@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ImpactStats from "@/components/ImpactStats";
 import AboutUs from "@/components/AboutUs";
-import Services from "@/components/Services";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import Campaign from "@/components/Campaign";
 import ChairmanMessage from "@/components/ChairmanMessage";
@@ -14,20 +14,21 @@ import Events from "@/components/Events";
 import News from "@/components/News";
 import Testimonials from "@/components/Testimonials";
 import DonationProgress from "@/components/DonationProgress";
-import GalleryPreview from "@/components/GalleryPreview";
 import CTA from "@/components/CTA";
 import Newsletter from "@/components/Newsletter";
-import ContactPreview from "@/components/ContactPreview";
 import Footer from "@/components/Footer";
 import VolunteerRegister from "@/components/VolunteerRegister";
 
 export default function Home() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState("home");
   const [isVolunteerOpen, setIsVolunteerOpen] = useState(false);
 
   // Smooth scroll handler
   const handleNavigate = (sectionId: string) => {
-    if (sectionId === "volunteer") {
+    if (sectionId === "services" || sectionId === "gallery" || sectionId === "contact") {
+      router.push(`/services#${sectionId}`);
+    } else if (sectionId === "volunteer") {
       setIsVolunteerOpen(true);
       const element = document.getElementById("volunteer-section");
       if (element) {
@@ -49,12 +50,9 @@ export default function Home() {
         "about",
         "leadership",
         "projects",
-        "services",
         "events",
-        "gallery",
         "volunteer-section",
-        "donation",
-        "contact"
+        "donation"
       ];
 
       const scrollPosition = window.scrollY + 200; // Offset
@@ -95,9 +93,6 @@ export default function Home() {
         {/* 4. About Party */}
         <AboutUs />
 
-        {/* 5. Our Services */}
-        <Services />
-
         {/* 6. Featured Welfare Projects */}
         <FeaturedProjects onNavigate={handleNavigate} />
 
@@ -124,17 +119,11 @@ export default function Home() {
         {/* 13. Donation Progress */}
         <DonationProgress />
 
-        {/* 14. Gallery Preview */}
-        <GalleryPreview />
-
         {/* 15. Call to Action */}
         <CTA onNavigate={handleNavigate} />
 
         {/* 16. Newsletter */}
         <Newsletter />
-
-        {/* 17. Contact Preview */}
-        <ContactPreview />
       </main>
 
       {/* 18. Footer */}
