@@ -57,37 +57,53 @@ export default function Footer({ onNavigate }: FooterProps) {
   };
 
   return (
-    <footer className="bg-neutral-dark text-white pt-20 pb-8 border-t border-white/5 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-gradient-to-b from-[#0a1813] to-[#040a08] text-white pt-24 pb-12 relative overflow-hidden border-t border-primary/25">
+      
+      {/* Background visual spotlight */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 border-b border-white/10 pb-16 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-16 border-b border-white/10">
           
-          {/* Col 1: Brand details */}
+          {/* Col 1: Brand details (4 columns) */}
           <div className="lg:col-span-4 space-y-6">
             <div 
-              className="flex items-center gap-2 cursor-pointer group"
+              className="flex items-center gap-3 cursor-pointer group"
               onClick={() => onNavigate("home")}
             >
-              <div className="bg-primary p-2 rounded-lg text-white group-hover:scale-105 transition-transform shadow-md">
+              <div className="bg-primary/20 p-2.5 rounded-xl text-white group-hover:scale-105 border border-primary/30 transition-all duration-300 shadow-lg shadow-primary/20">
                 <Sparkles className="w-5 h-5 text-accent" />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight tracking-tight text-white">
+                <span className="font-black text-lg leading-tight tracking-tight text-white group-hover:text-accent transition-colors">
                   AL-KHIDMAT
                 </span>
-                <span className="text-[10px] tracking-widest font-semibold uppercase text-accent">
+                <span className="text-[10px] tracking-widest font-extrabold uppercase text-accent mt-0.5 leading-none">
                   Citizens Alliance
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-gray-400 leading-relaxed font-semibold">
+            <p className="text-xs text-gray-300 leading-relaxed font-semibold">
               Combining progressive governance representation with a robust grassroots welfare network. We work 24/7 to solve challenges, support citizens, and govern transparently.
             </p>
 
+            {/* Credentials Badges */}
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-bold text-primary uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <span>ECP Registered</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25 text-[9px] font-bold text-accent uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                <span>Audited Welfare</span>
+              </div>
+            </div>
+
             {/* Social icons */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {[
                 { icon: FacebookIcon, href: "https://facebook.com", label: "Facebook" },
                 { icon: TwitterIcon, href: "https://twitter.com", label: "Twitter" },
@@ -101,7 +117,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 bg-white/5 hover:bg-primary text-white hover:text-white rounded-xl transition-all shadow-md hover:-translate-y-0.5"
+                    className="p-2.5 bg-white/5 hover:bg-gradient-to-br hover:from-primary hover:to-primary-hover text-gray-300 hover:text-white border border-white/10 hover:border-primary rounded-xl transition-all duration-300 shadow-md hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20"
                     aria-label={social.label}
                   >
                     <Icon className="w-4 h-4" />
@@ -111,97 +127,102 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Col 2: Quick Links */}
-          <div className="lg:col-span-2.5 space-y-4">
-            <h4 className="font-black text-sm uppercase text-white tracking-wider border-l-3 border-primary pl-2.5">
+          {/* Col 2: Quick Links (2 columns) */}
+          <div className="lg:col-span-2 space-y-6">
+            <h4 className="font-extrabold text-sm uppercase text-white tracking-wider pb-3.5 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-accent">
               Quick Links
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400 font-semibold">
+            <ul className="space-y-3.5 text-xs text-gray-400 font-semibold">
               {[
                 { name: "Home Base", id: "home" },
                 { name: "About Alliance", id: "about" },
-                { name: "Leadership Message", id: "leadership" },
+                { name: "Leadership", id: "leadership" },
                 { name: "Active Projects", id: "projects" },
                 { name: "Campaign News", id: "events" },
-                { name: "Audited Donations", id: "donation" }
+                { name: "Donations", id: "donation" }
               ].map((link, idx) => (
-                <li key={idx}>
+                <li key={idx} className="overflow-hidden">
                   <button
                     onClick={() => onNavigate(link.id)}
-                    className="hover:text-primary transition-colors cursor-pointer text-left"
+                    className="hover:text-accent transform hover:translate-x-1.5 transition-all duration-200 cursor-pointer text-left flex items-center gap-2 group"
                   >
-                    {link.name}
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-all shrink-0" />
+                    <span>{link.name}</span>
                   </button>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3: Services */}
-          <div className="lg:col-span-2.5 space-y-4">
-            <h4 className="font-black text-sm uppercase text-white tracking-wider border-l-3 border-accent pl-2.5">
-              Services
+          {/* Col 3: Services (3 columns) */}
+          <div className="lg:col-span-3 space-y-6">
+            <h4 className="font-extrabold text-sm uppercase text-white tracking-wider pb-3.5 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-accent after:to-primary">
+              Our Services
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400 font-semibold">
+            <ul className="space-y-3.5 text-xs text-gray-400 font-semibold">
               {[
                 { name: "Disaster Relief Operations", id: "services" },
                 { name: "Food Ration Distributions", id: "services" },
                 { name: "Free Medical Outposts", id: "services" },
                 { name: "Scholarships & IT Labs", id: "services" },
                 { name: "Nationwide Blood Net", id: "services" },
-                { name: "Tree Plantation Initiative", id: "services" }
+                { name: "Tree Planting Program", id: "services" }
               ].map((item, idx) => (
-                <li key={idx}>
+                <li key={idx} className="overflow-hidden">
                   <button
                     onClick={() => onNavigate(item.id)}
-                    className="hover:text-accent transition-colors cursor-pointer text-left"
+                    className="hover:text-primary transform hover:translate-x-1.5 transition-all duration-200 cursor-pointer text-left flex items-center gap-2 group"
                   >
-                    {item.name}
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-all shrink-0" />
+                    <span>{item.name}</span>
                   </button>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 4: Contact Info */}
-          <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-black text-sm uppercase text-white tracking-wider border-l-3 border-primary pl-2.5">
+          {/* Col 4: Contact Info (3 columns) */}
+          <div className="lg:col-span-3 space-y-6">
+            <h4 className="font-extrabold text-sm uppercase text-white tracking-wider pb-3.5 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[2px] after:bg-gradient-to-r after:from-primary after:to-accent">
               Direct Contact
             </h4>
-            <ul className="space-y-3.5 text-xs text-gray-400 font-semibold">
-              <li className="flex gap-2">
+            <ul className="space-y-3.5 text-xs text-gray-300 font-semibold">
+              <li className="flex gap-3 p-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-primary/20 rounded-xl transition-all duration-200">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>House 24, Block C, Al-Khidmat Avenue, Chiniot, Pakistan</span>
+                <span className="leading-relaxed">House 24, Block C, Al-Khidmat Avenue, Chiniot, Pakistan</span>
               </li>
-              <li className="flex gap-2">
-                <Phone className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+              <li className="flex gap-3 p-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-primary/20 rounded-xl transition-all duration-200 items-center">
+                <Phone className="w-4 h-4 text-accent shrink-0" />
                 <span>+92 (47) 111-25-25-25</span>
               </li>
-              <li className="flex gap-2">
-                <Mail className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>info@alkhidmatcitizens.org</span>
+              <li className="flex gap-3 p-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-primary/20 rounded-xl transition-all duration-200 items-center">
+                <Mail className="w-4 h-4 text-primary shrink-0" />
+                <span className="break-all">info@alkhidmatcitizens.org</span>
               </li>
             </ul>
           </div>
 
         </div>
 
-        {/* Footer Bottom copyright and scroll top */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-bold uppercase tracking-wider">
+        {/* Footer Bottom bar */}
+        <div className="mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider">
           <p>© {new Date().getFullYear()} Al-Khidmat Citizens Alliance. All Rights Reserved.</p>
-          <p>Audited by NGO transparency index.</p>
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
+            <p>Monitored under ECP Transparency Codes.</p>
+          </div>
         </div>
 
       </div>
 
-      {/* Floating Back to Top Button */}
+      {/* Floating Back to Top Button Orb */}
       {showScrollTop && (
         <button
           onClick={handleScrollTop}
-          className="fixed bottom-6 right-6 z-40 bg-primary hover:bg-primary-hover text-white p-3.5 rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer border border-primary-hover animate-bounce"
+          className="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-primary to-primary-hover hover:from-accent hover:to-accent-hover text-white hover:text-neutral-dark p-4 rounded-2xl shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-1.5 cursor-pointer border border-primary/20 hover:border-accent/40 group animate-pulse"
           aria-label="Back to Top"
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-5 h-5 transform group-hover:-translate-y-0.5 transition-transform" />
         </button>
       )}
     </footer>
