@@ -26,8 +26,12 @@ export default function Home() {
 
   // Smooth scroll handler
   const handleNavigate = (sectionId: string) => {
-    if (sectionId === "services" || sectionId === "gallery" || sectionId === "contact") {
-      router.push(`/services#${sectionId}`);
+    if (sectionId === "services") {
+      router.push("/services");
+    } else if (sectionId === "gallery") {
+      router.push("/gallery");
+    } else if (sectionId === "contact") {
+      router.push("/contact");
     } else if (sectionId === "volunteer") {
       setIsVolunteerOpen(true);
       const element = document.getElementById("volunteer-section");
