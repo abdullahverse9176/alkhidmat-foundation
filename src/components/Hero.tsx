@@ -3,12 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Users, Sparkles, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 
-interface HeroProps {
-  onNavigate: (sectionId: string) => void;
-}
-
-export default function Hero({ onNavigate }: HeroProps) {
+export default function Hero() {
   return (
     <section 
       id="home" 
@@ -67,21 +64,21 @@ export default function Hero({ onNavigate }: HeroProps) {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 pt-2"
             >
-              <button
-                onClick={() => onNavigate("donation")}
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white text-base font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer"
+              <Link
+                href="/#donation"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white text-base font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer text-center inline-flex"
               >
                 <Heart className="w-5 h-5 fill-current text-white" />
                 <span>Donate Now</span>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => onNavigate("volunteer")}
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 text-base font-bold rounded-xl transition-all duration-200 backdrop-blur-sm hover:-translate-y-0.5 cursor-pointer"
+              <Link
+                href="/volunteer"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 text-base font-bold rounded-xl transition-all duration-200 backdrop-blur-sm hover:-translate-y-0.5 cursor-pointer text-center inline-flex"
               >
                 <Users className="w-5 h-5" />
                 <span>Become a Volunteer</span>
-              </button>
+              </Link>
             </motion.div>
           </div>
 
@@ -139,12 +136,12 @@ export default function Hero({ onNavigate }: HeroProps) {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => onNavigate("projects")}
-                  className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors duration-150 text-center uppercase tracking-wider cursor-pointer"
+                <Link
+                  href="/welfare-projects"
+                  className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors duration-150 text-center uppercase tracking-wider cursor-pointer block"
                 >
                   View Active Projects
-                </button>
+                </Link>
               </div>
             </motion.div>
           </div>

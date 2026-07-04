@@ -4,12 +4,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Calendar, ArrowRight } from "lucide-react";
 import { featuredProjectsData, ProjectItem } from "@/data/mockData";
+import Link from "next/link";
 
-interface FeaturedProjectsProps {
-  onNavigate: (sectionId: string) => void;
-}
-
-export default function FeaturedProjects({ onNavigate }: FeaturedProjectsProps) {
+export default function FeaturedProjects() {
   const containerVariants = {
     hidden: {},
     visible: {
@@ -50,13 +47,13 @@ export default function FeaturedProjects({ onNavigate }: FeaturedProjectsProps) 
             </p>
           </div>
           
-          <button
-            onClick={() => onNavigate("donation")}
-            className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-hover group transition-colors cursor-pointer border-b border-primary/20 pb-1"
+          <Link
+            href="/#donation"
+            className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-hover group transition-colors cursor-pointer border-b border-primary/20 pb-1 align-middle inline-flex"
           >
             <span>View All Campaigns</span>
             <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
 
         {/* Project Cards Grid */}
@@ -137,19 +134,19 @@ export default function FeaturedProjects({ onNavigate }: FeaturedProjectsProps) 
 
                   {/* Action buttons */}
                   <div className="pt-2 grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => onNavigate("donation")}
+                    <Link
+                      href="/#donation"
                       className="py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg text-center transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Heart className="w-3.5 h-3.5 fill-current" />
                       <span>Donate</span>
-                    </button>
-                    <button
-                      onClick={() => onNavigate("about")}
-                      className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer"
+                    </Link>
+                    <Link
+                      href="/#about"
+                      className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
                     >
                       Read More
-                    </button>
+                    </Link>
                   </div>
 
                 </div>

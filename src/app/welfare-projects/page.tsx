@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import ContactPreview from "@/components/ContactPreview";
+import FeaturedProjects from "@/components/FeaturedProjects";
 import Footer from "@/components/Footer";
 import { Sparkles, ArrowLeft } from "lucide-react";
 
-export default function ContactPage() {
+export default function WelfareProjectsPage() {
   return (
     <div className="relative min-h-screen bg-white">
       {/* Sticky Top Header */}
@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-10000 scale-105"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&q=80&w=1200')`,
+            backgroundImage: `url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1200')`,
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1813]/95 via-[#040a08]/90 to-primary/45" />
@@ -28,14 +28,14 @@ export default function ContactPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 w-full">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-accent font-semibold text-xs uppercase tracking-wider backdrop-blur-sm mb-4">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Connect & Coordinate</span>
+            <span>Developmental & Reconstruction Works</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-            Contact Secretariat
+            Our Welfare Projects
           </h1>
           <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto mt-4 font-medium leading-relaxed">
-            Reach out to our offices in Chiniot for volunteer registration queries, donation checks, and program details.
+            Take a look at active infrastructure, water wells construction, and relief camp builds managed by Al-Khidmat Citizens teams.
           </p>
 
           {/* Breadcrumbs */}
@@ -45,14 +45,14 @@ export default function ContactPage() {
               <span>Back to Home</span>
             </Link>
             <span className="text-gray-600">/</span>
-            <span className="text-accent font-bold">Contact</span>
+            <span className="text-accent font-bold">Welfare Projects</span>
           </div>
         </div>
       </section>
 
       {/* Main Sections */}
       <main className="w-full">
-        <ContactPreview />
+        <FeaturedProjects />
       </main>
 
       {/* Footer */}

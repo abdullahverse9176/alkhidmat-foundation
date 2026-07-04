@@ -4,12 +4,9 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Users, Award } from "lucide-react";
 import { campaignData } from "@/data/mockData";
+import Link from "next/link";
 
-interface CampaignProps {
-  onNavigate: (sectionId: string) => void;
-}
-
-export default function Campaign({ onNavigate }: CampaignProps) {
+export default function Campaign() {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -73,18 +70,18 @@ export default function Campaign({ onNavigate }: CampaignProps) {
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <button
-                onClick={() => onNavigate("volunteer")}
-                className="px-8 py-3.5 bg-accent hover:bg-accent-hover text-neutral-dark font-black text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5"
+              <Link
+                href="/volunteer"
+                className="px-8 py-3.5 bg-accent hover:bg-accent-hover text-neutral-dark font-black text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 text-center inline-flex"
               >
                 Join Campaign As Volunteer
-              </button>
-              <button
-                onClick={() => onNavigate("contact")}
-                className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm rounded-xl transition-all duration-200 backdrop-blur-sm cursor-pointer hover:-translate-y-0.5"
+              </Link>
+              <Link
+                href="/contact"
+                className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm rounded-xl transition-all duration-200 backdrop-blur-sm cursor-pointer hover:-translate-y-0.5 text-center inline-flex"
               >
                 Contact Campaign Office
-              </button>
+              </Link>
             </div>
           </div>
 

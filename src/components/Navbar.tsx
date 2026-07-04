@@ -1,20 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { 
   Search, Menu, X, Heart, Users, Sparkles, ChevronDown,
   Info, Award, Image, Activity, Briefcase, Calendar, UserPlus
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface NavbarProps {
-  onNavigate: (sectionId: string) => void;
-  activeSection: string;
-}
-
-export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
-  const router = useRouter();
+export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -28,12 +24,12 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
 
   // Grouped Navigation Items with icons and descriptions
   const menuItems = [
-    { label: "Home", id: "home" },
+    { label: "Home", href: "/" },
     {
       label: "About Us",
       dropdownItems: [
-        { label: "Who We Are", id: "about", description: "Our mission, vision, and core values.", icon: Info },
-        { label: "Our Leadership", id: "leadership", description: "Meet the team and the Chairman.", icon: Award },
+        { label: "Who We Are", href: "/#about", description: "Our mission, vision, and core values.", icon: Info },
+        { label: "Our Leadership", href: "/#leadership", description: "Meet the team and the Chairman.", icon: Award },
         { label: "Operational Gallery", href: "/gallery", description: "Photos from our active welfare fields.", icon: Image }
       ]
     },
@@ -41,14 +37,14 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
       label: "Programs",
       dropdownItems: [
         { label: "Welfare Services", href: "/services", description: "Healthcare, education, and water campaigns.", icon: Activity },
-        { label: "Welfare Projects", id: "projects", description: "Active construction and building projects.", icon: Briefcase }
+        { label: "Welfare Projects", href: "/welfare-projects", description: "Active construction and building projects.", icon: Briefcase }
       ]
     },
     {
       label: "Get Involved",
       dropdownItems: [
-        { label: "Upcoming Events", id: "events", description: "Join our public awareness events.", icon: Calendar },
-        { label: "Join as Volunteer", id: "volunteer", description: "Register as a volunteer and help out.", icon: UserPlus }
+        { label: "Upcoming Events", href: "/#events", description: "Join our public awareness events.", icon: Calendar },
+        { label: "Join as Volunteer", href: "/volunteer", description: "Register as a volunteer and help out.", icon: UserPlus }
       ]
     },
     { label: "Contact", href: "/contact" }
@@ -62,24 +58,12 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLinkClick = (id?: string, href?: string) => {
-    setIsMobileMenuOpen(false);
-    setHoveredDropdown(null);
-    setMobileExpandedDropdown(null);
-    
-    if (href) {
-      router.push(href);
-    } else if (id) {
-      onNavigate(id);
-    }
-  };
-
   const isCategoryActive = (label: string) => {
-    if (label === "Home" && activeSection === "home") return true;
-    if (label === "About Us" && ["about", "leadership", "gallery"].includes(activeSection)) return true;
-    if (label === "Programs" && ["projects", "services"].includes(activeSection)) return true;
-    if (label === "Get Involved" && ["events", "volunteer"].includes(activeSection)) return true;
-    if (label === "Contact" && activeSection === "contact") return true;
+    if (label === "Home" && pathname === "/") return true;
+    if (label === "About Us" && (pathname === "/gallery" || pathname.startsWith("/about"))) return true;
+    if (label === "Programs" && (pathname === "/services" || pathname === "/welfare-projects")) return true;
+    if (label === "Get Involved" && (pathname === "/volunteer" || pathname === "/events")) return true;
+    if (label === "Contact" && pathname === "/contact") return true;
     return false;
   };
 
@@ -95,9 +79,14 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div 
+            <Link 
+              href="/"
               className="flex items-center gap-2 cursor-pointer group"
-              onClick={() => handleLinkClick("home")}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setHoveredDropdown(null);
+                setMobileExpandedDropdown(null);
+              }}
             >
               <div className="bg-primary p-2 rounded-lg text-white group-hover:scale-105 transition-transform duration-250 shadow-md">
                 <Sparkles className="w-5 h-5 text-accent animate-pulse" />
@@ -110,7 +99,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                   Citizens Alliance
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2">
@@ -143,8 +132,8 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                         }`} />
                       </button>
                     ) : (
-                      <button
-                        onClick={() => handleLinkClick(item.id, item.href)}
+                      <Link
+                        href={item.href || "/"}
                         className={`px-3 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${
                           isActive
                             ? isScrolled 
@@ -156,7 +145,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                         }`}
                       >
                         {item.label}
-                      </button>
+                      </Link>
                     )}
 
                     {/* Desktop Dropdown Panel */}
@@ -172,12 +161,16 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                           >
                             {item.dropdownItems?.map((subItem) => {
                               const IconComponent = subItem.icon;
-                              const isSubActive = activeSection === subItem.id || (subItem.href && activeSection === subItem.href.replace("/", ""));
+                              const isSubActive = pathname === subItem.href;
                               
                               return (
-                                <button
+                                <Link
                                   key={subItem.label}
-                                  onClick={() => handleLinkClick(subItem.id, subItem.href)}
+                                  href={subItem.href}
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setHoveredDropdown(null);
+                                  }}
                                   className={`flex gap-3 items-start p-2.5 rounded-xl transition-all duration-200 text-left w-full cursor-pointer hover:bg-primary/5 group ${
                                     isSubActive ? "bg-primary/[0.03]" : ""
                                   }`}
@@ -197,7 +190,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                                       {subItem.description}
                                     </span>
                                   </div>
-                                </button>
+                                </Link>
                               );
                             })}
                           </motion.div>
@@ -225,8 +218,8 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
               </button>
 
               {/* Become Volunteer */}
-              <button
-                onClick={() => handleLinkClick("volunteer")}
+              <Link
+                href="/volunteer"
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border cursor-pointer ${
                   isScrolled
                     ? "border-primary text-primary hover:bg-primary hover:text-white shadow-sm"
@@ -235,16 +228,16 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
               >
                 <Users className="w-3.5 h-3.5" />
                 <span>Volunteer</span>
-              </button>
+              </Link>
 
               {/* Donate Button */}
-              <button
-                onClick={() => handleLinkClick("donation")}
+              <Link
+                href="/#donation"
                 className="flex items-center gap-1.5 px-4.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-accent hover:bg-accent-hover transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg"
               >
                 <Heart className="w-3.5 h-3.5 fill-current text-white" />
                 <span>Donate</span>
-              </button>
+              </Link>
             </div>
 
             {/* Mobile controls */}
@@ -317,9 +310,13 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                                 {item.dropdownItems?.map((subItem) => {
                                   const SubIcon = subItem.icon;
                                   return (
-                                    <button
+                                    <Link
                                       key={subItem.label}
-                                      onClick={() => handleLinkClick(subItem.id, subItem.href)}
+                                      href={subItem.href}
+                                      onClick={() => {
+                                        setIsMobileMenuOpen(false);
+                                        setMobileExpandedDropdown(null);
+                                      }}
                                       className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-left cursor-pointer hover:bg-gray-50 text-neutral-light hover:text-primary transition-colors"
                                     >
                                       <SubIcon className="w-4 h-4 shrink-0 text-neutral-light" />
@@ -327,7 +324,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                                         <span className="text-xs font-bold">{subItem.label}</span>
                                         <span className="text-[10px] text-neutral-light leading-none mt-0.5">{subItem.description}</span>
                                       </div>
-                                    </button>
+                                    </Link>
                                   );
                                 })}
                               </motion.div>
@@ -335,8 +332,9 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                           </AnimatePresence>
                         </>
                       ) : (
-                        <button
-                          onClick={() => handleLinkClick(item.id, item.href)}
+                        <Link
+                          href={item.href || "/"}
+                          onClick={() => setIsMobileMenuOpen(false)}
                           className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider cursor-pointer ${
                             isActive
                               ? "text-primary bg-primary/5"
@@ -344,7 +342,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                           }`}
                         >
                           {item.label}
-                        </button>
+                        </Link>
                       )}
                     </div>
                   );
@@ -352,20 +350,22 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
 
                 {/* Mobile CTAs */}
                 <div className="pt-4 grid grid-cols-2 gap-3 border-t border-gray-100 mt-2 pb-3">
-                  <button
-                    onClick={() => handleLinkClick("volunteer")}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary hover:text-white cursor-pointer transition-colors"
+                  <Link
+                    href="/volunteer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary hover:text-white cursor-pointer transition-colors text-center"
                   >
                     <Users className="w-3.5 h-3.5" />
                     <span>Volunteer</span>
-                  </button>
-                  <button
-                    onClick={() => handleLinkClick("donation")}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-accent text-white text-xs font-bold uppercase tracking-wider hover:bg-accent-hover cursor-pointer transition-colors"
+                  </Link>
+                  <Link
+                    href="/#donation"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-accent text-white text-xs font-bold uppercase tracking-wider hover:bg-accent-hover cursor-pointer transition-colors text-center"
                   >
                     <Heart className="w-3.5 h-3.5 fill-current text-white" />
                     <span>Donate</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -442,7 +442,6 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
                     <div 
                       onClick={() => {
                         setIsSearchOpen(false);
-                        handleLinkClick("projects");
                       }}
                       className="p-3 bg-gray-50 hover:bg-primary/5 hover:border-primary/20 border border-transparent rounded-lg cursor-pointer transition-colors"
                     >

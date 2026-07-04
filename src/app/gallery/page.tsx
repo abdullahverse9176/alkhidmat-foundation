@@ -1,40 +1,15 @@
-"use client";
-
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import GalleryPreview from "@/components/GalleryPreview";
 import Footer from "@/components/Footer";
-import VolunteerRegister from "@/components/VolunteerRegister";
 import { Sparkles, ArrowLeft } from "lucide-react";
 
 export default function GalleryPage() {
-  const router = useRouter();
-  const [activeSection] = useState("gallery");
-  const [isVolunteerOpen, setIsVolunteerOpen] = useState(false);
-
-  const handleNavigate = (sectionId: string) => {
-    if (sectionId === "gallery") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (sectionId === "services") {
-      router.push("/services");
-    } else if (sectionId === "contact") {
-      router.push("/contact");
-    } else if (sectionId === "volunteer") {
-      setIsVolunteerOpen(true);
-    } else {
-      router.push(`/#${sectionId}`);
-    }
-  };
-
   return (
     <div className="relative min-h-screen bg-white">
       {/* Sticky Top Header */}
-      <Navbar 
-        onNavigate={handleNavigate} 
-        activeSection={activeSection} 
-      />
+      <Navbar />
 
       {/* Page Header / Hero Section */}
       <section className="relative h-[45vh] flex items-center justify-center overflow-hidden bg-neutral-dark pt-20">
@@ -81,13 +56,7 @@ export default function GalleryPage() {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={handleNavigate} />
-
-      {/* Floating Volunteer Registration Overlay Modal */}
-      <VolunteerRegister 
-        isOpen={isVolunteerOpen} 
-        onClose={() => setIsVolunteerOpen(false)} 
-      />
+      <Footer />
     </div>
   );
 }

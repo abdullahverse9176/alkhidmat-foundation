@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { 
   ArrowUp, 
   Sparkles, 
@@ -37,11 +38,7 @@ const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface FooterProps {
-  onNavigate: (sectionId: string) => void;
-}
-
-export default function Footer({ onNavigate }: FooterProps) {
+export default function Footer() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -69,9 +66,9 @@ export default function Footer({ onNavigate }: FooterProps) {
           
           {/* Col 1: Brand details (4 columns) */}
           <div className="lg:col-span-4 space-y-6">
-            <div 
-              className="flex items-center gap-3 cursor-pointer group"
-              onClick={() => onNavigate("home")}
+            <Link 
+              href="/"
+              className="flex items-center gap-3 cursor-pointer group inline-flex"
             >
               <div className="bg-primary/20 p-2.5 rounded-xl text-white group-hover:scale-105 border border-primary/30 transition-all duration-300 shadow-lg shadow-primary/20">
                 <Sparkles className="w-5 h-5 text-accent" />
@@ -84,7 +81,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                   Citizens Alliance
                 </span>
               </div>
-            </div>
+            </Link>
 
             <p className="text-xs text-gray-300 leading-relaxed font-semibold">
               Combining progressive governance representation with a robust grassroots welfare network. We work 24/7 to solve challenges, support citizens, and govern transparently.
@@ -134,21 +131,21 @@ export default function Footer({ onNavigate }: FooterProps) {
             </h4>
             <ul className="space-y-3.5 text-xs text-gray-400 font-semibold">
               {[
-                { name: "Home Base", id: "home" },
-                { name: "About Alliance", id: "about" },
-                { name: "Leadership", id: "leadership" },
-                { name: "Active Projects", id: "projects" },
-                { name: "Campaign News", id: "events" },
-                { name: "Donations", id: "donation" }
+                { name: "Home Base", href: "/" },
+                { name: "About Alliance", href: "/#about" },
+                { name: "Leadership", href: "/#leadership" },
+                { name: "Active Projects", href: "/welfare-projects" },
+                { name: "Campaign News", href: "/#events" },
+                { name: "Donations", href: "/#donation" }
               ].map((link, idx) => (
                 <li key={idx} className="overflow-hidden">
-                  <button
-                    onClick={() => onNavigate(link.id)}
+                  <Link
+                    href={link.href}
                     className="hover:text-accent transform hover:translate-x-1.5 transition-all duration-200 cursor-pointer text-left flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                     <span>{link.name}</span>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -161,21 +158,21 @@ export default function Footer({ onNavigate }: FooterProps) {
             </h4>
             <ul className="space-y-3.5 text-xs text-gray-400 font-semibold">
               {[
-                { name: "Disaster Relief Operations", id: "services" },
-                { name: "Food Ration Distributions", id: "services" },
-                { name: "Free Medical Outposts", id: "services" },
-                { name: "Scholarships & IT Labs", id: "services" },
-                { name: "Nationwide Blood Net", id: "services" },
-                { name: "Tree Planting Program", id: "services" }
+                { name: "Disaster Relief Operations", href: "/services" },
+                { name: "Food Ration Distributions", href: "/services" },
+                { name: "Free Medical Outposts", href: "/services" },
+                { name: "Scholarships & IT Labs", href: "/services" },
+                { name: "Nationwide Blood Net", href: "/services" },
+                { name: "Tree Planting Program", href: "/services" }
               ].map((item, idx) => (
                 <li key={idx} className="overflow-hidden">
-                  <button
-                    onClick={() => onNavigate(item.id)}
+                  <Link
+                    href={item.href}
                     className="hover:text-primary transform hover:translate-x-1.5 transition-all duration-200 cursor-pointer text-left flex items-center gap-2 group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                     <span>{item.name}</span>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
