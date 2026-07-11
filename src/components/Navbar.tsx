@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { 
   Search, Menu, X, Heart, Users, Sparkles, ChevronDown,
-  Info, Award, Image, Activity, Briefcase, Calendar, UserPlus
+  Info, Award, Image, Activity, Briefcase, Calendar, UserPlus,
+  LogOut, LayoutDashboard
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Navbar() {
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -238,6 +241,45 @@ export default function Navbar() {
                 <Heart className="w-3.5 h-3.5 fill-current text-white" />
                 <span>Donate</span>
               </Link>
+
+              {/* STEP 10.1: Login/Dashboard state for desktop Navbar */}
+              {status === "authenticated" ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-250 border cursor-pointer ${
+                      isScrolled
+                        ? "border-primary text-primary hover:bg-primary hover:text-white"
+                        : "border-white/30 text-white hover:bg-white hover:text-primary"
+                    }`}
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-250 cursor-pointer ${
+                      isScrolled
+                        ? "text-neutral-light hover:text-red-650"
+                        : "text-gray-200 hover:text-white"
+                    }`}
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-250 border border-transparent cursor-pointer ${
+                    isScrolled
+                      ? "text-neutral-light hover:text-primary hover:bg-primary/5"
+                      : "text-gray-200 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
 
             {/* Mobile controls */}
@@ -349,23 +391,59 @@ export default function Navbar() {
                 })}
 
                 {/* Mobile CTAs */}
-                <div className="pt-4 grid grid-cols-2 gap-3 border-t border-gray-100 mt-2 pb-3">
-                  <Link
-                    href="/volunteer"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary hover:text-white cursor-pointer transition-colors text-center"
-                  >
-                    <Users className="w-3.5 h-3.5" />
-                    <span>Volunteer</span>
-                  </Link>
-                  <Link
-                    href="/#donation"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-accent text-white text-xs font-bold uppercase tracking-wider hover:bg-accent-hover cursor-pointer transition-colors text-center"
-                  >
-                    <Heart className="w-3.5 h-3.5 fill-current text-white" />
-                    <span>Donate</span>
-                  </Link>
+                <div className="pt-4 space-y-2.5 border-t border-gray-100 mt-2 pb-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link
+                      href="/volunteer"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary hover:text-white cursor-pointer transition-colors text-center"
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      <span>Volunteer</span>
+                    </Link>
+                    <Link
+                      href="/#donation"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-accent text-white text-xs font-bold uppercase tracking-wider hover:bg-accent-hover cursor-pointer transition-colors text-center"
+                    >
+                      <Heart className="w-3.5 h-3.5 fill-current text-white" />
+                      <span>Donate</span>
+                    </Link>
+                  </div>
+
+                  {/* STEP 10.2: Login/Dashboard state for mobile menu */}
+                  {status === "authenticated" ? (
+                    <div className="grid grid-cols-2 gap-3 pt-1">
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-primary-hover cursor-pointer transition-colors text-center"
+                      >
+                        <LayoutDashboard className="w-3.5 h-3.5 text-white" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          signOut({ callbackUrl: "/" });
+                        }}
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-gray-200 text-neutral-dark text-xs font-bold uppercase tracking-wider hover:bg-gray-50 cursor-pointer transition-colors text-center"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="pt-1">
+                      <Link
+                        href="/login"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary/20 text-neutral-dark hover:border-primary text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors text-center"
+                      >
+                        <span>Login Member Portal</span>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
