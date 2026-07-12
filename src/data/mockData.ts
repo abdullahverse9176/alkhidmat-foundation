@@ -23,9 +23,17 @@ export interface StatItem {
 
 export interface ServiceItem {
   id: string;
+  slug: string;
   title: string;
   description: string;
+  longDescription: string;
   iconName: "Flame" | "Apple" | "Stethoscope" | "GraduationCap" | "Droplet" | "Trees" | "Sparkles" | "Briefcase";
+  image: string;
+  features: string[];
+  stats: {
+    label: string;
+    value: string;
+  }[];
 }
 
 export interface ProjectItem {
@@ -126,55 +134,229 @@ export const partyAboutData = {
   imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
 };
 
-export const servicesData: ServiceItem[] = [
+export interface ServiceItemDetail {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  longDescription: string;
+  iconName: "Flame" | "Apple" | "Stethoscope" | "GraduationCap" | "Droplet" | "Trees" | "Sparkles" | "Briefcase";
+  image: string;
+  features: string[];
+  stats: {
+    label: string;
+    value: string;
+  }[];
+}
+
+export const servicesData: ServiceItemDetail[] = [
   {
     id: "srv-1",
+    slug: "disaster-relief",
     title: "Disaster Relief",
-    description: "Rapid response deployment for floods, earthquakes, and emergencies, providing food, clean drinking water, and safe shelter.",
-    iconName: "Flame"
+    description:
+      "Rapid response deployment for floods, earthquakes, and emergencies.",
+    longDescription:
+      "Our Disaster Relief program provides immediate humanitarian assistance during natural disasters and emergencies. We deliver food, clean drinking water, temporary shelter, medical aid, and essential supplies to affected families while supporting long-term recovery efforts.",
+    iconName: "Flame",
+    image: "/images/services/disaster-relief.jpg",
+    features: [
+      "Emergency Food Distribution",
+      "Temporary Shelters",
+      "Clean Drinking Water",
+      "Rescue & Relief Operations",
+      "Medical Assistance",
+    ],
+    stats: [
+      { label: "Families Helped", value: "50,000+" },
+      { label: "Relief Camps", value: "300+" },
+      { label: "Volunteers", value: "5,000+" },
+    ],
   },
   {
     id: "srv-2",
-    title: "Food Distribution",
-    description: "Daily meals and monthly ration packs provided to marginalized families and daily wage earners to fight food insecurity.",
-    iconName: "Apple"
+    slug: "clean-water-initiative",
+    title: "Clean Water Initiative",
+    description:
+      "Providing safe drinking water through hand pumps and water wells.",
+    longDescription:
+      "We install hand pumps, construct water wells, and provide clean drinking water to underserved communities. Access to safe water improves health, reduces waterborne diseases, and enhances the quality of life for thousands of families.",
+    iconName: "Droplet",
+    image: "/images/services/clean-water.jpg",
+    features: [
+      "Hand Pump Installation",
+      "Water Well Construction",
+      "Water Filtration",
+      "Maintenance Services",
+      "Emergency Water Supply",
+    ],
+    stats: [
+      { label: "Hand Pumps", value: "350+" },
+      { label: "Villages", value: "120+" },
+      { label: "Families", value: "10,000+" },
+    ],
   },
   {
     id: "srv-3",
-    title: "Medical Camps",
-    description: "Free medical examinations, diagnostic tests, and prescription medicines organized in under-served rural communities.",
-    iconName: "Stethoscope"
+    slug: "food-distribution",
+    title: "Food Distribution",
+    description:
+      "Providing meals and ration packages to families facing food insecurity.",
+    longDescription:
+      "Our Food Distribution program delivers nutritious meals, ration packages, and emergency food assistance to low-income families, ensuring no one goes hungry during difficult times.",
+    iconName: "Apple",
+    image: "/images/services/food-distribution.jpg",
+    features: [
+      "Monthly Ration Packs",
+      "Daily Meals",
+      "Ramadan Food Drives",
+      "Emergency Food Support",
+      "Community Kitchens",
+    ],
+    stats: [
+      { label: "Meals Served", value: "1M+" },
+      { label: "Families", value: "80,000+" },
+      { label: "Distribution Centers", value: "150+" },
+    ],
   },
   {
     id: "srv-4",
+    slug: "education-support",
     title: "Education Support",
-    description: "Scholarships, uniforms, books, and IT laboratory funding for deserving students from low-income households.",
-    iconName: "GraduationCap"
+    description:
+      "Helping deserving students through scholarships and educational resources.",
+    longDescription:
+      "We empower students from underprivileged backgrounds by providing scholarships, books, uniforms, school supplies, and digital learning opportunities.",
+    iconName: "GraduationCap",
+    image: "/images/services/education.jpg",
+    features: [
+      "Scholarships",
+      "School Supplies",
+      "Books & Uniforms",
+      "IT Labs",
+      "Career Guidance",
+    ],
+    stats: [
+      { label: "Students", value: "15,000+" },
+      { label: "Scholarships", value: "4,500+" },
+      { label: "Schools", value: "200+" },
+    ],
   },
   {
     id: "srv-5",
-    title: "Blood Donation",
-    description: "A nationwide network of active donors, facilitating safe blood transfusions for thalassemia patients and emergencies.",
-    iconName: "Droplet"
+    slug: "tree-plantation",
+    title: "Tree Plantation",
+    description:
+      "Creating a greener future through nationwide plantation campaigns.",
+    longDescription:
+      "Our Tree Plantation initiative promotes environmental sustainability by planting indigenous trees, restoring green spaces, and educating communities about climate action.",
+    iconName: "Trees",
+    image: "/images/services/tree-plantation.jpg",
+    features: [
+      "Tree Plantation Drives",
+      "Community Awareness",
+      "School Campaigns",
+      "Environmental Protection",
+      "Climate Action",
+    ],
+    stats: [
+      { label: "Trees Planted", value: "5M+" },
+      { label: "Cities", value: "80+" },
+      { label: "Volunteers", value: "20,000+" },
+    ],
   },
   {
     id: "srv-6",
-    title: "Tree Plantation",
-    description: "Environmental restoration campaigns, aiming to plant 5 million indigenous trees to combat climate change.",
-    iconName: "Trees"
+    slug: "medical-camps",
+    title: "Medical Camps",
+    description:
+      "Providing free healthcare services in underserved communities.",
+    longDescription:
+      "Our Medical Camps offer free health checkups, diagnostic tests, medicines, and specialist consultations for individuals who lack access to quality healthcare.",
+    iconName: "Stethoscope",
+    image: "/images/services/medical-camps.jpg",
+    features: [
+      "Free Checkups",
+      "Medicines",
+      "Diagnostic Tests",
+      "Health Awareness",
+      "Specialist Consultations",
+    ],
+    stats: [
+      { label: "Patients", value: "250,000+" },
+      { label: "Medical Camps", value: "800+" },
+      { label: "Doctors", value: "1,200+" },
+    ],
   },
   {
     id: "srv-7",
-    title: "Women Empowerment",
-    description: "Skills development programs including sewing, vocational classes, and micro-grants to establish home-based startups.",
-    iconName: "Sparkles"
+    slug: "blood-donation",
+    title: "Blood Donation",
+    description:
+      "Connecting voluntary donors with patients in need of lifesaving blood.",
+    longDescription:
+      "Our Blood Donation program maintains an active donor network, ensuring timely blood availability for emergencies, surgeries, and patients with chronic illnesses such as thalassemia.",
+    iconName: "Droplet",
+    image: "/images/services/blood-donation.jpg",
+    features: [
+      "Emergency Blood Requests",
+      "Donor Registration",
+      "Blood Donation Camps",
+      "Awareness Campaigns",
+      "Hospital Partnerships",
+    ],
+    stats: [
+      { label: "Donors", value: "100,000+" },
+      { label: "Lives Saved", value: "50,000+" },
+      { label: "Camps", value: "500+" },
+    ],
   },
   {
     id: "srv-8",
+    slug: "women-empowerment",
+    title: "Women Empowerment",
+    description:
+      "Supporting women through skills training and economic opportunities.",
+    longDescription:
+      "We help women become financially independent by providing vocational training, entrepreneurship support, sewing courses, and micro-financing opportunities.",
+    iconName: "Sparkles",
+    image: "/images/services/women-empowerment.jpg",
+    features: [
+      "Vocational Training",
+      "Sewing Courses",
+      "Micro Grants",
+      "Business Support",
+      "Skill Development",
+    ],
+    stats: [
+      { label: "Women Trained", value: "12,000+" },
+      { label: "Training Centers", value: "75+" },
+      { label: "Businesses Started", value: "2,000+" },
+    ],
+  },
+  {
+    id: "srv-9",
+    slug: "youth-development",
     title: "Youth Development",
-    description: "Leadership bootcamps, career guidance seminars, and sports initiatives to channel youth energy into nation-building.",
-    iconName: "Briefcase"
-  }
+    description:
+      "Developing future leaders through education, training, and leadership programs.",
+    longDescription:
+      "Our Youth Development initiative equips young people with leadership skills, career guidance, technical training, and volunteer opportunities to prepare them for a brighter future.",
+    iconName: "Briefcase",
+    image: "/images/services/youth-development.jpg",
+    features: [
+      "Leadership Programs",
+      "Career Counseling",
+      "Technical Training",
+      "Volunteer Opportunities",
+      "Sports Activities",
+    ],
+    stats: [
+      { label: "Youth Trained", value: "25,000+" },
+      { label: "Programs", value: "350+" },
+      { label: "Cities", value: "60+" },
+    ],
+  },
 ];
 
 export const featuredProjectsData: ProjectItem[] = [

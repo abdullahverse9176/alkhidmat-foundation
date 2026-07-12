@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { 
   Flame, 
   Apple, 
@@ -76,16 +77,9 @@ export default function Services() {
         >
           {servicesData.map((service: ServiceItem) => {
             const Icon = iconMap[service.iconName] || Sparkles;
+
             return (
-              <motion.div
-                key={service.id}
-                variants={cardVariants}
-                whileHover={{ 
-                  y: -8, 
-                  boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05)",
-                  borderColor: "rgba(15, 123, 63, 0.2)"
-                }}
-                className="bg-white rounded-2xl p-6 border border-gray-100 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+              <Link className="bg-white rounded-2xl p-6 border border-gray-100 transition-all duration-300 flex flex-col justify-between group cursor-pointer" href={`/services/${service.slug}`} key={service.id}
               >
                 <div>
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-inner">
@@ -105,7 +99,7 @@ export default function Services() {
                   <span>Learn More</span>
                   <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </motion.div>
+              </Link>
             );
           })}
         </motion.div>
