@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import RecaptchaWrapper from "@/components/RecaptchaWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +34,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {/* STEP 9.1: AuthProvider se children ko wrap kar rahe hain */}
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <RecaptchaWrapper>
+            <Navbar />
+            {children}
+            <Footer />
+          </RecaptchaWrapper>
         </AuthProvider>
       </body>
     </html>
