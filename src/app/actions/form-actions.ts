@@ -36,26 +36,13 @@ export async function submitFormAction(
 ): Promise<SubmitFormResponse> {
   try {
     // 1. Verify reCAPTCHA
-    let verification: any = await verifyRecaptcha(recaptchaToken);
-    
-    const isDev = process.env.NODE_ENV === "development";
-    const forceRecaptcha = process.env.FORCE_RECAPTCHA === "true";
+    const verification: any = await verifyRecaptcha(recaptchaToken);
 
     if (!verification.success || (verification.score < 0.5)) {
-      if (isDev && !forceRecaptcha) {
-        console.warn(
-          `[DEV MODE] reCAPTCHA validation failed (Error: ${verification.error}, Score: ${verification.score}). Bypassing validation check for local testing.`
-        );
-        verification = {
-          success: true,
-          score: 0.9,
-        };
-      } else {
-        return {
-          success: false,
-          error: `reCAPTCHA verification failed (${verification.error || "Please try again."}).`,
-        };
-      }
+      return {
+        success: false,
+        error: `reCAPTCHA verification failed (${verification.error || "Please try again."}).`,
+      };
     }
 
     // 2. Resolve Schema based on formType

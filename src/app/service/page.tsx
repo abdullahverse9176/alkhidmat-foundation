@@ -33,7 +33,7 @@ export default function ContactPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function onSubmit(data: ContactFormData) {
+  async function serviceForm(data: ContactFormData) {
     setIsSubmitting(true);
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -63,7 +63,7 @@ export default function ContactPage() {
       <Navbar />
 
       <div className="max-w-xl mx-auto mb-10 p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(serviceForm)} className="space-y-4">
           {successMessage && (
             <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 border border-green-100" role="alert">
               {successMessage}
