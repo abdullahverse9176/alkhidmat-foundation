@@ -1,9 +1,17 @@
 import React from 'react'
 
-const FormBtn = ({text}: {text: string}) => {
+const FormBtn = ({ text, disabled }: { text: string; disabled?: boolean }) => {
   return (
     <>
-        <button type='submit' className='cursor-pointer mt-3 py-3 px-5 bg-primary text-white rounded-lg'>{text}</button>
+      <button
+        type="submit"
+        disabled={disabled}
+        className={`cursor-pointer mt-3 py-3 px-5 bg-primary text-white rounded-lg transition-opacity duration-200 ${
+          disabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
+        }`}
+      >
+        {text}
+      </button>
     </>
   )
 }

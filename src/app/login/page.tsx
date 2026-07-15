@@ -79,17 +79,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Quick Sandbox Help Alert */}
-          <div className="mb-6 bg-primary/10 border border-primary/20 rounded-xl p-3 text-left">
-            <p className="text-[11px] text-primary-hover font-semibold leading-relaxed uppercase tracking-wider mb-1 flex items-center gap-1 text-emerald-400">
-              <Sparkles className="w-3 h-3 text-accent" /> Sandbox Login (For Testing)
-            </p>
-            <p className="text-[11px] text-gray-300 leading-normal">
-              Agar aapke paas database ready nahi hai, toh aap is dummy login se test kar sakte hain:<br />
-              <strong>Email:</strong> <code className="text-accent">admin@alkhidmat.org</code><br />
-              <strong>Password:</strong> <code className="text-accent">password123</code>
-            </p>
-          </div>
+
 
           {/* Error Message Box */}
           {error && (

@@ -42,23 +42,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const { email, password } = parsedCredentials.data;
 
-        // --- DEVELOPMENT / FALLBACK MECHANISM ---
-        // Agar MONGODB_URI .env.local me configure nahi hai ya default hai,
-        // toh hum bina database ke test karne ke liye ek dummy/fallback user return karenge.
-        const isDbConfigured = process.env.MONGODB_URI && process.env.MONGODB_URI !== 'your_mongodb_connection_string';
-        
-        if (!isDbConfigured || email === 'admin@alkhidmat.org') {
-          if (email === 'admin@alkhidmat.org' && password === 'password123') {
-            console.log('Logging in using Fallback/Mock Admin Account');
-            return {
-              id: 'mock-admin-id',
-              name: 'Al-Khidmat Admin',
-              email: 'admin@alkhidmat.org',
-              role: 'admin',
-            };
-          }
-        }
-
         // --- REAL DATABASE AUTHENTICATION ---
         const user = await getUser(email);
         if (!user) {
