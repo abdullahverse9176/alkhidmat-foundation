@@ -4,7 +4,6 @@ import { dbConnect } from "@/lib/db";
 import { FormSubmission } from "@/models/FormSubmission";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { ContactSchema } from "@/app/schemas/contact-schema";
-import { headers } from "next/headers";
 import { z } from "zod";
 
 // Schema registry to easily support multiple schemas / forms in the future
@@ -67,15 +66,6 @@ export async function submitFormAction(
     // 4. Connect to DB
     await dbConnect();
 
-    // 5. Get IP Address of the requester (optional but helpful)
-    let ip = "";
-    try {
-      const headersList = await headers();
-      ip = headersList.get("x-forwarded-for")?.split(",")[0] || "";
-    } catch (e) {
-      console.warn("Failed to retrieve IP address:", e);
-    }
-
     // 6. Save submission to MongoDB
     await FormSubmission.create({
       formType,
@@ -88,7 +78,6 @@ export async function submitFormAction(
         content: utm.content || "",
       },
       recaptchaScore: verification.score,
-      ip,
     });
 
     return {
