@@ -22,10 +22,6 @@ const FormSubmissionSchema = new Schema(
       type: Number,
       default: 0,
     },
-    ip: {
-      type: String,
-      default: "",
-    },
   },
   {
     timestamps: true,

@@ -38,7 +38,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function serviceForm(data: ContactFormData) {
+  async function contactForm(data: ContactFormData) {
     setIsSubmitting(true);
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -68,7 +68,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit(serviceForm)} className="space-y-4">
+    <form onSubmit={handleSubmit(contactForm)} className="space-y-4">
       {successMessage && (
         <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 border border-green-100" role="alert">
           {successMessage}
