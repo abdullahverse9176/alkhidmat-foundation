@@ -24,3 +24,10 @@ export interface SelectOption {
 export interface SelectInputProps extends BaseFieldProps {
   options: SelectOption[];
 }
+
+export interface SubmitFormResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+  details?: Record<string, any>;
+}

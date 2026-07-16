@@ -5,6 +5,7 @@ import { FormSubmission } from "@/models/FormSubmission";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { ContactSchema } from "@/app/schemas/contact-schema";
 import { z } from "zod";
+import { SubmitFormResponse } from "../interfaces/forms";
 
 // Schema registry to easily support multiple schemas / forms in the future
 const schemas: Record<string, z.ZodSchema> = {
@@ -13,13 +14,6 @@ const schemas: Record<string, z.ZodSchema> = {
   // newsletter: NewsletterSchema,
   // volunteer: VolunteerSchema,
 };
-
-export interface SubmitFormResponse {
-  success: boolean;
-  message?: string;
-  error?: string;
-  details?: Record<string, any>;
-}
 
 export async function submitFormAction(
   formType: string,
