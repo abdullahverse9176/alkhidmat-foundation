@@ -9,15 +9,18 @@ import {
   ContactFormData,
 } from "@/app/schemas/contact-schema";
 import TextInput from "@/components/forms-component/TextInput";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import FormBtn from "@/components/forms-component/FormBtn";
 import { useRecaptcha } from "@/app/hooks/useRecaptcha";
 import useUTM from "@/app/hooks/useUTM";
 import { submitFormAction } from "@/app/actions/form-actions";
 import useGTM from "../hooks/useGTM";
+import Textarea from "@/components/forms-component/Textarea";
 
-export default function ContactPage() {
+interface ContactFormProps {
+  onSuccess?: () => void;
+}
+
+export default function ContactForm({ onSuccess }: ContactFormProps) {
   const {
     register,
     handleSubmit,
@@ -51,6 +54,7 @@ export default function ContactPage() {
         setSuccessMessage(response.message || "Submitted successfully!");
         trackFormSubmit("contact", utm);
         reset();
+        onSuccess?.();
       } else {
         setErrorMessage(response.error || "Something went wrong.");
         trackFormError("contact", response.error);
@@ -64,52 +68,51 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-32">
-      <Navbar />
+    <form onSubmit={handleSubmit(serviceForm)} className="space-y-4">
+      {successMessage && (
+        <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 border border-green-100" role="alert">
+          {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="p-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-100" role="alert">
+          {errorMessage}
+        </div>
+      )}
 
-      <div className="max-w-xl mx-auto mb-10 p-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100">
-        <form onSubmit={handleSubmit(serviceForm)} className="space-y-4">
-          {successMessage && (
-            <div className="p-4 text-sm text-green-800 rounded-lg bg-green-50 border border-green-100" role="alert">
-              {successMessage}
-            </div>
-          )}
-          {errorMessage && (
-            <div className="p-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-100" role="alert">
-              {errorMessage}
-            </div>
-          )}
+      <TextInput
+        label="Name"
+        placeholder="Enter your name"
+        registration={register("name")}
+        error={errors.name}
+      />
 
-          <TextInput
-            label="Name"
-            placeholder="Enter your name"
-            registration={register("name")}
-            error={errors.name}
-          />
+      <TextInput
+        label="Email"
+        placeholder="Enter your email"
+        type="email"
+        registration={register("email")}
+        error={errors.email}
+      />
 
-          <TextInput
-            label="Email"
-            placeholder="Enter your email"
-            type="email"
-            registration={register("email")}
-            error={errors.email}
-          />
+      <TextInput
+        label="Phone"
+        placeholder="Enter your phone number"
+        type="tel"
+        registration={register("phone")}
+        error={errors.phone}
+      />
 
-          <TextInput
-            label="Phone"
-            placeholder="Enter your phone number"
-            type="tel"
-            registration={register("phone")}
-            error={errors.phone}
-          />
+      <Textarea
+        label="Message"
+        placeholder="Enter your message"
+        registration={register("message")}
+        error={errors.message}
+      />
 
-          <div className="text-center pt-2">
-            <FormBtn text={isSubmitting ? "Submitting..." : "Submit"} disabled={isSubmitting} />
-          </div>
-        </form>
+      <div className="text-center pt-2">
+        <FormBtn text={isSubmitting ? "Submitting..." : "Submit"} disabled={isSubmitting} />
       </div>
-
-      <Footer />
-    </div>
+    </form>
   );
 }

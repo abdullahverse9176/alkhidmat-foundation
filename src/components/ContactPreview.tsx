@@ -3,23 +3,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, ShieldCheck, CheckCircle2, Send } from "lucide-react";
+import ContactForm from "@/app/contact/ContactForm";
 
 export default function ContactPreview() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSent, setIsSent] = useState(false);
-  const [isSending, setIsSending] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      setIsSending(true);
-      setTimeout(() => {
-        setIsSending(false);
-        setIsSent(true);
-        setFormData({ name: "", email: "", message: "" });
-      }, 1500);
-    }
-  };
 
   const contactDetails = [
     {
@@ -100,76 +87,20 @@ export default function ContactPreview() {
           <div className="lg:col-span-7 bg-gray-50 border border-gray-150 rounded-3xl p-8 sm:p-10 flex flex-col justify-between shadow-sm">
             <AnimatePresence mode="wait">
               {!isSent ? (
-                <motion.form
+                <motion.div
                   key="contact-form"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  onSubmit={handleSubmit}
-                  className="space-y-5 flex-grow flex flex-col justify-between"
+                  className="flex-grow "
                 >
                   <h3 className="font-extrabold text-neutral-dark text-lg mb-2">
                     Send a Direct Message
                   </h3>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-dark mb-1">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g. Abdullah"
-                        className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-neutral-dark font-semibold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-dark mb-1">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="name@domain.com"
-                        className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-neutral-dark font-semibold"
-                      />
-                    </div>
-                  </div>
+                  <ContactForm onSuccess={() => setIsSent(true)} />
 
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Write your suggestions, queries or volunteer application details..."
-                      className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-neutral-dark font-semibold resize-none"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSending}
-                    className="w-full py-3.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
-                  >
-                    {isSending ? (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Send Message</span>
-                      </>
-                    )}
-                  </button>
-                </motion.form>
+                </motion.div>
               ) : (
                 <motion.div
                   key="contact-success"
