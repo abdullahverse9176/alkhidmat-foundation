@@ -25,7 +25,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(ContactSchema),
   });
@@ -34,12 +34,10 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
   const utm = useUTM();
   const { trackFormSubmit, trackFormError } = useGTM();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function contactForm(data: ContactFormData) {
-    setIsSubmitting(true);
     setSuccessMessage(null);
     setErrorMessage(null);
 
@@ -62,8 +60,6 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
     } catch (err: any) {
       setErrorMessage(err.message || "Failed to submit form.");
       trackFormError("contact", err.message);
-    } finally {
-      setIsSubmitting(false);
     }
   }
 
