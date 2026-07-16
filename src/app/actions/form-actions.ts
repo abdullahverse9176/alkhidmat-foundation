@@ -78,11 +78,11 @@ export async function submitFormAction(
       success: true,
       message: "Your submission has been received successfully!",
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in submitFormAction:", error);
     return {
       success: false,
-      error: "An unexpected server error occurred. Please try again later.",
+      error: `An unexpected server error occurred: ${error.message || error}. Please try again later.`,
     };
   }
 }
