@@ -15,6 +15,7 @@ import FormBtn from "@/components/forms-component/FormBtn";
 import { useRecaptcha } from "@/app/hooks/useRecaptcha";
 import useUTM from "@/app/hooks/useUTM";
 import { submitFormAction } from "@/app/actions/form-actions";
+import useGTM from "../hooks/useGTM";
 
 export default function ContactPage() {
   const {
@@ -28,6 +29,7 @@ export default function ContactPage() {
 
   const { getToken } = useRecaptcha();
   const utm = useUTM();
+  const { trackFormSubmit, trackFormError } = useGTM();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -47,12 +49,15 @@ export default function ContactPage() {
 
       if (response.success) {
         setSuccessMessage(response.message || "Submitted successfully!");
+        trackFormSubmit("contact", utm);
         reset();
       } else {
         setErrorMessage(response.error || "Something went wrong.");
+        trackFormError("contact", response.error);
       }
     } catch (err: any) {
       setErrorMessage(err.message || "Failed to submit form.");
+      trackFormError("contact", err.message);
     } finally {
       setIsSubmitting(false);
     }
