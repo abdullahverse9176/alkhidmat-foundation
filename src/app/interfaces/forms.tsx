@@ -31,3 +31,10 @@ export interface SubmitFormResponse {
   error?: string;
   details?: Record<string, any>;
 }
+
+export interface PhoneInputFieldProps {
+  name: string;
+  control: any;
+  label: string;
+  error?: any;
+}

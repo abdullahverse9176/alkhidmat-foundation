@@ -15,6 +15,7 @@ import useUTM from "@/app/hooks/useUTM";
 import { submitFormAction } from "@/app/actions/form-actions";
 import useGTM from "../hooks/useGTM";
 import Textarea from "@/components/forms-component/Textarea";
+import PhoneInputField from "@/components/forms-component/PhoneInputField";
 
 interface ContactFormProps {
   onSuccess?: () => void;
@@ -24,6 +25,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
@@ -91,11 +93,10 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
         error={errors.email}
       />
 
-      <TextInput
-        label="Phone"
-        placeholder="Enter your phone number"
-        type="tel"
-        registration={register("phone")}
+      <PhoneInputField
+        name="phone"
+        control={control}
+        label="Phone Number"
         error={errors.phone}
       />
 
