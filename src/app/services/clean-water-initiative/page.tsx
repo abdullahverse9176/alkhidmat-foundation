@@ -3,7 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { cleanWaterProjects } from "@/data/cleanWaterData";
+import { cleanWaterProjects as defaultProjects, CleanWaterProject } from "@/data/cleanWaterData";
+import { dbConnect } from "@/lib/db";
+import { Project } from "@/models/Service";
 import { 
   Droplet, 
   MapPin, 
@@ -22,7 +24,25 @@ export const metadata = {
   description: "Explore our clean water projects, including hand pump installations, deep water wells, and filtration plants providing safe drinking water.",
 };
 
-export default function CleanWaterInitiativePage() {
+export const dynamic = "force-dynamic";
+
+export default async function CleanWaterInitiativePage() {
+  let dbProjects = [];
+  try {
+    await dbConnect();
+    dbProjects = await Project.find({ serviceSlug: "clean-water-initiative" }).lean();
+
+    if (dbProjects.length === 0) {
+      // Seed default projects
+      await Project.insertMany(defaultProjects);
+      dbProjects = await Project.find({ serviceSlug: "clean-water-initiative" }).lean();
+    }
+  } catch (error) {
+    console.error("Database connection failed in CleanWaterInitiativePage, falling back to mock defaultProjects:", error);
+    dbProjects = defaultProjects as any[];
+  }
+
+  const projects = JSON.parse(JSON.stringify(dbProjects)) as CleanWaterProject[];
   return (
     <div className="relative min-h-screen bg-slate-50/50">
       {/* Navigation */}
@@ -98,7 +118,7 @@ export default function CleanWaterInitiativePage() {
 
         {/* Project Listing Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 mb-20">
-          {cleanWaterProjects.map((project) => (
+          {projects.map((project) => (
             <Link 
               key={project.id} 
               href={`/services/clean-water-initiative/${project.slug}`}

@@ -8,6 +8,8 @@ import {
   Users,
   Target,
 } from "lucide-react";
+import { dbConnect } from "@/lib/db";
+import { Service } from "@/models/Service";
 
 export default async function ServiceDetailsPage({
   params,
@@ -16,9 +18,21 @@ export default async function ServiceDetailsPage({
 }) {
   const { slug } = await params;
 
-  const service = servicesData.find((item) => item.slug === slug);
+  let service = null;
+  try {
+    await dbConnect();
+    service = await Service.findOne({ slug }).lean();
+  } catch (error) {
+    console.error("Database connection failed in ServiceDetailsPage, falling back to mock servicesData:", error);
+  }
 
-  if (!service) notFound();
+  if (!service) {
+    const mockService = servicesData.find((item) => item.slug === slug);
+    if (!mockService) notFound();
+    service = JSON.parse(JSON.stringify(mockService));
+  } else {
+    service = JSON.parse(JSON.stringify(service));
+  }
 
   return (
     <main>

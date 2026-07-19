@@ -27,7 +27,15 @@ const iconMap = {
   Briefcase: Briefcase,
 };
 
-export default function Services() {
+export interface ServicesProps {
+  initialServices?: ServiceItem[];
+}
+
+export default function Services({ initialServices }: ServicesProps) {
+  const displayServices = initialServices && initialServices.length > 0 
+    ? initialServices 
+    : servicesData;
+
   const containerVariants = {
     hidden: {},
     visible: {
@@ -75,11 +83,11 @@ export default function Services() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {servicesData.map((service: ServiceItem) => {
-            const Icon = iconMap[service.iconName] || Sparkles;
+          {displayServices.map((service: any) => {
+            const Icon = iconMap[service.iconName as keyof typeof iconMap] || Sparkles;
 
             return (
-              <Link className="bg-white rounded-2xl p-6 border border-gray-100 transition-all duration-300 flex flex-col justify-between group cursor-pointer" href={`/services/${service.slug}`} key={service.id}
+              <Link className="bg-white rounded-2xl p-6 border border-gray-100 transition-all duration-300 flex flex-col justify-between group cursor-pointer" href={`/services/${service.slug}`} key={service.id || service._id}
               >
                 <div>
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-inner">

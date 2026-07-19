@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectGallery from "@/components/ProjectGallery";
-import { cleanWaterProjects } from "@/data/cleanWaterData";
+import { cleanWaterProjects as defaultProjects, CleanWaterProject } from "@/data/cleanWaterData";
+import { dbConnect } from "@/lib/db";
+import { Project } from "@/models/Service";
 import { 
   ChevronLeft, 
   MapPin, 
@@ -30,7 +32,17 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { projectSlug } = await params;
-  const project = cleanWaterProjects.find((p) => p.slug === projectSlug);
+  let project = null;
+  try {
+    await dbConnect();
+    project = await Project.findOne({ slug: projectSlug }).lean();
+  } catch (error) {
+    console.error("Database connection failed in generateMetadata, falling back to mock defaultProjects:", error);
+  }
+  
+  if (!project) {
+    project = defaultProjects.find((p) => p.slug === projectSlug) as any;
+  }
   
   if (!project) return { title: "Project Not Found" };
   
@@ -42,9 +54,22 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ProjectDetailsPage({ params }: PageProps) {
   const { projectSlug } = await params;
-  const project = cleanWaterProjects.find((p) => p.slug === projectSlug);
 
-  if (!project) notFound();
+  let dbProject = null;
+  try {
+    await dbConnect();
+    dbProject = await Project.findOne({ slug: projectSlug }).lean();
+  } catch (error) {
+    console.error("Database connection failed in ProjectDetailsPage, falling back to mock defaultProjects:", error);
+  }
+
+  if (!dbProject) {
+    const mockProject = defaultProjects.find((p) => p.slug === projectSlug);
+    if (!mockProject) notFound();
+    dbProject = JSON.parse(JSON.stringify(mockProject));
+  }
+
+  const project = JSON.parse(JSON.stringify(dbProject)) as CleanWaterProject;
 
   return (
     <div className="relative min-h-screen bg-slate-50/50">

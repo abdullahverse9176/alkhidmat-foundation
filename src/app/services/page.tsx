@@ -4,8 +4,41 @@ import Navbar from "@/components/Navbar";
 import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import { Sparkles, ArrowLeft } from "lucide-react";
+import { dbConnect } from "@/lib/db";
+import { Service } from "@/models/Service";
+import { servicesData } from "@/data/mockData";
 
-export default function ServicesPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ServicesPage() {
+  let dbServices = [];
+  try {
+    await dbConnect();
+    dbServices = await Service.find().lean();
+
+    if (dbServices.length === 0) {
+      // Seed default services
+      const seedData = servicesData.map((s) => ({
+        title: s.title,
+        slug: s.slug,
+        description: s.description,
+        longDescription: s.longDescription,
+        iconName: s.iconName,
+        image: s.image.startsWith("/") 
+          ? "https://images.unsplash.com/photo-1469571486040-7530613856e1?auto=format&fit=crop&q=80&w=600" 
+          : s.image,
+        features: s.features || [],
+        stats: s.stats || [],
+      }));
+      await Service.insertMany(seedData);
+      dbServices = await Service.find().lean();
+    }
+  } catch (error) {
+    console.error("Database connection failed in ServicesPage, falling back to mock servicesData:", error);
+    dbServices = servicesData as any[];
+  }
+
+  const serializedServices = JSON.parse(JSON.stringify(dbServices));
   return (
     <div className="relative min-h-screen bg-white">
       {/* Sticky Top Header */}
@@ -53,7 +86,7 @@ export default function ServicesPage() {
       {/* Main Sections */}
       <main className="w-full">
         {/* 1. Services */}
-        <Services />
+        <Services initialServices={serializedServices} />
       </main>
 
       {/* Footer */}
