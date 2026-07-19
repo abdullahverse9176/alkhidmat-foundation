@@ -30,7 +30,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       {/* 1. Sidebar Panel (Left on Desktop, Top on Mobile) */}
-      <aside className="w-full md:w-64 bg-slate-900 text-slate-100 flex-shrink-0 flex flex-col border-b md:border-b-0 md:border-r border-slate-800">
+      <aside className="w-full md:w-64 md:h-screen md:sticky md:top-0 bg-slate-900 text-slate-100 flex-shrink-0 flex flex-col border-b md:border-b-0 md:border-r border-slate-800">
         
         {/* Brand Header */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800 bg-slate-950/40">
