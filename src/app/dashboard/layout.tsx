@@ -63,6 +63,14 @@ export default async function DashboardLayout({
           </Link>
 
           <Link 
+            href="/dashboard/service-projects" 
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
+          >
+            <Droplet className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+            <span>Service Projects</span>
+          </Link>
+
+          <Link 
             href="/dashboard/projects" 
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
           >
