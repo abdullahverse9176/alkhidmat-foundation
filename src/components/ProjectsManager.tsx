@@ -33,6 +33,8 @@ interface ProjectItem {
   featuredImage: string;
   gallery: string[];
   techSpecs: { label: string; value: string }[];
+  goal?: number;
+  raised?: number;
 }
 
 interface ServiceSummary {
@@ -67,7 +69,9 @@ const defaultFormState: ProjectItem = {
   totalCost: "",
   featuredImage: "",
   gallery: [],
-  techSpecs: []
+  techSpecs: [],
+  goal: 0,
+  raised: 0
 };
 
 export default function ProjectsManager({ initialProjects, services }: ProjectsManagerProps) {
@@ -83,14 +87,20 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
   const [newSpec, setNewSpec] = useState({ label: "", value: "" });
 
   const handleEditClick = (project: ProjectItem) => {
-    setFormState({ ...project });
+    setFormState({ 
+      ...project,
+      goal: project.goal || 0,
+      raised: project.raised || 0
+    });
     setIsEditing(true);
   };
 
   const handleAddNewClick = () => {
     setFormState({
       ...defaultFormState,
-      serviceSlug: services[0]?.slug || "clean-water-initiative"
+      serviceSlug: services[0]?.slug || "clean-water-initiative",
+      goal: 0,
+      raised: 0
     });
     setIsEditing(true);
   };
@@ -222,20 +232,20 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
     setFormState(prev => {
       const list = [...prev.costBreakdown, { label: newCostItem.label.trim(), amount: newCostItem.amount.trim() }];
       
-      // Attempt to auto-calc Total Cost if empty or just updating
-      let calculatedTotal = prev.totalCost;
+      // Attempt to auto-calc Total Cost / Goal if sum > 0
       const sum = list.reduce((acc, item) => {
         const val = parseInt(item.amount.replace(/[^0-9]/g, ""), 10);
         return isNaN(val) ? acc : acc + val;
       }, 0);
-      if (sum > 0) {
-        calculatedTotal = `PKR ${sum.toLocaleString()}`;
-      }
+      
+      const goalUpdate = sum > 0 ? sum : (prev.goal || 0);
+      const calculatedTotal = `PKR ${goalUpdate.toLocaleString()}`;
 
       return {
         ...prev,
         costBreakdown: list,
-        totalCost: calculatedTotal
+        totalCost: calculatedTotal,
+        goal: goalUpdate
       };
     });
     setNewCostItem({ label: "", amount: "" });
@@ -280,7 +290,10 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
           ...formState.projectHead,
           avatarUrl: formState.projectHead.avatarUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop",
           message: formState.projectHead.message || ""
-        }
+        },
+        goal: parseInt(String(formState.goal), 10) || 0,
+        raised: parseInt(String(formState.raised), 10) || 0,
+        totalCost: "PKR " + (parseInt(String(formState.goal), 10) || 0).toLocaleString()
       };
 
       const saved = await saveProjectAction(payload);
@@ -458,6 +471,32 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
             </div>
 
             <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Total Project Cost / Goal ($) *</label>
+              <input 
+                type="number" 
+                name="goal" 
+                value={formState.goal || 0} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. 500000"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Amount Raised ($) *</label>
+              <input 
+                type="number" 
+                name="raised" 
+                value={formState.raised || 0} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. 412000"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Head Full Name</label>
               <input 
                 type="text" 
@@ -515,7 +554,7 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
                   value={newSpec.label} 
                   onChange={(e) => setNewSpec(prev => ({ ...prev, label: e.target.value }))} 
                   placeholder="Spec Label (e.g. Drilling Depth)"
-                  className="px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-750 bg-slate-50/50"
+                  className="px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-755 bg-slate-50/50"
                 />
                 <div className="flex gap-2">
                   <input 
@@ -523,7 +562,7 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
                     value={newSpec.value} 
                     onChange={(e) => setNewSpec(prev => ({ ...prev, value: e.target.value }))} 
                     placeholder="Spec Value (e.g. 250 Feet)"
-                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-750 bg-slate-50/50"
+                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-755 bg-slate-50/50"
                   />
                   <button type="button" onClick={addSpec} className="px-4 py-3 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer">Add</button>
                 </div>
@@ -579,18 +618,6 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
                   </div>
                 ))}
               </div>
-
-              <div className="pt-2 border-t border-slate-200 flex justify-between items-center">
-                <span className="text-xs font-bold text-slate-500 uppercase">Total Project Cost</span>
-                <input 
-                  type="text" 
-                  name="totalCost" 
-                  value={formState.totalCost} 
-                  onChange={handleInputChange} 
-                  placeholder="e.g. PKR 150,000"
-                  className="px-3.5 py-2 max-w-[150px] text-right rounded-xl border border-slate-200 text-xs font-extrabold text-slate-750 bg-white"
-                />
-              </div>
             </div>
 
             {/* Cooperators roll list */}
@@ -620,9 +647,9 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Site Photos Gallery</label>
               <div className="flex items-center gap-4">
-                <span className="text-xs text-slate-450 font-semibold">Upload photos from building or delivery phases:</span>
-                <label className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-750 flex items-center gap-1.5 cursor-pointer border-dashed ml-auto">
-                  {uploadStates.gallery ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-slate-450" />}
+                <span className="text-xs text-slate-455 font-semibold">Upload photos from building or delivery phases:</span>
+                <label className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-755 flex items-center gap-1.5 cursor-pointer border-dashed ml-auto">
+                  {uploadStates.gallery ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-slate-455" />}
                   <span>Add Photo</span>
                   <input type="file" accept="image/*" multiple onChange={(e) => handleFileChange(e, "gallery")} className="hidden" />
                 </label>

@@ -176,3 +176,28 @@ export async function deleteProjectAction(idOrSlug: string) {
     throw new Error(error.message || "Failed to delete project");
   }
 }
+
+/**
+ * Increment the raised field of a project atomically when a donation is received.
+ */
+export async function recordDonationAction(projectSlug: string, amount: number) {
+  await dbConnect();
+  try {
+    const updated = await Project.findOneAndUpdate(
+      { slug: projectSlug },
+      { $inc: { raised: amount } },
+      { new: true }
+    );
+    
+    // Revalidate landing page, services directory and specific details page
+    revalidatePath("/");
+    revalidatePath("/services");
+    if (updated) {
+      revalidatePath(`/services/${updated.serviceSlug}/${projectSlug}`);
+    }
+    return JSON.parse(JSON.stringify(updated));
+  } catch (error: any) {
+    console.error("Error in recordDonationAction:", error);
+    throw new Error("Failed to record donation: " + error.message);
+  }
+}

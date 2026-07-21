@@ -34,6 +34,8 @@ interface ProjectItem {
   totalCost?: string;
   featuredImage: string;
   gallery?: string[];
+  goal?: number;
+  raised?: number;
 }
 
 interface ServiceSummary {
@@ -52,6 +54,8 @@ const defaultFormState: ProjectItem = {
   slug: "",
   featuredImage: "",
   location: "",
+  goal: 0,
+  raised: 0
 };
 
 export default function ServiceProjectsManager({ initialProjects, services }: ServiceProjectsManagerProps) {
@@ -65,7 +69,9 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
     setFormState({ 
       ...project,
       featuredImage: project.featuredImage || "",
-      location: project.location || ""
+      location: project.location || "",
+      goal: project.goal || 0,
+      raised: project.raised || 0
     });
     setIsEditing(true);
   };
@@ -75,7 +81,9 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
       ...defaultFormState,
       serviceSlug: services[0]?.slug || "",
       featuredImage: "",
-      location: ""
+      location: "",
+      goal: 0,
+      raised: 0
     });
     setIsEditing(true);
   };
@@ -144,9 +152,11 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
         },
         cooperators: formState.cooperators || [],
         costBreakdown: formState.costBreakdown || [],
-        totalCost: formState.totalCost || "PKR 150,000",
+        totalCost: "PKR " + (parseInt(String(formState.goal), 10) || 0).toLocaleString(),
         techSpecs: [], // specs removed from UI
         gallery: formState.gallery || [],
+        goal: parseInt(String(formState.goal), 10) || 0,
+        raised: parseInt(String(formState.raised), 10) || 0
       };
 
       const saved = await saveProjectAction(payload);
@@ -268,6 +278,33 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                 placeholder="e.g. Chiniot, Punjab"
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Total Project Cost / Goal ($) *</label>
+                <input 
+                  type="number" 
+                  name="goal" 
+                  value={formState.goal || 0} 
+                  onChange={handleInputChange} 
+                  required
+                  placeholder="e.g. 500000"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Amount Raised ($) *</label>
+                <input 
+                  type="number" 
+                  name="raised" 
+                  value={formState.raised || 0} 
+                  onChange={handleInputChange} 
+                  required
+                  placeholder="e.g. 412000"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+                />
+              </div>
             </div>
 
             {/* Featured Image upload block */}

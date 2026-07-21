@@ -1,15 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, DollarSign, CheckCircle2, X, Award } from "lucide-react";
+import { recordDonationAction } from "@/app/actions/services";
 
-export default function DonationProgress() {
+interface DonationProgressProps {
+  projects?: {
+    slug: string;
+    title: string;
+    raised?: number;
+    goal?: number;
+  }[];
+}
+
+export default function DonationProgress({ projects = [] }: DonationProgressProps) {
   const [selectedAmount, setSelectedAmount] = useState<number | "custom">(50);
   const [customAmount, setCustomAmount] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [donorName, setDonorName] = useState("");
+  const [selectedProjectSlug, setSelectedProjectSlug] = useState("general");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const p = params.get("project");
+      if (p) {
+        setSelectedProjectSlug(p);
+      }
+    }
+  }, []);
 
   const presetAmounts = [25, 50, 100, 250, 500];
 
@@ -30,7 +51,7 @@ export default function DonationProgress() {
     return selectedAmount;
   };
 
-  const handleDonateSubmit = (e: React.FormEvent) => {
+  const handleDonateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const donationVal = getFinalAmount();
     if (donationVal <= 0) {
@@ -38,14 +59,19 @@ export default function DonationProgress() {
       return;
     }
     setIsSubmitting(true);
-    // Simulate transaction
-    setTimeout(() => {
+    try {
+      if (selectedProjectSlug && selectedProjectSlug !== "general") {
+        await recordDonationAction(selectedProjectSlug, donationVal);
+      }
       setIsSubmitting(false);
       setShowSuccessModal(true);
-    }, 1500);
+    } catch (error: any) {
+      alert(`Transaction processing failed: ${error?.message || error}`);
+      setIsSubmitting(false);
+    }
   };
 
-  // Main campaign specs
+  // Main campaign specs (General Welfare Fund default progress)
   const goalAmount = 1500000;
   const raisedAmount = 1062500;
   const progressPercent = Math.round((raisedAmount / goalAmount) * 100);
@@ -126,7 +152,7 @@ export default function DonationProgress() {
 
             {/* Right Column: Donation Form Panel */}
             <div className="lg:col-span-6 p-8 sm:p-10 flex flex-col justify-center">
-              <form onSubmit={handleDonateSubmit} className="space-y-6">
+              <form onSubmit={handleDonateSubmit} className="space-y-4">
                 <h4 className="font-extrabold text-neutral-dark text-lg">
                   Select Donation Amount (USD)
                 </h4>
@@ -171,7 +197,7 @@ export default function DonationProgress() {
                 </div>
 
                 {/* Donor details */}
-                <div className="space-y-3.5">
+                <div className="space-y-3">
                   <div>
                     <label className="block text-xs font-extrabold text-neutral-dark mb-1">
                       Your Full Name
@@ -184,6 +210,24 @@ export default function DonationProgress() {
                       onChange={(e) => setDonorName(e.target.value)}
                       className="w-full p-3 bg-gray-50 border border-gray-250 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-extrabold text-neutral-dark mb-1">
+                      Designate Donation to Campaign
+                    </label>
+                    <select
+                      value={selectedProjectSlug}
+                      onChange={(e) => setSelectedProjectSlug(e.target.value)}
+                      className="w-full p-3 bg-gray-50 border border-gray-250 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold"
+                    >
+                      <option value="general">General Welfare Fund</option>
+                      {projects.map((p) => (
+                        <option key={p.slug} value={p.slug}>
+                          {p.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
@@ -249,7 +293,7 @@ export default function DonationProgress() {
                 </h4>
 
                 <p className="text-xs text-neutral-light leading-relaxed max-w-xs mx-auto">
-                  Thank you, **{donorName}**, for your contribution of **${getFinalAmount()}** to the Al-Khidmat General Welfare Fund.
+                  Thank you, **{donorName}**, for your contribution of **${getFinalAmount()}** to the {selectedProjectSlug === "general" ? "General Welfare Fund" : `Campaign: ${projects.find(p => p.slug === selectedProjectSlug)?.title || selectedProjectSlug}`}.
                 </p>
 
                 {/* Receipt Details Box */}

@@ -3,10 +3,23 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Calendar, ArrowRight } from "lucide-react";
-import { featuredProjectsData, ProjectItem } from "@/data/mockData";
+import { featuredProjectsData } from "@/data/mockData";
 import Link from "next/link";
 
-export default function FeaturedProjects() {
+interface FeaturedProjectsProps {
+  projects?: {
+    _id?: string;
+    slug: string;
+    serviceSlug: string;
+    title: string;
+    shortDescription?: string;
+    featuredImage: string;
+    raised?: number;
+    goal?: number;
+  }[];
+}
+
+export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProps) {
   const containerVariants = {
     hidden: {},
     visible: {
@@ -28,6 +41,31 @@ export default function FeaturedProjects() {
       },
     },
   };
+
+  // Build the list of projects to render: prefer database projects, fall back to mock data
+  const displayProjects = projects.length > 0 
+    ? projects.slice(0, 6).map(p => ({
+        id: p._id || p.slug,
+        title: p.title,
+        description: p.shortDescription || `${p.title} - An active welfare initiative of Alkhidmat Foundation.`,
+        category: p.serviceSlug ? p.serviceSlug.replace(/-/g, " ") : "Welfare Initiative",
+        imageUrl: p.featuredImage || "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=600&auto=format&fit=crop",
+        raisedAmount: p.raised || 0,
+        targetAmount: p.goal || 100000,
+        slug: p.slug,
+        serviceSlug: p.serviceSlug
+      }))
+    : featuredProjectsData.map(p => ({
+        id: p.id,
+        title: p.title,
+        description: p.description,
+        category: p.category,
+        imageUrl: p.imageUrl,
+        raisedAmount: p.raisedAmount,
+        targetAmount: p.targetAmount,
+        slug: "", // default fallback
+        serviceSlug: "clean-water-initiative"
+      }));
 
   return (
     <section id="projects" className="py-24 bg-white relative">
@@ -64,7 +102,7 @@ export default function FeaturedProjects() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {featuredProjectsData.map((project: ProjectItem) => {
+          {displayProjects.map((project) => {
             const percentage = Math.min(100, Math.round((project.raisedAmount / project.targetAmount) * 100));
 
             return (
@@ -126,7 +164,7 @@ export default function FeaturedProjects() {
                     <div className="flex justify-between items-center text-[10px] text-neutral-light border-t border-gray-100 pt-3">
                       <span className="font-bold text-accent px-2 py-0.5 bg-accent/10 rounded">{percentage}% Funded</span>
                       <span className="flex items-center gap-1 font-semibold">
-                        <Calendar className="w-3.5 h-3.5" />
+                        <Calendar className="w-3.5 h-3.5 text-neutral-light" />
                         <span>Active Campaign</span>
                       </span>
                     </div>
@@ -135,20 +173,28 @@ export default function FeaturedProjects() {
                   {/* Action buttons */}
                   <div className="pt-2 grid grid-cols-2 gap-3">
                     <Link
-                      href="/#donation"
+                      href={project.slug ? `/#donation?project=${project.slug}` : "/#donation"}
                       className="py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg text-center transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Heart className="w-3.5 h-3.5 fill-current" />
                       <span>Donate</span>
                     </Link>
-                    <Link
-                      href="/#about"
-                      className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
-                    >
-                      Read More
-                    </Link>
+                    {project.slug ? (
+                      <Link
+                        href={`/services/${project.serviceSlug}/${project.slug}`}
+                        className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
+                      >
+                        Read More
+                      </Link>
+                    ) : (
+                      <Link
+                        href="/#about"
+                        className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
+                      >
+                        Read More
+                      </Link>
+                    )}
                   </div>
-
                 </div>
               </motion.div>
             );

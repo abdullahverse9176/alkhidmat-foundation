@@ -85,6 +85,10 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
   const project = JSON.parse(JSON.stringify(dbProject));
   const serviceTitle = service?.title || "Welfare Service";
 
+  const percentage = project.goal > 0 
+    ? Math.min(100, Math.round(((project.raised || 0) / project.goal) * 100)) 
+    : 0;
+
   return (
     <div className="relative min-h-screen bg-slate-50/50">
       {/* Navigation */}
@@ -227,6 +231,73 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
           {/* Right Column: Cost, Leaders & Cooperators (Col span 5) */}
           <div className="lg:col-span-5 space-y-8">
             
+            {/* Donation Campaign Progress Card */}
+            {project.goal > 0 && (
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden space-y-6">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full" />
+                
+                <div className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-emerald-600 fill-current" />
+                  <h3 className="text-lg font-bold text-slate-800">Campaign Donation</h3>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Progress bar */}
+                  <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-50">
+                    <div
+                      style={{ width: `${percentage}%` }}
+                      className="bg-emerald-600 h-full rounded-full transition-all duration-1000"
+                    />
+                  </div>
+
+                  {/* Info Row */}
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block">Raised</span>
+                      <span className="text-2xl font-black text-emerald-600">${(project.raised || 0).toLocaleString()}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block">Goal</span>
+                      <span className="text-xl font-bold text-slate-800">${project.goal.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Status Badges */}
+                  <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4">
+                    <span className="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-700">
+                      {percentage}% Funded
+                    </span>
+                    <span className="flex items-center gap-1.5 text-slate-500">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{project.status === "Completed" ? "Completed Campaign" : "Active Campaign"}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <Link
+                    href={`/#donation?project=${project.slug}`}
+                    className="py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl text-center shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Heart className="w-3.5 h-3.5 fill-current" />
+                    <span>Donate</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Project link copied to clipboard!");
+                      }
+                    }}
+                    className="py-3 border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl text-center transition-colors cursor-pointer"
+                  >
+                    Share Project
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* 1. Itemized Cost Breakdown Card */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full" />

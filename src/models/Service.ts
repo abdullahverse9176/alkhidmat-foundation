@@ -55,6 +55,8 @@ const ProjectSchema = new Schema(
     totalCost: { type: String, required: true },
     featuredImage: { type: String, required: true },
     gallery: { type: [String], default: [] },
+    goal: { type: Number, default: 0 },
+    raised: { type: Number, default: 0 },
     techSpecs: [
       {
         label: { type: String, required: true },

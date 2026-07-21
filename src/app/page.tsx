@@ -14,8 +14,11 @@ import DonationProgress from "@/components/DonationProgress";
 import CTA from "@/components/CTA";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
+import { getProjectsAction } from "@/app/actions/services";
 
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjectsAction();
+
   return (
     <div className="relative min-h-screen bg-white">
       {/* Sticky Top Header */}
@@ -33,7 +36,7 @@ export default function Home() {
         <AboutUs />
 
         {/* 6. Featured Welfare Projects */}
-        <FeaturedProjects />
+        <FeaturedProjects projects={projects} />
 
         {/* 7. Election Campaign Section */}
         <Campaign />
@@ -56,7 +59,7 @@ export default function Home() {
         <Testimonials />
 
         {/* 13. Donation Progress */}
-        <DonationProgress />
+        <DonationProgress projects={projects} />
 
         {/* 15. Call to Action */}
         <CTA />
