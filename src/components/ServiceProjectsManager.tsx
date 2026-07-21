@@ -18,7 +18,7 @@ interface ProjectItem {
   techSpecs?: ProjectDetail[];
   shortDescription?: string;
   longDescription?: string;
-  location?: string;
+  location: string;
   province?: string;
   date?: string;
   status?: string;
@@ -51,6 +51,7 @@ const defaultFormState: ProjectItem = {
   title: "",
   slug: "",
   featuredImage: "",
+  location: "",
 };
 
 export default function ServiceProjectsManager({ initialProjects, services }: ServiceProjectsManagerProps) {
@@ -63,7 +64,8 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
   const handleEditClick = (project: ProjectItem) => {
     setFormState({ 
       ...project,
-      featuredImage: project.featuredImage || ""
+      featuredImage: project.featuredImage || "",
+      location: project.location || ""
     });
     setIsEditing(true);
   };
@@ -72,7 +74,8 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
     setFormState({
       ...defaultFormState,
       serviceSlug: services[0]?.slug || "",
-      featuredImage: ""
+      featuredImage: "",
+      location: ""
     });
     setIsEditing(true);
   };
@@ -116,8 +119,8 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formState.title || !formState.slug || !formState.serviceSlug || !formState.featuredImage) {
-      alert("Please fill in all required fields (Service, Title, Slug, Image)");
+    if (!formState.title || !formState.slug || !formState.serviceSlug || !formState.featuredImage || !formState.location) {
+      alert("Please fill in all required fields (Service, Title, Slug, Image, Area/City/Province)");
       return;
     }
 
@@ -128,8 +131,8 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
         ...formState,
         shortDescription: formState.shortDescription || `${formState.title} Project`,
         longDescription: formState.longDescription || `${formState.title} Project detailed specification report.`,
-        location: formState.location || "Chiniot Regional Site",
-        province: formState.province || "Punjab",
+        location: formState.location,
+        province: formState.location, // Bind same value to province for validation safety
         date: formState.date || new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" }),
         status: formState.status || "Completed",
         beneficiaries: formState.beneficiaries || "500+ Local Residents",
@@ -254,6 +257,19 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
               />
             </div>
 
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Area/City/Province *</label>
+              <input 
+                type="text" 
+                name="location" 
+                value={formState.location} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. Chiniot, Punjab"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
             {/* Featured Image upload block */}
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Image Banner *</label>
@@ -336,6 +352,7 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                 <tr className="border-b border-slate-100 bg-slate-50/75">
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Banner</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Project Info</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Area/City/Province</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Service Sector</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
@@ -358,6 +375,11 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                         <h4 className="font-bold text-slate-800 text-sm leading-snug">{project.title}</h4>
                         <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-wider mt-1 block">/{project.slug}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-xs font-bold text-slate-700">
+                        {project.location || "N/A"}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
@@ -385,7 +407,7 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                 ))}
                 {projects.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="text-center py-10 text-slate-400 font-medium italic bg-slate-50/50">
+                    <td colSpan={5} className="text-center py-10 text-slate-400 font-medium italic bg-slate-50/50">
                       No projects registered in this directory.
                     </td>
                   </tr>

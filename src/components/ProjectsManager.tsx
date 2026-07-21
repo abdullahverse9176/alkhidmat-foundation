@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { 
   Plus, Edit2, Trash2, Upload, Loader2, Sparkles, 
-  Check, X, Heart, UserCheck, Receipt, Cpu, Trash
+  Check, X, UserCheck, Receipt, Trash
 } from "lucide-react";
 import { saveProjectAction, deleteProjectAction } from "@/app/actions/services";
 import { uploadImageAction } from "@/app/actions/services";
@@ -266,14 +266,24 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formState.title || !formState.slug || !formState.featuredImage) {
-      alert("Fields (Title, Slug, Featured Image) are required.");
+    if (!formState.title || !formState.slug) {
+      alert("Fields (Title, Slug) are required.");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const saved = await saveProjectAction(formState);
+      const payload = {
+        ...formState,
+        featuredImage: formState.featuredImage || "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=600&auto=format&fit=crop",
+        projectHead: {
+          ...formState.projectHead,
+          avatarUrl: formState.projectHead.avatarUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop",
+          message: formState.projectHead.message || ""
+        }
+      };
+
+      const saved = await saveProjectAction(payload);
       if (formState._id) {
         setProjects(prev => prev.map(p => p._id === saved._id ? saved : p));
       } else {
@@ -334,380 +344,304 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
             </button>
           </div>
 
-          {/* Form Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Form Fields - 2 columns layout: 1 field per column */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Left side: Core Info */}
-            <div className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parent Service Core *</label>
-                <select
-                  name="serviceSlug"
-                  value={formState.serviceSlug}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                >
-                  {services.map(srv => (
-                    <option key={srv.slug} value={srv.slug}>{srv.title}</option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parent Service Core *</label>
+              <select
+                name="serviceSlug"
+                value={formState.serviceSlug}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              >
+                {services.map(srv => (
+                  <option key={srv.slug} value={srv.slug}>{srv.title}</option>
+                ))}
+              </select>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Name *</label>
-                  <input 
-                    type="text" 
-                    name="title" 
-                    value={formState.title} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="e.g. Kashmore Handpump"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">URL Slug *</label>
-                  <input 
-                    type="text" 
-                    name="slug" 
-                    value={formState.slug} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="e.g. kashmore-handpump"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Name *</label>
+              <input 
+                type="text" 
+                name="title" 
+                value={formState.title} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. Kashmore Handpump"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Location (Tehsil/City) *</label>
-                  <input 
-                    type="text" 
-                    name="location" 
-                    value={formState.location} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="e.g. Tangwani, Kashmore"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Province *</label>
-                  <select
-                    name="province"
-                    value={formState.province}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  >
-                    <option value="Sindh">Sindh</option>
-                    <option value="Punjab">Punjab</option>
-                    <option value="KPK">KPK</option>
-                    <option value="Balochistan">Balochistan</option>
-                    <option value="Kashmir">Kashmir</option>
-                  </select>
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">URL Slug *</label>
+              <input 
+                type="text" 
+                name="slug" 
+                value={formState.slug} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. kashmore-handpump"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Timeline Date *</label>
-                  <input 
-                    type="text" 
-                    name="date" 
-                    value={formState.date} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="e.g. May 2026"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Beneficiaries *</label>
-                  <input 
-                    type="text" 
-                    name="beneficiaries" 
-                    value={formState.beneficiaries} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="e.g. 45+ Families"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Status *</label>
-                  <select
-                    name="status"
-                    value={formState.status}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
-                  >
-                    <option value="Completed">Completed</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Maintenance">Maintenance</option>
-                  </select>
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Location (Tehsil/City) *</label>
+              <input 
+                type="text" 
+                name="location" 
+                value={formState.location} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. Tangwani, Kashmore"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description Excerpt *</label>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Province *</label>
+              <select
+                name="province"
+                value={formState.province}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              >
+                <option value="Sindh">Sindh</option>
+                <option value="Punjab">Punjab</option>
+                <option value="KPK">KPK</option>
+                <option value="Balochistan">Balochistan</option>
+                <option value="Kashmir">Kashmir</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Timeline Date *</label>
+              <input 
+                type="text" 
+                name="date" 
+                value={formState.date} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. May 2026"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target Beneficiaries *</label>
+              <input 
+                type="text" 
+                name="beneficiaries" 
+                value={formState.beneficiaries} 
+                onChange={handleInputChange} 
+                required
+                placeholder="e.g. 45+ Families"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Status *</label>
+              <select
+                name="status"
+                value={formState.status}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              >
+                <option value="Completed">Completed</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Not Yet Started">Not Yet Started</option>
+                <option value="Maintenance">Maintenance</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Head Full Name</label>
+              <input 
+                type="text" 
+                name="name" 
+                value={formState.projectHead.name} 
+                onChange={handleProjectHeadChange}
+                placeholder="Name of supervisor"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Head Role / Title</label>
+              <input 
+                type="text" 
+                name="role" 
+                value={formState.projectHead.role} 
+                onChange={handleProjectHeadChange}
+                placeholder="e.g. Field Engineer"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Short Description Excerpt *</label>
+              <input 
+                type="text" 
+                name="shortDescription" 
+                value={formState.shortDescription} 
+                onChange={handleInputChange} 
+                required
+                placeholder="Short info box shown on cards..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full Story / Implementation Logs</label>
+              <textarea 
+                name="longDescription" 
+                value={formState.longDescription} 
+                onChange={handleInputChange} 
+                rows={4}
+                placeholder="Explain water crisis, geological boring details, and community impacts..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+              />
+            </div>
+
+            {/* Technical specs list */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Technical Specs (Key/Value)</label>
+              <div className="grid grid-cols-2 gap-2">
                 <input 
                   type="text" 
-                  name="shortDescription" 
-                  value={formState.shortDescription} 
-                  onChange={handleInputChange} 
-                  required
-                  placeholder="Short info box shown on cards..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+                  value={newSpec.label} 
+                  onChange={(e) => setNewSpec(prev => ({ ...prev, label: e.target.value }))} 
+                  placeholder="Spec Label (e.g. Drilling Depth)"
+                  className="px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-750 bg-slate-50/50"
                 />
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={newSpec.value} 
+                    onChange={(e) => setNewSpec(prev => ({ ...prev, value: e.target.value }))} 
+                    placeholder="Spec Value (e.g. 250 Feet)"
+                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-750 bg-slate-50/50"
+                  />
+                  <button type="button" onClick={addSpec} className="px-4 py-3 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer">Add</button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                {formState.techSpecs.map((spec, i) => (
+                  <div key={i} className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
+                    <div>
+                      <span className="block text-[9px] uppercase font-bold text-slate-450">{spec.label}</span>
+                      <span className="text-xs font-bold text-slate-700">{spec.value}</span>
+                    </div>
+                    <button type="button" onClick={() => removeSpec(i)} className="text-slate-400 hover:text-red-500 p-1 rounded-full"><X className="w-3.5 h-3.5" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cost breakdown & Total Cost */}
+            <div className="md:col-span-2 p-5 border border-slate-100 rounded-2xl bg-slate-50/30 space-y-4">
+              <h4 className="font-bold text-slate-750 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <Receipt className="w-4 h-4 text-emerald-600" />
+                <span>Itemized Cost Log & Budget</span>
+              </h4>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <input 
+                  type="text" 
+                  value={newCostItem.label} 
+                  onChange={(e) => setNewCostItem(prev => ({ ...prev, label: e.target.value }))} 
+                  placeholder="Expense item (e.g. Boring)"
+                  className="px-3.5 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
+                />
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={newCostItem.amount} 
+                    onChange={(e) => setNewCostItem(prev => ({ ...prev, amount: e.target.value }))} 
+                    placeholder="Amount (e.g. PKR 60,000)"
+                    className="flex-1 px-3.5 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
+                  />
+                  <button type="button" onClick={addCostItem} className="px-3 py-3 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer">Add</button>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full Story / Implementation Logs</label>
-                <textarea 
-                  name="longDescription" 
-                  value={formState.longDescription} 
+              <div className="space-y-2 mt-3 max-h-36 overflow-y-auto">
+                {formState.costBreakdown.map((item, i) => (
+                  <div key={i} className="flex justify-between items-center text-xs py-1.5 border-b border-slate-200/60">
+                    <span className="text-slate-500 font-semibold">{item.label}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-slate-750">{item.amount}</span>
+                      <button type="button" onClick={() => removeCostItem(i)} className="text-slate-400 hover:text-red-500"><X className="w-3.5 h-3.5" /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-2 border-t border-slate-200 flex justify-between items-center">
+                <span className="text-xs font-bold text-slate-500 uppercase">Total Project Cost</span>
+                <input 
+                  type="text" 
+                  name="totalCost" 
+                  value={formState.totalCost} 
                   onChange={handleInputChange} 
-                  rows={4}
-                  placeholder="Explain water crisis, geological boring details, and community impacts..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:border-primary bg-slate-50/50"
+                  placeholder="e.g. PKR 150,000"
+                  className="px-3.5 py-2 max-w-[150px] text-right rounded-xl border border-slate-200 text-xs font-extrabold text-slate-750 bg-white"
                 />
               </div>
             </div>
 
-            {/* Right side: Media & Specs */}
-            <div className="space-y-6">
-              
-              {/* Featured Image */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Featured Project Image *</label>
-                <div className="flex items-center gap-4">
-                  <input 
-                    type="text" 
-                    name="featuredImage" 
-                    value={formState.featuredImage} 
-                    onChange={handleInputChange} 
-                    required
-                    placeholder="Image URL link"
-                    className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 focus:outline-none focus:border-primary bg-slate-50/50"
-                  />
-                  <label className="px-4 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center gap-2 cursor-pointer border-dashed">
-                    {uploadStates.featuredImage ? (
-                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                    ) : (
-                      <Upload className="w-4 h-4 text-slate-400" />
-                    )}
-                    <span>Upload</span>
-                    <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "featuredImage")} className="hidden" />
-                  </label>
-                </div>
+            {/* Cooperators roll list */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Honor Roll Cooperators / Donors</label>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={newCooperator} 
+                  onChange={(e) => setNewCooperator(e.target.value)} 
+                  placeholder="Donor / Foundation name"
+                  className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
+                />
+                <button type="button" onClick={addCooperator} className="px-4 py-3 bg-slate-800 text-white text-xs font-bold rounded-xl cursor-pointer">Add</button>
+              </div>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {formState.cooperators.map((cop, i) => (
+                  <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold">
+                    <span>{cop}</span>
+                    <button type="button" onClick={() => removeCooperator(i)} className="text-slate-400 hover:text-slate-650"><X className="w-3.5 h-3.5" /></button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Project Site Gallery */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Site Photos Gallery</label>
+              <div className="flex items-center gap-4">
+                <span className="text-xs text-slate-450 font-semibold">Upload photos from building or delivery phases:</span>
+                <label className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-750 flex items-center gap-1.5 cursor-pointer border-dashed ml-auto">
+                  {uploadStates.gallery ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-slate-450" />}
+                  <span>Add Photo</span>
+                  <input type="file" accept="image/*" multiple onChange={(e) => handleFileChange(e, "gallery")} className="hidden" />
+                </label>
               </div>
 
-              {/* Project Head Profile */}
-              <div className="p-5 border border-slate-100 rounded-2xl bg-slate-50/30 space-y-4">
-                <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-emerald-600" />
-                  <span>Project Head / Director</span>
-                </h4>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Full Name</label>
-                    <input 
-                      type="text" 
-                      name="name" 
-                      value={formState.projectHead.name} 
-                      onChange={handleProjectHeadChange}
-                      placeholder="Name of supervisor"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
-                    />
+              <div className="grid grid-cols-4 gap-2.5 mt-3.5">
+                {formState.gallery.map((img, i) => (
+                  <div key={i} className="relative h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 group">
+                    <img src={img} alt="Gallery Preview" className="w-full h-full object-cover" />
+                    <button 
+                      type="button" 
+                      onClick={() => setFormState(prev => ({ ...prev, gallery: prev.gallery.filter((_, idx) => idx !== i) }))}
+                      className="absolute inset-0 bg-red-600/80 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash className="w-4 h-4" />
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Role / Title</label>
-                    <input 
-                      type="text" 
-                      name="role" 
-                      value={formState.projectHead.role} 
-                      onChange={handleProjectHeadChange}
-                      placeholder="e.g. Field Engineer"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Avatar Image URL</label>
-                    <div className="flex gap-2">
-                      <input 
-                        type="text" 
-                        name="avatarUrl" 
-                        value={formState.projectHead.avatarUrl} 
-                        onChange={handleProjectHeadChange}
-                        placeholder="Image URL"
-                        className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-2xs text-slate-500 bg-white"
-                      />
-                      <label className="px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[10px] font-bold text-slate-600 flex items-center gap-1 cursor-pointer">
-                        {uploadStates.avatarUrl ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
-                        <span>Up</span>
-                        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "avatarUrl")} className="hidden" />
-                      </label>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Personal Message / Quote</label>
-                    <input 
-                      type="text" 
-                      name="message" 
-                      value={formState.projectHead.message || ""} 
-                      onChange={handleProjectHeadChange}
-                      placeholder="e.g. Water is a human right..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
-                    />
-                  </div>
-                </div>
+                ))}
               </div>
-
-              {/* Technical specs list */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Technical Specs (Key/Value)</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input 
-                    type="text" 
-                    value={newSpec.label} 
-                    onChange={(e) => setNewSpec(prev => ({ ...prev, label: e.target.value }))} 
-                    placeholder="Spec Label (e.g. Drilling Depth)"
-                    className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
-                  />
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      value={newSpec.value} 
-                      onChange={(e) => setNewSpec(prev => ({ ...prev, value: e.target.value }))} 
-                      placeholder="Spec Value (e.g. 250 Feet)"
-                      className="flex-1 px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
-                    />
-                    <button type="button" onClick={addSpec} className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl">Add</button>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mt-3">
-                  {formState.techSpecs.map((spec, i) => (
-                    <div key={i} className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-100 rounded-xl">
-                      <div>
-                        <span className="block text-[9px] uppercase font-bold text-slate-400">{spec.label}</span>
-                        <span className="text-xs font-bold text-slate-700">{spec.value}</span>
-                      </div>
-                      <button type="button" onClick={() => removeSpec(i)} className="text-slate-400 hover:text-red-500 p-1 rounded-full"><X className="w-3.5 h-3.5" /></button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Cost breakdown & Total Cost */}
-              <div className="p-5 border border-slate-100 rounded-2xl bg-slate-50/30 space-y-4">
-                <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                  <Receipt className="w-4 h-4 text-emerald-600" />
-                  <span>Itemized Cost Log & Budget</span>
-                </h4>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <input 
-                    type="text" 
-                    value={newCostItem.label} 
-                    onChange={(e) => setNewCostItem(prev => ({ ...prev, label: e.target.value }))} 
-                    placeholder="Expense item (e.g. Boring)"
-                    className="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
-                  />
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      value={newCostItem.amount} 
-                      onChange={(e) => setNewCostItem(prev => ({ ...prev, amount: e.target.value }))} 
-                      placeholder="Amount (e.g. PKR 60,000)"
-                      className="flex-1 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white"
-                    />
-                    <button type="button" onClick={addCostItem} className="px-3 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl">Add</button>
-                  </div>
-                </div>
-
-                <div className="space-y-2 mt-3 max-h-36 overflow-y-auto">
-                  {formState.costBreakdown.map((item, i) => (
-                    <div key={i} className="flex justify-between items-center text-xs py-1.5 border-b border-slate-200/60">
-                      <span className="text-slate-500 font-semibold">{item.label}</span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-slate-750">{item.amount}</span>
-                        <button type="button" onClick={() => removeCostItem(i)} className="text-slate-400 hover:text-red-500"><X className="w-3.5 h-3.5" /></button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-2 border-t border-slate-200 flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-500 uppercase">Total Project Cost</span>
-                  <input 
-                    type="text" 
-                    name="totalCost" 
-                    value={formState.totalCost} 
-                    onChange={handleInputChange} 
-                    placeholder="e.g. PKR 150,000"
-                    className="px-3.5 py-2 max-w-[150px] text-right rounded-xl border border-slate-200 text-xs font-extrabold text-slate-750 bg-white"
-                  />
-                </div>
-              </div>
-
-              {/* Cooperators roll list */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Honor Roll Cooperators / Donors</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={newCooperator} 
-                    onChange={(e) => setNewCooperator(e.target.value)} 
-                    placeholder="Donor / Foundation name"
-                    className="flex-1 px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
-                  />
-                  <button type="button" onClick={addCooperator} className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl">Add</button>
-                </div>
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {formState.cooperators.map((cop, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold">
-                      <span>{cop}</span>
-                      <button type="button" onClick={() => removeCooperator(i)} className="text-slate-400 hover:text-slate-600"><X className="w-3 h-3" /></button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Project Gallery Images */}
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Project Site Photos Gallery</label>
-                <div className="flex items-center gap-4">
-                  <span className="text-xs text-slate-400 font-semibold">Upload photos from building or delivery phases:</span>
-                  <label className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-750 flex items-center gap-1.5 cursor-pointer border-dashed ml-auto">
-                    {uploadStates.gallery ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-slate-400" />}
-                    <span>Add Photo</span>
-                    <input type="file" accept="image/*" multiple onChange={(e) => handleFileChange(e, "gallery")} className="hidden" />
-                  </label>
-                </div>
-
-                <div className="grid grid-cols-4 gap-2.5 mt-3.5">
-                  {formState.gallery.map((img, i) => (
-                    <div key={i} className="relative h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 group">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={img} alt="Gallery Preview" className="w-full h-full object-cover" />
-                      <button 
-                        type="button" 
-                        onClick={() => setFormState(prev => ({ ...prev, gallery: prev.gallery.filter((_, idx) => idx !== i) }))}
-                        className="absolute inset-0 bg-red-600/80 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
             </div>
 
           </div>
