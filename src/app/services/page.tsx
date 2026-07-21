@@ -15,24 +15,6 @@ export default async function ServicesPage() {
   try {
     await dbConnect();
     dbServices = await Service.find().lean();
-
-    if (dbServices.length === 0) {
-      // Seed default services
-      const seedData = servicesData.map((s) => ({
-        title: s.title,
-        slug: s.slug,
-        description: s.description,
-        longDescription: s.longDescription,
-        iconName: s.iconName,
-        image: s.image.startsWith("/") 
-          ? "https://images.unsplash.com/photo-1469571486040-7530613856e1?auto=format&fit=crop&q=80&w=600" 
-          : s.image,
-        features: s.features || [],
-        stats: s.stats || [],
-      }));
-      await Service.insertMany(seedData);
-      dbServices = await Service.find().lean();
-    }
   } catch (error) {
     console.error("Database connection failed in ServicesPage, falling back to mock servicesData:", error);
     dbServices = servicesData as any[];

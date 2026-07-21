@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { cleanWaterProjects as defaultProjects } from "@/data/cleanWaterData";
 import { servicesData } from "@/data/mockData";
 import { dbConnect } from "@/lib/db";
 import { Project, Service } from "@/models/Service";
@@ -79,16 +78,6 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
     
     // Fetch projects for this service
     dbProjects = await Project.find({ serviceSlug: slug }).lean();
-    
-    // Seed default projects if clean-water-initiative is empty in DB
-    if (dbProjects.length === 0 && slug === "clean-water-initiative") {
-      const seedProjects = defaultProjects.map(({ id, ...p }: any) => ({
-        ...p,
-        serviceSlug: "clean-water-initiative"
-      }));
-      await Project.insertMany(seedProjects);
-      dbProjects = await Project.find({ serviceSlug: "clean-water-initiative" }).lean();
-    }
   } catch (error) {
     console.error("Database connection failed in ServiceDetailsPage, falling back to mock data:", error);
   }
@@ -273,6 +262,35 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
           </div>
         )}
 
+        {/* Dynamic Sector Activity Photo Gallery */}
+        {service.gallery && service.gallery.length > 0 && (
+          <section className="mb-20 space-y-6">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h2 className="text-3xl font-bold text-slate-800">Field Activity Gallery</h2>
+              <p className="text-slate-500 text-sm mt-3">Visual insights from our active field deployments and rehabilitation drives.</p>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {service.gallery.map((imgUrl: string, index: number) => (
+                <div 
+                  key={index}
+                  className="relative h-60 rounded-3xl overflow-hidden shadow-sm border border-slate-100 group bg-slate-150"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src={imgUrl} 
+                    alt={`${service.title} Gallery ${index}`} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">{service.title} Deployments</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Pricing & Sponsorship Guide */}
         <section className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 to-emerald-950 text-white p-8 sm:p-12 lg:p-16 shadow-xl border border-white/5">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl" />
@@ -316,40 +334,19 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
 
             {/* Right Cost/Feature Cards */}
             <div className="lg:col-span-5 space-y-4">
-              {slug === "clean-water-initiative" ? (
+              {service.packages && service.packages.length > 0 ? (
                 <>
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
-                    <div>
-                      <h4 className="font-bold text-white">Standard Hand Pump</h4>
-                      <p className="text-xs text-slate-400 mt-1">Ideal for shallow groundwater villages.</p>
+                  {service.packages.map((pkg: any, i: number) => (
+                    <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
+                      <div>
+                        <h4 className="font-bold text-white">{pkg.name}</h4>
+                        <p className="text-xs text-slate-400 mt-1">{pkg.description}</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-extrabold text-amber-300">{pkg.cost}</div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xl font-extrabold text-amber-300">PKR 150,000</div>
-                      <span className="text-[10px] text-slate-400">Approx. $550 USD</span>
-                    </div>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
-                    <div>
-                      <h4 className="font-bold text-white">Solar Submersible Well</h4>
-                      <p className="text-xs text-slate-400 mt-1">Includes tank, taps & panels.</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xl font-extrabold text-emerald-300">PKR 850,000</div>
-                      <span className="text-[10px] text-slate-400">Approx. $3,050 USD</span>
-                    </div>
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
-                    <div>
-                      <h4 className="font-bold text-white">Reverse Osmosis Plant</h4>
-                      <p className="text-xs text-slate-400 mt-1">Eliminates heavy arsenic/chemicals.</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xl font-extrabold text-amber-300">PKR 1,100,000</div>
-                      <span className="text-[10px] text-slate-400">Approx. $3,950 USD</span>
-                    </div>
-                  </div>
+                  ))}
                 </>
               ) : (
                 <>

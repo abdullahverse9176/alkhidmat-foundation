@@ -60,10 +60,14 @@ export async function saveServiceAction(serviceData: any) {
     const { slug } = serviceData;
     if (!slug) throw new Error("Service slug is required");
 
+    // Copy and remove _id to prevent immutable field error
+    const updateData = { ...serviceData };
+    delete updateData._id;
+
     // Upsert the service by slug
     const updated = await Service.findOneAndUpdate(
       { slug },
-      { ...serviceData },
+      updateData,
       { new: true, upsert: true, runValidators: true }
     );
 
@@ -127,9 +131,13 @@ export async function saveProjectAction(projectData: any) {
     const { slug } = projectData;
     if (!slug) throw new Error("Project slug is required");
 
+    // Copy and remove _id to prevent immutable field error
+    const updateData = { ...projectData };
+    delete updateData._id;
+
     const updated = await Project.findOneAndUpdate(
       { slug },
-      { ...projectData },
+      updateData,
       { new: true, upsert: true, runValidators: true }
     );
 

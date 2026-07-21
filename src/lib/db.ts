@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import { Service, Project } from '@/models/Service';
+import { servicesData } from '@/data/mockData';
+import { cleanWaterProjects } from '@/data/cleanWaterData';
 
 // STEP 1: Database connection connect karne ke liye helper file
 // Yahan hum Mongoose ka istemal kar ke MongoDB se connect karenge.
@@ -20,7 +23,43 @@ if (!MONGODB_URI) {
 let cached = (global as any).mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = (global as any).mongoose = { conn: null, promise: null, seeded: false };
+}
+
+export async function seedDatabase() {
+  try {
+    const serviceCount = await Service.countDocuments();
+    if (serviceCount === 0) {
+      console.log('Seeding default services...');
+      const seedServices = servicesData.map((s) => ({
+        title: s.title,
+        slug: s.slug,
+        description: s.description,
+        longDescription: s.longDescription,
+        iconName: s.iconName,
+        image: s.image.startsWith('/') 
+          ? 'https://images.unsplash.com/photo-1469571486040-7530613856e1?auto=format&fit=crop&q=80&w=600' 
+          : s.image,
+        features: s.features || [],
+        stats: s.stats || [],
+      }));
+      await Service.insertMany(seedServices);
+      console.log('Successfully seeded default services!');
+    }
+
+    const projectCount = await Project.countDocuments();
+    if (projectCount === 0) {
+      console.log('Seeding default projects...');
+      const seedProjects = cleanWaterProjects.map(({ id, ...p }: any) => ({
+        ...p,
+        serviceSlug: 'clean-water-initiative'
+      }));
+      await Project.insertMany(seedProjects);
+      console.log('Successfully seeded default projects!');
+    }
+  } catch (error) {
+    console.error('Failed to seed database:', error);
+  }
 }
 
 export async function dbConnect() {
@@ -53,5 +92,12 @@ export async function dbConnect() {
     throw e;
   }
 
+  // Run seeding if not already done in this runtime instance
+  if (!cached.seeded) {
+    await seedDatabase();
+    cached.seeded = true;
+  }
+
   return cached.conn;
 }
+

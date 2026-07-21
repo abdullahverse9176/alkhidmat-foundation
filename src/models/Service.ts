@@ -15,6 +15,14 @@ const ServiceSchema = new Schema(
         value: { type: String, required: true },
       },
     ],
+    packages: [
+      {
+        name: { type: String, required: true },
+        cost: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
+    gallery: { type: [String], default: [] },
   },
   { timestamps: true }
 );

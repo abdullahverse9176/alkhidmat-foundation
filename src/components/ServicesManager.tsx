@@ -19,6 +19,8 @@ interface ServiceItem {
   image: string;
   features: string[];
   stats: { label: string; value: string }[];
+  packages?: { name: string; cost: string; description: string }[];
+  gallery?: string[];
 }
 
 interface ServicesManagerProps {
@@ -35,7 +37,9 @@ const defaultFormState: ServiceItem = {
   iconName: "Sparkles",
   image: "",
   features: [],
-  stats: []
+  stats: [],
+  packages: [],
+  gallery: []
 };
 
 export default function ServicesManager({ initialServices }: ServicesManagerProps) {
@@ -46,9 +50,17 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
   const [isUploading, setIsUploading] = useState(false);
   const [newFeature, setNewFeature] = useState("");
   const [newStat, setNewStat] = useState({ label: "", value: "" });
+  
+  // Custom packages and gallery state hook variables
+  const [newPackage, setNewPackage] = useState({ name: "", cost: "", description: "" });
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
 
   const handleEditClick = (service: ServiceItem) => {
-    setFormState({ ...service });
+    setFormState({ 
+      ...service,
+      packages: service.packages || [],
+      gallery: service.gallery || []
+    });
     setIsEditing(true);
   };
 
@@ -153,6 +165,53 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
     } catch (error: any) {
       alert(error.message || "Failed to delete service");
     }
+  };
+
+  const handleAddPackage = () => {
+    if (!newPackage.name.trim() || !newPackage.cost.trim()) return;
+    setFormState(prev => ({
+      ...prev,
+      packages: [...(prev.packages || []), { 
+        name: newPackage.name.trim(), 
+        cost: newPackage.cost.trim(), 
+        description: newPackage.description.trim() || "Sponsorship Level Package"
+      }]
+    }));
+    setNewPackage({ name: "", cost: "", description: "" });
+  };
+
+  const handleRemovePackage = (idx: number) => {
+    setFormState(prev => ({
+      ...prev,
+      packages: (prev.packages || []).filter((_, i) => i !== idx)
+    }));
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setIsUploadingGallery(true);
+    try {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      const url = await uploadImageAction(formData);
+      setFormState(prev => ({
+        ...prev,
+        gallery: [...(prev.gallery || []), url]
+      }));
+    } catch (err) {
+      alert("Failed to upload image.");
+    } finally {
+      setIsUploadingGallery(false);
+    }
+  };
+
+  const handleRemoveGalleryImage = (idx: number) => {
+    setFormState(prev => ({
+      ...prev,
+      gallery: (prev.gallery || []).filter((_, i) => i !== idx)
+    }));
   };
 
   return (
@@ -384,6 +443,116 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+
+          <hr className="border-slate-100 my-6" />
+
+          {/* Dynamic Sponsorship Packages */}
+          <div className="space-y-4">
+            <h4 className="font-bold text-slate-700 text-sm uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>Sponsorship & Price Tiers</span>
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input 
+                type="text" 
+                value={newPackage.name} 
+                onChange={(e) => setNewPackage(prev => ({ ...prev, name: e.target.value }))} 
+                placeholder="Package Name (e.g. Standard Hand Pump)"
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
+              />
+              <input 
+                type="text" 
+                value={newPackage.cost} 
+                onChange={(e) => setNewPackage(prev => ({ ...prev, cost: e.target.value }))} 
+                placeholder="Cost (e.g. PKR 150,000)"
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
+              />
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={newPackage.description} 
+                  onChange={(e) => setNewPackage(prev => ({ ...prev, description: e.target.value }))} 
+                  placeholder="Short explanation (e.g. Ideal for shallow water)"
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-slate-50/50"
+                />
+                <button 
+                  type="button" 
+                  onClick={handleAddPackage}
+                  className="px-4 py-2.5 bg-slate-800 text-white hover:bg-slate-950 text-xs font-bold rounded-xl cursor-pointer"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+              {(formState.packages || []).map((pkg, i) => (
+                <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-xl relative group">
+                  <div className="pr-6">
+                    <span className="block text-xs font-bold text-slate-800">{pkg.name}</span>
+                    <span className="block text-[11px] font-extrabold text-emerald-600 mt-1">{pkg.cost}</span>
+                    <span className="block text-[10px] text-slate-400 font-medium mt-1 leading-relaxed">{pkg.description}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => handleRemovePackage(i)} 
+                    className="absolute top-3 right-3 text-slate-400 hover:text-red-500 p-1 hover:bg-red-50 rounded-full transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+              {(formState.packages || []).length === 0 && (
+                <div className="col-span-full text-xs text-slate-400 font-medium italic">No sponsorship packages created.</div>
+              )}
+            </div>
+          </div>
+
+          <hr className="border-slate-100 my-6" />
+
+          {/* Service Photo Gallery */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-slate-700 text-sm uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-emerald-500" />
+                <span>Sector Activity Photo Gallery</span>
+              </h4>
+              <label className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 cursor-pointer rounded-xl border-dashed shadow-sm">
+                {isUploadingGallery ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
+                ) : (
+                  <Upload className="w-3.5 h-3.5 text-slate-400" />
+                )}
+                <span>{isUploadingGallery ? "Uploading..." : "Add Gallery Image"}</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleGalleryUpload} 
+                  className="hidden" 
+                  disabled={isUploadingGallery}
+                />
+              </label>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mt-3">
+              {(formState.gallery || []).map((img, i) => (
+                <div key={i} className="relative h-20 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 group shadow-2xs">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img} alt="Gallery Preview" className="w-full h-full object-cover" />
+                  <button 
+                    type="button" 
+                    onClick={() => handleRemoveGalleryImage(i)}
+                    className="absolute inset-0 bg-red-600/80 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 className="w-4.5 h-4.5" />
+                  </button>
+                </div>
+              ))}
+              {(formState.gallery || []).length === 0 && (
+                <div className="col-span-full text-xs text-slate-400 font-medium italic">No gallery images uploaded.</div>
+              )}
             </div>
           </div>
 
