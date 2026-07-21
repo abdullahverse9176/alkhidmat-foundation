@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { saveServiceAction, deleteServiceAction } from "@/app/actions/services";
 import { uploadImageAction } from "@/app/actions/services";
+import { convertToWebP } from "@/lib/imageUtils";
 
 interface ServiceItem {
   _id?: string;
@@ -88,14 +89,20 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image file size must not exceed 5MB.");
+      return;
+    }
+
     setIsUploading(true);
     try {
+      const webpFile = await convertToWebP(file);
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", webpFile);
       const url = await uploadImageAction(formData);
       setFormState(prev => ({ ...prev, image: url }));
-    } catch (error) {
-      alert("Failed to upload image. Make sure Cloudinary keys are configured.");
+    } catch (error: any) {
+      alert(`Failed to upload image: ${error?.message || error}`);
     } finally {
       setIsUploading(false);
     }
@@ -190,18 +197,34 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
   const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
+
+    const filesArray = Array.from(files);
+    
+    // Check sizes for all files
+    for (const file of filesArray) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`File "${file.name}" exceeds the 5MB size limit.`);
+        return;
+      }
+    }
+
     setIsUploadingGallery(true);
     try {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append("file", file);
-      const url = await uploadImageAction(formData);
+      const uploadPromises = filesArray.map(async (file) => {
+        const webpFile = await convertToWebP(file);
+        const formData = new FormData();
+        formData.append("file", webpFile);
+        return uploadImageAction(formData);
+      });
+
+      const urls = await Promise.all(uploadPromises);
+
       setFormState(prev => ({
         ...prev,
-        gallery: [...(prev.gallery || []), url]
+        gallery: [...(prev.gallery || []), ...urls]
       }));
-    } catch (err) {
-      alert("Failed to upload image.");
+    } catch (err: any) {
+      alert(`Failed to upload one or more images: ${err?.message || err}`);
     } finally {
       setIsUploadingGallery(false);
     }
@@ -529,6 +552,7 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
                 <input 
                   type="file" 
                   accept="image/*" 
+                  multiple
                   onChange={handleGalleryUpload} 
                   className="hidden" 
                   disabled={isUploadingGallery}

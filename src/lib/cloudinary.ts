@@ -6,12 +6,6 @@ import { v2 as cloudinary } from "cloudinary";
 // CLOUDINARY_API_KEY=your_api_key
 // CLOUDINARY_API_SECRET=your_api_secret
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 export interface CloudinaryUploadResponse {
   secure_url: string;
   public_id: string;
@@ -26,6 +20,13 @@ export async function uploadToCloudinary(
   fileUri: string,
   folder: string = "services"
 ): Promise<CloudinaryUploadResponse> {
+  // Always configure at call-time to ensure environment variables are loaded
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
   // If Cloudinary keys are not set, return a mock or throw error
   if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
     console.warn("Cloudinary environment variables are missing! Using mock upload result.");

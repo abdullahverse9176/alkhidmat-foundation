@@ -17,6 +17,11 @@ export async function uploadImageAction(formData: FormData): Promise<string> {
       throw new Error("No file provided in FormData");
     }
 
+    // Check size limit (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error("File size exceeds the 5MB limit.");
+    }
+
     // Convert file to buffer and base64
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);

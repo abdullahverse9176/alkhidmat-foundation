@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { saveProjectAction, deleteProjectAction } from "@/app/actions/services";
 import { uploadImageAction } from "@/app/actions/services";
+import { convertToWebP } from "@/lib/imageUtils";
 
 interface ProjectItem {
   _id?: string;
@@ -120,10 +121,16 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
   };
 
   const triggerUpload = async (file: File, targetField: "featuredImage" | "avatarUrl" | "gallery") => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image file size must not exceed 5MB.");
+      return;
+    }
+
     setUploadStates(prev => ({ ...prev, [targetField]: true }));
     try {
+      const webpFile = await convertToWebP(file);
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", webpFile);
       const url = await uploadImageAction(formData);
 
       setFormState(prev => {
@@ -144,16 +151,53 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
           };
         }
       });
-    } catch (error) {
-      alert("Failed to upload image. Ensure Cloudinary credentials are set.");
+    } catch (error: any) {
+      alert(`Failed to upload image: ${error?.message || error}`);
     } finally {
       setUploadStates(prev => ({ ...prev, [targetField]: false }));
     }
   };
 
+  const triggerMultipleUploads = async (files: File[]) => {
+    // Check sizes
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`File "${file.name}" exceeds the 5MB size limit.`);
+        return;
+      }
+    }
+
+    setUploadStates(prev => ({ ...prev, gallery: true }));
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const webpFile = await convertToWebP(file);
+        const formData = new FormData();
+        formData.append("file", webpFile);
+        return uploadImageAction(formData);
+      });
+
+      const urls = await Promise.all(uploadPromises);
+
+      setFormState(prev => ({
+        ...prev,
+        gallery: [...prev.gallery, ...urls]
+      }));
+    } catch (error: any) {
+      alert(`Failed to upload one or more images: ${error?.message || error}`);
+    } finally {
+      setUploadStates(prev => ({ ...prev, gallery: false }));
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, targetField: "featuredImage" | "avatarUrl" | "gallery") => {
-    const file = e.target.files?.[0];
-    if (file) triggerUpload(file, targetField);
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    if (targetField === "gallery") {
+      triggerMultipleUploads(Array.from(files));
+    } else {
+      triggerUpload(files[0], targetField);
+    }
   };
 
   // List management helpers
@@ -643,7 +687,7 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
                   <label className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-750 flex items-center gap-1.5 cursor-pointer border-dashed ml-auto">
                     {uploadStates.gallery ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-slate-400" />}
                     <span>Add Photo</span>
-                    <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "gallery")} className="hidden" />
+                    <input type="file" accept="image/*" multiple onChange={(e) => handleFileChange(e, "gallery")} className="hidden" />
                   </label>
                 </div>
 
