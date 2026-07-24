@@ -119,7 +119,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
         {/* Wave Pattern overlay */}
         <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 opacity-10">
           <svg className="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V30.25C1123.7,11.81,1055.75,111.45,985.66,92.83Z" fill="#0F7B3F"></path>
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V30.25C1123.7,11.81,1055.75,111.45,985.66,92.83Z" fill="#00ADF2"></path>
           </svg>
         </div>
 
@@ -130,7 +130,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
-            {firstPart} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-300">{lastWord}</span>
+            {firstPart} <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-amber-300">{lastWord}</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto mt-6 font-medium leading-relaxed">
             {service.description}
@@ -141,7 +141,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
             <div className={`grid grid-cols-2 md:grid-cols-${Math.min(service.stats.length, 4)} gap-4 max-w-4xl mx-auto mt-12 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md`}>
               {service.stats.map((stat: any, index: number) => (
                 <div key={index} className={`text-center p-2 ${index > 0 ? "border-l border-white/10" : ""}`}>
-                  <div className="text-2xl sm:text-3xl font-bold text-emerald-400">{stat.value}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-primary">{stat.value}</div>
                   <div className="text-xs sm:text-sm text-slate-400 font-medium mt-1">{stat.label}</div>
                 </div>
               ))}
@@ -211,7 +211,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
 
                   {/* Beneficiary Badge */}
                   <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1 text-white text-xs sm:text-sm font-semibold">
-                    <Users className="w-4 h-4 text-emerald-400" />
+                    <Users className="w-4 h-4 text-sky-400" />
                     <span>{project.beneficiaries}</span>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
                 {/* Card Body */}
                 <div className="p-6 sm:p-8">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-md">
                       {project.province}
                     </span>
                     <span className="text-xs font-medium text-slate-400 flex items-center gap-1">
@@ -228,7 +228,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
                     </span>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800 group-hover:text-primary transition-colors line-clamp-1">
                     {project.title}
                   </h3>
                   <p className="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed line-clamp-2">
@@ -241,7 +241,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
                       <span className="block text-xs font-medium text-slate-400">Total Cost</span>
                       <span className="text-lg font-bold text-slate-800">{project.totalCost}</span>
                     </div>
-                    <span className="inline-flex items-center gap-1.5 font-bold text-sm text-emerald-600 group-hover:text-emerald-800 transition-colors">
+                    <span className="inline-flex items-center gap-1.5 font-bold text-sm text-primary group-hover:text-primary-hover transition-colors">
                       <span>View Details</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
@@ -290,8 +290,8 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
         )}
 
         {/* Pricing & Sponsorship Guide */}
-        <section className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 to-emerald-950 text-white p-8 sm:p-12 lg:p-16 shadow-xl border border-white/5">
-          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl" />
+        <section className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 to-sky-950 text-white p-8 sm:p-12 lg:p-16 shadow-xl border border-white/5">
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl" />
 
           <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -310,8 +310,8 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                    <CheckCircle className="w-4 h-4 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Full Cost Transparency</h4>
@@ -319,8 +319,8 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                    <CheckCircle className="w-4 h-4 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Verification Reports</h4>
@@ -335,7 +335,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
               {service.packages && service.packages.length > 0 ? (
                 <>
                   {service.packages.map((pkg: any, i: number) => (
-                    <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
+                    <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-primary/50 transition-colors">
                       <div>
                         <h4 className="font-bold text-white">{pkg.name}</h4>
                         <p className="text-xs text-slate-400 mt-1">{pkg.description}</p>
@@ -349,12 +349,12 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
               ) : (
                 <>
                   {service.features && service.features.slice(0, 3).map((feature: string, i: number) => (
-                    <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-emerald-500/50 transition-colors">
+                    <div key={i} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-between hover:border-primary/50 transition-colors">
                       <div>
                         <h4 className="font-bold text-white">{feature}</h4>
                         <p className="text-xs text-slate-400 mt-1">Key intervention program.</p>
                       </div>
-                      <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Active</span>
+                      <span className="text-primary text-xs font-bold uppercase tracking-wider">Active</span>
                     </div>
                   ))}
                 </>
@@ -363,7 +363,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
               <div className="pt-4 flex flex-col sm:flex-row gap-3">
                 <Link 
                   href="/contact" 
-                  className="flex-1 text-center py-3.5 px-6 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-emerald-950/50 text-sm"
+                  className="flex-1 text-center py-3.5 px-6 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-sky-950/50 text-sm"
                 >
                   Coordinate Support
                 </Link>

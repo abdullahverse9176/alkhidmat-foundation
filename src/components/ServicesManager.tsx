@@ -239,7 +239,7 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
                 {services.map(service => (
                   <tr key={service.slug} className="hover:bg-slate-50/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 font-bold text-xs uppercase border border-emerald-100">
+                      <span className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary font-bold text-xs uppercase border border-primary/20">
                         {service.iconName}
                       </span>
                     </td>
@@ -258,7 +258,7 @@ export default function ServicesManager({ initialServices }: ServicesManagerProp
                       <div className="flex items-center justify-end gap-1.5">
                         <button 
                           onClick={() => handleEditClick(service)}
-                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-emerald-50/30 rounded-lg transition-colors cursor-pointer"
+                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>

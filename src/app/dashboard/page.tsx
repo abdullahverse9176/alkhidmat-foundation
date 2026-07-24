@@ -83,7 +83,7 @@ export default async function DashboardPage() {
             <h3 className="text-base font-bold text-gray-800">
               Recent Volunteer Registrations
             </h3>
-            <span className="text-xs font-semibold text-[#0F7B3F] hover:underline cursor-pointer">
+            <span className="text-xs font-semibold text-[#00ADF2] hover:underline cursor-pointer">
               View all
             </span>
           </div>
@@ -129,15 +129,15 @@ export default async function DashboardPage() {
           </h3>
           
           <div className="space-y-3 flex-1">
-            <Link href="/dashboard/services" className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#0F7B3F] hover:bg-[#0F7B3F]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#0F7B3F] flex items-center justify-between">
+            <Link href="/dashboard/services" className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#00ADF2] hover:bg-[#00ADF2]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#00ADF2] flex items-center justify-between">
               <span>Create New Welfare Campaign</span>
               <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             </Link>
-            <Link href="/dashboard/projects" className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#0F7B3F] hover:bg-[#0F7B3F]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#0F7B3F] flex items-center justify-between">
+            <Link href="/dashboard/projects" className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#00ADF2] hover:bg-[#00ADF2]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#00ADF2] flex items-center justify-between">
               <span>Manage Water Projects</span>
               <Gift className="w-4 h-4" />
             </Link>
-            <button className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#0F7B3F] hover:bg-[#0F7B3F]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#0F7B3F] cursor-pointer flex items-center justify-between">
+            <button className="w-full text-left p-3.5 rounded-xl border border-gray-100 hover:border-[#00ADF2] hover:bg-[#00ADF2]/5 transition-all text-xs font-bold text-gray-700 hover:text-[#00ADF2] cursor-pointer flex items-center justify-between">
               <span>Schedule Volunteer Meeting</span>
               <Calendar className="w-4 h-4" />
             </button>

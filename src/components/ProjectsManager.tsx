@@ -583,7 +583,7 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
             {/* Cost breakdown & Total Cost */}
             <div className="md:col-span-2 p-5 border border-slate-100 rounded-2xl bg-slate-50/30 space-y-4">
               <h4 className="font-bold text-slate-750 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <Receipt className="w-4 h-4 text-emerald-600" />
+                <Receipt className="w-4 h-4 text-primary" />
                 <span>Itemized Cost Log & Budget</span>
               </h4>
               
@@ -756,7 +756,7 @@ export default function ProjectsManager({ initialProjects, services }: ProjectsM
                       <div className="flex items-center justify-end gap-1.5">
                         <button 
                           onClick={() => handleEditClick(project)}
-                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-emerald-50/30 rounded-lg transition-colors cursor-pointer"
+                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>

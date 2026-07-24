@@ -106,20 +106,20 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
-            <Link href="/" className="hover:text-emerald-400 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/services" className="hover:text-emerald-400 transition-colors">Services</Link>
+            <Link href="/services" className="hover:text-primary transition-colors">Services</Link>
             <span>/</span>
-            <Link href={`/services/${slug}`} className="hover:text-emerald-400 transition-colors">{serviceTitle}</Link>
+            <Link href={`/services/${slug}`} className="hover:text-primary transition-colors">{serviceTitle}</Link>
             <span>/</span>
-            <span className="text-emerald-400 truncate max-w-[200px] sm:max-w-none">{project.title}</span>
+            <span className="text-primary truncate max-w-[200px] sm:max-w-none">{project.title}</span>
           </nav>
 
           {/* Project Header Info */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-md border border-primary/20">
                   {project.province} Province
                 </span>
                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold border ${
@@ -156,8 +156,8 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
               </div>
               <div className="px-3 border-r border-white/10">
                 <span className="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Beneficiaries</span>
-                <span className="text-sm font-semibold text-emerald-400 flex items-center gap-1 mt-0.5">
-                  <Users className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-sm font-semibold text-sky-400 flex items-center gap-1 mt-0.5">
+                  <Users className="w-3.5 h-3.5 text-sky-400" />
                   {project.beneficiaries}
                 </span>
               </div>
@@ -178,7 +178,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
         {/* Back Link */}
         <Link 
           href={`/services/${slug}`} 
-          className="inline-flex items-center gap-1 text-sm font-bold text-emerald-600 hover:text-emerald-700 transition-colors mb-8 group cursor-pointer"
+          className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-primary-hover transition-colors mb-8 group cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
           <span>Back to All {serviceTitle} Projects</span>
@@ -192,7 +192,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
             {/* Story / Description */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
               <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-emerald-600 rounded-full"></span>
+                <span className="w-1.5 h-6 bg-primary rounded-full"></span>
                 <span>Crisis & Solution Story</span>
               </h2>
               <p className="text-slate-600 leading-relaxed text-base sm:text-[17px]">
@@ -203,7 +203,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
               {project.techSpecs && project.techSpecs.length > 0 && (
                 <div className="pt-6 border-t border-slate-100">
                   <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
-                    <Cpu className="w-5 h-5 text-emerald-600" />
+                    <Cpu className="w-5 h-5 text-primary" />
                     <span>Technical & Operational Specifications</span>
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -232,10 +232,10 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
             {/* Donation Campaign Progress Card */}
             {project.goal > 0 && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden space-y-6">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full" />
                 
                 <div className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-emerald-600 fill-current" />
+                  <Heart className="w-5 h-5 text-primary fill-current" />
                   <h3 className="text-lg font-bold text-slate-800">Campaign Donation</h3>
                 </div>
 
@@ -244,7 +244,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
                   <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-50">
                     <div
                       style={{ width: `${percentage}%` }}
-                      className="bg-emerald-600 h-full rounded-full transition-all duration-1000"
+                      className="bg-primary h-full rounded-full transition-all duration-1000"
                     />
                   </div>
 
@@ -252,7 +252,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
                   <div className="flex justify-between items-end">
                     <div>
                       <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block">Raised</span>
-                      <span className="text-2xl font-black text-emerald-600">${(project.raised || 0).toLocaleString()}</span>
+                      <span className="text-2xl font-black text-primary">${(project.raised || 0).toLocaleString()}</span>
                     </div>
                     <div className="text-right">
                       <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block">Goal</span>
@@ -276,7 +276,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <Link
                     href={`/#donation?project=${project.slug}`}
-                    className="py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl text-center shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase tracking-wider rounded-xl text-center shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Heart className="w-3.5 h-3.5 fill-current" />
                     <span>Donate</span>
@@ -298,10 +298,10 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
 
             {/* 1. Itemized Cost Breakdown Card */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full" />
               
               <div className="flex items-center gap-2 mb-6">
-                <Receipt className="w-5 h-5 text-emerald-600" />
+                <Receipt className="w-5 h-5 text-primary" />
                 <h3 className="text-lg font-bold text-slate-800">Itemized Cost Log</h3>
               </div>
 
@@ -330,8 +330,8 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
                 </div>
               )}
 
-              <div className="mt-6 p-4 bg-emerald-50 rounded-2xl border border-emerald-100/50 flex gap-3 text-xs text-emerald-800">
-                <Info className="w-4.5 h-4.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <div className="mt-6 p-4 bg-primary/10 rounded-2xl border border-primary/20 flex gap-3 text-xs text-primary">
+                <Info className="w-4.5 h-4.5 text-primary flex-shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
                   Budget log vetted by regional auditors. Placing a similar project provides long-term welfare relief. Coordinate below.
                 </p>
@@ -342,7 +342,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
             {project.projectHead && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm">
                 <div className="flex items-center gap-2 mb-6">
-                  <UserCheck className="w-5 h-5 text-emerald-600" />
+                  <UserCheck className="w-5 h-5 text-primary" />
                   <h3 className="text-lg font-bold text-slate-800">Project Leader</h3>
                 </div>
 
@@ -358,7 +358,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
                   )}
                   <div className="space-y-1">
                     <h4 className="font-bold text-slate-800 text-base">{project.projectHead.name}</h4>
-                    <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+                    <p className="text-xs font-semibold text-primary uppercase tracking-wider">
                       {project.projectHead.role}
                     </p>
                     <p className="text-xs text-slate-400 font-medium">Al-Khidmat Engineering Board</p>
@@ -390,8 +390,8 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
 
                 <div className="space-y-2.5">
                   {project.cooperators.map((name: string, i: number) => (
-                    <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-emerald-50/30 rounded-xl border border-slate-100/50 hover:border-emerald-100 transition-colors">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                    <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-primary/5 rounded-xl border border-slate-100/50 hover:border-primary/20 transition-colors">
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary flex-shrink-0" />
                       <span className="text-sm font-bold text-slate-700">{name}</span>
                     </div>
                   ))}
@@ -404,8 +404,8 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
             )}
 
             {/* Call to Action Widget */}
-            <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-emerald-950 text-white shadow-xl relative overflow-hidden border border-white/5">
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl" />
+            <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-sky-950 text-white shadow-xl relative overflow-hidden border border-white/5">
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
               
               {slug === "clean-water-initiative" ? (
                 <>
@@ -426,7 +426,7 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
               <div className="mt-5 flex flex-col sm:flex-row gap-2.5">
                 <Link 
                   href="/contact" 
-                  className="flex-1 text-center py-2.5 px-4 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover transition-colors shadow-md shadow-emerald-950/50"
+                  className="flex-1 text-center py-2.5 px-4 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-hover transition-colors shadow-md shadow-sky-950/50"
                 >
                   Contact Secretariat
                 </Link>

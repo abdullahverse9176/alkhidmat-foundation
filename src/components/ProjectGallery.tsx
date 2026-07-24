@@ -25,7 +25,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-        <span className="w-1.5 h-6 bg-emerald-600 rounded-full"></span>
+        <span className="w-1.5 h-6 bg-primary rounded-full"></span>
         <span>Project Site Gallery</span>
       </h3>
 
@@ -50,7 +50,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
         {/* Captions */}
         <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-slate-900/75 backdrop-blur-sm border border-white/10 text-white text-xs flex justify-between items-center">
           <span className="font-semibold tracking-wide">Click to expand</span>
-          <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+          <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
             Image {activeIndex + 1} of {images.length}
           </span>
         </div>
@@ -64,7 +64,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
             onClick={() => setActiveIndex(idx)}
             className={`relative h-20 rounded-xl overflow-hidden cursor-pointer transition-all border-2 ${
               activeIndex === idx 
-                ? "border-emerald-600 scale-[0.98] ring-2 ring-emerald-500/20" 
+                ? "border-primary scale-[0.98] ring-2 ring-primary/20" 
                 : "border-transparent hover:border-slate-300 opacity-70 hover:opacity-100"
             }`}
           >

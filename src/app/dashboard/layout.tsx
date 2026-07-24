@@ -35,7 +35,7 @@ export default async function DashboardLayout({
         {/* Brand Header */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800 bg-slate-950/40">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="bg-[#0F7B3F] p-1.5 rounded-lg text-white group-hover:scale-105 transition-transform duration-200">
+            <div className="bg-[#00ADF2] p-1.5 rounded-lg text-white group-hover:scale-105 transition-transform duration-200">
               <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             </div>
             <span className="font-extrabold text-sm tracking-wider uppercase text-white">
@@ -50,7 +50,7 @@ export default async function DashboardLayout({
             href="/dashboard" 
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
           >
-            <Layers className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+            <Layers className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Overview Dashboard</span>
           </Link>
 
@@ -58,7 +58,7 @@ export default async function DashboardLayout({
             href="/dashboard/services" 
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
           >
-            <Sparkles className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+            <Sparkles className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Manage Services</span>
           </Link>
 
@@ -66,7 +66,7 @@ export default async function DashboardLayout({
             href="/dashboard/service-projects" 
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
           >
-            <Droplet className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+            <Droplet className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Service Projects</span>
           </Link>
 
@@ -74,7 +74,7 @@ export default async function DashboardLayout({
             href="/dashboard/projects" 
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
           >
-            <Droplet className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+            <Droplet className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Welfare Projects</span>
           </Link>
 
@@ -115,8 +115,8 @@ export default async function DashboardLayout({
             </div>
             
             {/* Role badge */}
-            <span className="flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/80">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-primary/10 text-primary border border-primary/20">
+              <ShieldCheck className="w-3.5 h-3.5 text-primary" />
               {(user as any)?.role || "Admin"}
             </span>
 

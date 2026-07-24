@@ -419,7 +419,7 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
+                      <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20">
                         {getServiceTitle(project.serviceSlug)}
                       </span>
                     </td>
@@ -427,7 +427,7 @@ export default function ServiceProjectsManager({ initialProjects, services }: Se
                       <div className="flex items-center justify-end gap-1.5">
                         <button 
                           onClick={() => handleEditClick(project)}
-                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-emerald-50/30 rounded-lg transition-colors cursor-pointer"
+                          className="p-2 border border-slate-200 hover:border-primary text-slate-500 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
