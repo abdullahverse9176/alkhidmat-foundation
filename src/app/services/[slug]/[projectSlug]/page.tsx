@@ -91,8 +91,6 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
 
   return (
     <div className="relative min-h-screen bg-slate-50/50">
-      {/* Navigation */}
-      <Navbar />
 
       {/* Hero Section */}
       <section className="relative min-h-[40vh] flex items-end overflow-hidden bg-neutral-dark pt-28 pb-12">
@@ -446,8 +444,6 @@ export default async function ProjectDetailsPage({ params }: PageProps) {
         </div>
       </main>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

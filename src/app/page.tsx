@@ -21,8 +21,6 @@ export default async function Home() {
 
   return (
     <div className="relative min-h-screen bg-white">
-      {/* Sticky Top Header */}
-      <Navbar />
 
       {/* Main Sections */}
       <main className="w-full">
@@ -68,8 +66,6 @@ export default async function Home() {
         <Newsletter />
       </main>
 
-      {/* 18. Footer */}
-      <Footer />
     </div>
   );
 }

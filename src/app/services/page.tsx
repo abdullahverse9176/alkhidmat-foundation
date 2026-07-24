@@ -70,9 +70,7 @@ export default async function ServicesPage() {
         {/* 1. Services */}
         <Services initialServices={serializedServices} />
       </main>
-
-      {/* Footer */}
-      <Footer />
+      
     </div>
   );
 }

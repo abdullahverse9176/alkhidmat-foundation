@@ -8,8 +8,6 @@ import { Sparkles, ArrowLeft } from "lucide-react";
 export default function GalleryPage() {
   return (
     <div className="relative min-h-screen bg-white">
-      {/* Sticky Top Header */}
-      <Navbar />
 
       {/* Page Header / Hero Section */}
       <section className="relative h-[45vh] flex items-center justify-center overflow-hidden bg-neutral-dark pt-20">
@@ -55,8 +53,6 @@ export default function GalleryPage() {
         <GalleryPreview />
       </main>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
