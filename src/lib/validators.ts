@@ -14,6 +14,9 @@ export const phoneField = (label: string) =>
 export const emailField = (label: string) =>
     z.email(`${label} is invalid`);
 
+export const cityField = (label: string) =>
+    requiredText(label).min(1, `${label} is required`);
+
 export const messageField = (label: string) =>
     z.string().trim().refine(
         (value) => value === "" || value.length >= 10,

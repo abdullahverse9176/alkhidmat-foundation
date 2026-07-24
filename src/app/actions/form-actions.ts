@@ -3,16 +3,15 @@
 import { dbConnect } from "@/lib/db";
 import { FormSubmission } from "@/models/FormSubmission";
 import { verifyRecaptcha } from "@/lib/recaptcha";
-import { ContactSchema } from "@/app/schemas/contact-schema";
+import { ContactSchema, VolunteerRegisterSchema } from "@/app/schemas/contact-schema";
 import { z } from "zod";
 import { SubmitFormResponse } from "../interfaces/forms";
 
 // Schema registry to easily support multiple schemas / forms in the future
 const schemas: Record<string, z.ZodSchema> = {
   contact: ContactSchema,
-  // Add other form schemas here as your project grows:
-  // newsletter: NewsletterSchema,
-  // volunteer: VolunteerSchema,
+  volunteer_register: VolunteerRegisterSchema,
+
 };
 
 export async function submitFormAction(

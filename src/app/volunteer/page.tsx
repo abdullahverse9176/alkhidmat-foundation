@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Sparkles, ArrowLeft, UserCheck, ShieldCheck, CheckCircle2 } from "lucide-react";
+import VolunteerRegister from "@/components/VolunteerRegister";
 
 export default function VolunteerPage() {
   const [formData, setFormData] = useState({
@@ -88,115 +89,7 @@ export default function VolunteerPage() {
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <div className="bg-white border border-gray-150 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
             {!isSuccess ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-gray-100 pb-5">
-                  <div className="bg-primary/10 text-primary p-3 rounded-2xl shrink-0">
-                    <UserCheck className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-black text-neutral-dark">
-                      Join Our Volunteer Network
-                    </h3>
-                    <p className="text-xs text-neutral-light font-semibold uppercase tracking-wider mt-0.5">
-                      Enter details to coordinate with local cell heads
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Muhammad Abdullah"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold transition-all"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="name@domain.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="e.g. +92 300 1234567"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      City of Residence
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Chiniot"
-                      value={formData.city}
-                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold transition-all"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-neutral-dark mb-1">
-                      Preferred Relief Program
-                    </label>
-                    <select
-                      value={formData.program}
-                      onChange={(e) => setFormData({ ...formData, program: e.target.value })}
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-neutral-dark font-semibold transition-all"
-                    >
-                      {programs.map((prog) => (
-                        <option key={prog} value={prog}>
-                          {prog}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 pt-4 border-t border-gray-100">
-                  <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-neutral-light leading-normal font-semibold">
-                    By submitting, you agree to coordinate with local area heads and receive safety brief alerts regarding emergency disaster deployments.
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
-                >
-                  {isSubmitting ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    "Submit Volunteer Registration"
-                  )}
-                </button>
-              </form>
+              <VolunteerRegister />
             ) : (
               <div className="text-center py-10 space-y-5">
                 <div className="inline-flex p-4 bg-primary/10 text-primary rounded-full animate-bounce">

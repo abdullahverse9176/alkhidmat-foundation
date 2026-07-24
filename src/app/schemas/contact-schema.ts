@@ -5,6 +5,7 @@ import {
   emailField,
   phoneField,
   messageField,
+  cityField,
 } from "@/lib/validators";
 
 export const ContactSchema = z.object({
@@ -14,4 +15,13 @@ export const ContactSchema = z.object({
   message: messageField("Message"),
 });
 
+export const VolunteerRegisterSchema = z.object({
+  name: nameField("Name"),
+  email: emailField("Email"),
+  phone: phoneField("Phone"),
+  city: cityField("City"),
+  program: z.enum(["Disaster Relief", "Food Distribution", "Medical Camps", "Education Support", "Blood Donation Net", "Tree Plantation", "Women Empowerment", "Youth Development"]),
+});
+
+export type VolunteerRegisterData = z.infer<typeof VolunteerRegisterSchema>;
 export type ContactFormData = z.infer<typeof ContactSchema>;

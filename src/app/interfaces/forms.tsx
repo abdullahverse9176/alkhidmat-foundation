@@ -38,3 +38,11 @@ export interface PhoneInputFieldProps {
   label: string;
   error?: any;
 }
+
+export interface SelectBoxProps {
+  label: string;
+  registration: any;
+  error: any;
+  placeholder?: string;
+  children: React.ReactNode;
+}
