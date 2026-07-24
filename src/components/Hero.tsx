@@ -35,7 +35,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-accent font-semibold text-xs uppercase tracking-wider backdrop-blur-sm"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Political Movement & social Welfare</span>
+              <span>Humanitarian Services & Social Welfare</span>
             </motion.div>
 
             <motion.h1
@@ -54,7 +54,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-base sm:text-lg text-gray-300 max-w-2xl leading-relaxed font-medium"
             >
-              Al-Khidmat Citizens Alliance unites political accountability with grassroots social reform. We believe public service should build sustainable food systems, clean water, and quality education for all citizens.
+              Alkhidmat Foundation is Pakistan's leading non-profit, non-political humanitarian organization. We are committed to providing clean water, quality education, orphan care, healthcare, disaster relief, and community welfare to vulnerable families.
             </motion.p>
 
             {/* Action Buttons */}
@@ -66,9 +66,9 @@ export default function Hero() {
             >
               <Link
                 href="/#donation"
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white text-base font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer text-center inline-flex"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-slate-900 text-base font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer text-center inline-flex"
               >
-                <Heart className="w-5 h-5 fill-current text-white" />
+                <Heart className="w-5 h-5 fill-current text-slate-900" />
                 <span>Donate Now</span>
               </Link>
 

@@ -78,20 +78,20 @@ export default function Footer() {
                   AL-KHIDMAT
                 </span>
                 <span className="text-[10px] tracking-widest font-extrabold uppercase text-accent mt-0.5 leading-none">
-                  Citizens Alliance
+                  Foundation Chiniot
                 </span>
               </div>
             </Link>
 
             <p className="text-xs text-gray-300 leading-relaxed font-semibold">
-              Combining progressive governance representation with a robust grassroots welfare network. We work 24/7 to solve challenges, support citizens, and govern transparently.
+              Leading non-political, non-profit humanitarian organization committed to serving humanity. We provide clean water, healthcare, education, orphan care, and disaster relief across Pakistan.
             </p>
 
             {/* Credentials Badges */}
             <div className="flex flex-wrap gap-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-bold text-primary uppercase tracking-widest">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                <span>ECP Registered</span>
+                <span>Registered NGO</span>
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25 text-[9px] font-bold text-accent uppercase tracking-widest">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -194,7 +194,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-3 p-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-primary/20 rounded-xl transition-all duration-200 items-center">
                 <Mail className="w-4 h-4 text-primary shrink-0" />
-                <span className="break-all">info@alkhidmatcitizens.org</span>
+                <span className="break-all">info@alkhidmat.org</span>
               </li>
             </ul>
           </div>
@@ -203,10 +203,10 @@ export default function Footer() {
 
         {/* Footer Bottom bar */}
         <div className="mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider">
-          <p>© {new Date().getFullYear()} Al-Khidmat Citizens Alliance. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Alkhidmat Foundation Chiniot. All Rights Reserved.</p>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
-            <p>Monitored under ECP Transparency Codes.</p>
+            <p>Accredited Charity & Registered NPO</p>
           </div>
         </div>
 

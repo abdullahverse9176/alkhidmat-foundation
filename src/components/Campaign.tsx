@@ -58,7 +58,7 @@ export default function Campaign() {
           <div className="lg:col-span-7 space-y-6 text-left">
             <span className="inline-flex items-center gap-2 px-3 py-1 bg-accent/20 border border-accent/30 text-accent font-bold text-xs uppercase tracking-wider rounded-full backdrop-blur-sm animate-pulse">
               <Award className="w-3.5 h-3.5" />
-              <span>Election Call 2026</span>
+              <span>Welfare Drive 2026</span>
             </span>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
@@ -74,13 +74,13 @@ export default function Campaign() {
                 href="/volunteer"
                 className="px-8 py-3.5 bg-accent hover:bg-accent-hover text-neutral-dark font-black text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 text-center inline-flex"
               >
-                Join Campaign As Volunteer
+                Join Drive As Volunteer
               </Link>
               <Link
                 href="/contact"
                 className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm rounded-xl transition-all duration-200 backdrop-blur-sm cursor-pointer hover:-translate-y-0.5 text-center inline-flex"
               >
-                Contact Campaign Office
+                Contact Drive Secretariat
               </Link>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function Campaign() {
               className="w-full max-w-md rounded-2xl glass-card-dark p-8 border border-white/10 text-center shadow-2xl relative"
             >
               <h3 className="font-extrabold text-lg text-white mb-6 uppercase tracking-wider">
-                Countdown to Election Day
+                Countdown to Campaign Launch
               </h3>
 
               {/* Countdown Numbers Grid */}
@@ -119,7 +119,7 @@ export default function Campaign() {
 
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-center gap-2 text-xs text-gray-400 font-semibold">
                 <Calendar className="w-4 h-4 text-accent" />
-                <span>Target: October 15, 2026</span>
+                <span>Target Launch: October 15, 2026</span>
               </div>
             </motion.div>
           </div>

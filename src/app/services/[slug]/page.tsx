@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!service) return { title: "Service Not Found" };
   
   return {
-    title: `${service.title} - Al-Khidmat Citizens Alliance`,
+    title: `${service.title} - Alkhidmat Foundation`,
     description: service.description,
   };
 }
@@ -305,7 +305,7 @@ export default async function ServiceDetailsPage({ params }: PageProps) {
                 Sponsor a {service.title} Project & Build a Legacy
               </h2>
               <p className="text-slate-300 mt-4 leading-relaxed">
-                Provide critical assistance in the name of your family or organization. Al-Khidmat Citizens Alliance manages project logistics, provides transparent auditing, and logs location telemetry once the deployment finishes.
+                Provide critical assistance in the name of your family or organization. Alkhidmat Foundation Chiniot manages project logistics, provides transparent auditing, and logs location telemetry once the deployment finishes.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">

@@ -126,11 +126,11 @@ export const impactStatsData: StatItem[] = [
 
 export const partyAboutData = {
   subtitle: "Who We Are",
-  title: "Al-Khidmat Citizens Alliance (ACA)",
-  description1: "The Al-Khidmat Citizens Alliance is a forward-thinking political movement dedicated to combining progressive state leadership with extensive social welfare networks. Founded on the principles of justice, service, and equal opportunity, we believe that political power is a trust to be used solely for the betterment of humanity.",
-  description2: "Unlike traditional political entities, our actions speak before our speeches do. With over a decade of grassroots community service, our volunteers work around the clock to provide disaster relief, primary health resources, and educational empowerment. We are paving the way for a self-reliant, ethical, and thriving society.",
-  mission: "To establish a just, corruption-free society by empowering local communities, optimizing public services, and rendering compassionate aid to all citizens without discrimination.",
-  vision: "A prosperous democratic nation where healthcare, clean water, quality education, and rapid disaster relief are guaranteed rights for every citizen.",
+  title: "Alkhidmat Foundation Chiniot",
+  description1: "Alkhidmat Foundation is a leading non-profit, non-political, and non-governmental humanitarian organization. Founded on the principles of justice, service, and integrity, we work solely for the betterment of humanity, particularly supporting orphans, widows, and vulnerable families.",
+  description2: "Our volunteers work around the clock to provide disaster relief, primary health resources, clean water, and educational empowerment. We are paving the way for a self-reliant, ethical, and thriving society where basic human needs are met with dignity.",
+  mission: "To serve humanity with integrity, especially vulnerable families and children, without any discrimination based on race, religion, or political affiliation.",
+  vision: "A self-reliant, healthy, and educated society where healthcare, clean water, education, and disaster relief are accessible to all.",
   imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800"
 };
 
@@ -390,17 +390,17 @@ export const featuredProjectsData: ProjectItem[] = [
 ];
 
 export const campaignData = {
-  title: "General Election Campaign 2026",
-  description: "Join the movement that prioritizes healthcare, education, and humanitarian values in state policies. Our campaign represents a transparent democracy, accountability, and the direct translation of welfare models into governance. Support the Al-Khidmat Citizens Alliance today.",
+  title: "Mega Welfare & Humanitarian Drive 2026",
+  description: "Join our nationwide humanitarian initiative to support vulnerable families, orphans, and disaster-struck communities. Our drive focuses on expanding clean water plants, medical infrastructure, and educational programs across Chiniot. Support Alkhidmat Foundation today.",
   electionDate: "2026-10-15T00:00:00",
   imageUrl: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=1200"
 };
 
 export const chairmanMessageData = {
   name: "Dr. Muhammad Tahir Chaudhry",
-  role: "Chairman, Al-Khidmat Citizens Alliance",
-  message: "Our political ideology is simple: power is empty if it does not serve the weakest member of the society. For over a decade, we have stayed beside our brothers and sisters in their times of distress, whether through floods, poverty, or pandemics. We are transitioning this practical service model into national legislative agendas. The Al-Khidmat Citizens Alliance is not just another political option; it is a promise of service, honesty, and sustainable progress. Join us as we build a nation where no child sleeps hungry and no family is left without a home.",
-  signatureText: "M. Tahir Chaudhry",
+  role: "President, Alkhidmat Foundation Chiniot",
+  message: "Our guiding principle is simple: service to humanity is service to Allah. For over a decade, we have stayed beside our brothers and sisters in their times of distress, whether through floods, poverty, or pandemics. Alkhidmat Foundation is not just another welfare charity; it is a promise of service, honesty, and sustainable progress. Join us as we build a community where no child sleeps hungry and no family is left without care.",
+  signatureText: "Dr. M. Tahir Chaudhry",
   imageUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600"
 };
 
@@ -445,7 +445,7 @@ export const latestNewsData: NewsItem[] = [
     title: "Al-Khidmat Establishes Smart IT Lab in Chiniot School",
     date: "July 2, 2026",
     category: "Education",
-    excerpt: "In our ongoing efforts to bridge the digital divide, Al-Khidmat Citizens Alliance has inaugurated a state-of-the-art computer laboratory with high-speed internet and modern coding resources for local orphanages.",
+    excerpt: "In our ongoing efforts to bridge the digital divide, Alkhidmat Foundation has inaugurated a state-of-the-art computer laboratory with high-speed internet and modern coding resources for local orphanages.",
     imageUrl: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=600"
   },
   {

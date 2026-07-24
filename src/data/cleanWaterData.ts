@@ -99,7 +99,7 @@ export const cleanWaterProjects: CleanWaterProject[] = [
     cooperators: [
       "Anjum Family (USA)",
       "Mr. Bilal Siddiqui (Karachi)",
-      "Al-Khidmat Citizens Alliance Youth Wing",
+      "Alkhidmat Foundation Youth Wing",
       "Kashmore Union Council 4"
     ],
     costBreakdown: [
@@ -180,12 +180,12 @@ export const cleanWaterProjects: CleanWaterProject[] = [
     beneficiaries: "600+ Families (approx. 4,000 people)",
     projectHead: {
       name: "Dr. Muhammad Tahir Chaudhry",
-      role: "Alliance Chairman",
+      role: "President, Alkhidmat Foundation Chiniot",
       avatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=250",
       message: "Water filtration plants are critical in districts like Layyah, where water is plentiful but slow-poisoning due to arsenic. This project is a direct healthcare intervention."
     },
     cooperators: [
-      "Al-Khidmat Citizens Alliance UK Branch",
+      "Alkhidmat Foundation UK Branch",
       "Overseas Pakistani Coalition (London)",
       "Haji Rafiq Brothers Cotton Ginnery",
       "Punjab Health Department Liaison"

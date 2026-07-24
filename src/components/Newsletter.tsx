@@ -46,7 +46,7 @@ export default function Newsletter() {
             Subscribe to Our Newsletter
           </h2>
           <p className="text-xs sm:text-sm text-gray-200 max-w-xl mx-auto leading-relaxed font-medium">
-            Get real-time updates regarding our emergency deployments, volunteer schedules, and political campaigns delivered straight to your inbox.
+            Get real-time updates regarding our emergency deployments, volunteer schedules, and community welfare programs delivered straight to your inbox.
           </p>
         </div>
 
