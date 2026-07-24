@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import assets from "@/data/assets";
 import { 
   Search, Menu, X, Heart, Users, Sparkles, ChevronDown,
-  Info, Award, Image, Activity, Briefcase, Calendar, UserPlus,
+  Info, Award, Activity, Briefcase, Calendar, UserPlus,
   LogOut, LayoutDashboard
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -33,7 +35,7 @@ export default function Navbar() {
       dropdownItems: [
         { label: "Who We Are", href: "/#about", description: "Our mission, vision, and core values.", icon: Info },
         { label: "Our Leadership", href: "/#leadership", description: "Meet the team and the Chairman.", icon: Award },
-        { label: "Operational Gallery", href: "/gallery", description: "Photos from our active welfare fields.", icon: Image }
+        { label: "Operational Gallery", href: "/gallery", description: "Photos from our active welfare fields.", icon: UserPlus }
       ]
     },
     {
@@ -91,16 +93,8 @@ export default function Navbar() {
                 setMobileExpandedDropdown(null);
               }}
             >
-              <div className="bg-primary p-2 rounded-lg text-white group-hover:scale-105 transition-transform duration-250 shadow-md">
-                <Sparkles className="w-5 h-5 text-accent animate-pulse" />
-              </div>
-              <div className="flex flex-col">
-                <span className={`font-black text-base leading-tight tracking-tight uppercase ${isScrolled ? "text-primary" : "text-white"}`}>
-                  AL-KHIDMAT
-                </span>
-                <span className={`text-[9px] tracking-widest font-bold uppercase ${isScrolled ? "text-neutral-light" : "text-gray-200"}`}>
-                  Citizens Alliance
-                </span>
+              <div className="">
+                <Image src={assets.officialLogo} alt="Logo" width={50} height={50} />
               </div>
             </Link>
 
