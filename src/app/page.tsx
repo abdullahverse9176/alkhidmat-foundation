@@ -29,7 +29,9 @@ export default async function Home() {
         <ChairmanMessage />
 
         {/* Upcoming Events */}
-        <Events events={featuredEvents} />
+        {featuredEvents && featuredEvents.length > 0 && (
+          <Events events={featuredEvents} />
+        )}
 
         {/* Latest News & Articles */}
         <News />
