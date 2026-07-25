@@ -1,68 +1,37 @@
 import React from "react";
-import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ImpactStats from "@/components/ImpactStats";
 import AboutUs from "@/components/AboutUs";
-import FeaturedProjects from "@/components/FeaturedProjects";
-import Campaign from "@/components/Campaign";
 import ChairmanMessage from "@/components/ChairmanMessage";
-import VolunteerOfMonth from "@/components/VolunteerOfMonth";
 import Events from "@/components/Events";
 import News from "@/components/News";
-import Testimonials from "@/components/Testimonials";
-import DonationProgress from "@/components/DonationProgress";
-import CTA from "@/components/CTA";
 import Newsletter from "@/components/Newsletter";
-import Footer from "@/components/Footer";
-import { getProjectsAction } from "@/app/actions/services";
 
 export default async function Home() {
-  const projects = await getProjectsAction();
-
   return (
     <div className="relative min-h-screen bg-white">
 
       {/* Main Sections */}
       <main className="w-full">
-        {/* 2. Hero Section */}
+        {/* Hero Section */}
         <Hero />
 
-        {/* 3. Impact Statistics */}
+        {/* Impact Statistics */}
         <ImpactStats />
 
-        {/* 4. About Party */}
+        {/* About Us Overview */}
         <AboutUs />
 
-        {/* 6. Featured Welfare Projects */}
-        <FeaturedProjects projects={projects} />
-
-        {/* 7. Election Campaign Section */}
-        <Campaign />
-
-        {/* 8. Chairman Message */}
+        {/* Chairman Leadership Message */}
         <ChairmanMessage />
 
-        {/* 9. Volunteer of the Month */}
-        <div id="volunteer-section">
-          <VolunteerOfMonth />
-        </div>
-
-        {/* 10. Upcoming Events */}
+        {/* Upcoming Events */}
         <Events />
 
-        {/* 11. Latest News */}
+        {/* Latest News & Articles */}
         <News />
 
-        {/* 12. Testimonials */}
-        <Testimonials />
-
-        {/* 13. Donation Progress */}
-        <DonationProgress projects={projects} />
-
-        {/* 15. Call to Action */}
-        <CTA />
-
-        {/* 16. Newsletter */}
+        {/* Newsletter Subscription */}
         <Newsletter />
       </main>
 
