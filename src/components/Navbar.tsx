@@ -49,7 +49,8 @@ export default function Navbar() {
       label: "Get Involved",
       dropdownItems: [
         { label: "Upcoming Events", href: "/#events", description: "Join our public awareness events.", icon: Calendar },
-        { label: "Join as Volunteer", href: "/volunteer", description: "Register as a volunteer and help out.", icon: UserPlus }
+        { label: "Join as Volunteer", href: "/volunteer", description: "Register as a volunteer and help out.", icon: UserPlus },
+        { label: "Become a Blood Donor", href: "/blood-donor", description: "Sign up to donate blood and save lives.", icon: Heart }
       ]
     },
     { label: "Contact", href: "/contact" }
@@ -67,7 +68,7 @@ export default function Navbar() {
     if (label === "Home" && pathname === "/") return true;
     if (label === "About Us" && (pathname === "/gallery" || pathname.startsWith("/about"))) return true;
     if (label === "Programs" && (pathname === "/services" || pathname === "/welfare-projects")) return true;
-    if (label === "Get Involved" && (pathname === "/volunteer" || pathname === "/events")) return true;
+    if (label === "Get Involved" && (pathname === "/volunteer" || pathname === "/events" || pathname === "/blood-donor")) return true;
     if (label === "Contact" && pathname === "/contact") return true;
     return false;
   };
