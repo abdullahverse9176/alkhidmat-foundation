@@ -7,6 +7,11 @@ const FormSubmissionSchema = new Schema(
       required: [true, "Form type is required"],
       trim: true,
     },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
     data: {
       type: Schema.Types.Mixed,
       required: [true, "Form data is required"],

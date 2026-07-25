@@ -6,6 +6,7 @@ import {
   Users, Gift, Heart, Sparkles, LogOut, ArrowLeft, 
   Calendar, CheckCircle, Clock, ShieldCheck 
 } from "lucide-react";
+import { getVolunteerStatsAction, getVolunteersAction } from "@/app/actions/volunteer-actions";
 
 // STEP 8: Protected Dashboard Page (Server Component)
 // Yeh page sirf authenticated users ke liye visible hai (protected by middleware).
@@ -22,20 +23,35 @@ export default async function DashboardPage() {
 
   const user = session.user;
 
-  // Mock dashboard cards data
+  // Fetch dynamic statistics and volunteer data from DB
+  const dynamicStats = await getVolunteerStatsAction();
+  const rawRecentVolunteers = await getVolunteersAction();
+
+  // Map to dashboard structure
   const stats = [
-    { label: "Active Volunteers", value: "15,430+", icon: Users, color: "text-emerald-600 bg-emerald-50" },
-    { label: "Welfare Projects", value: "48 Active", icon: Gift, color: "text-amber-600 bg-amber-50" },
+    { label: "Active Volunteers", value: `${dynamicStats.activeVolunteers.toLocaleString()}+`, icon: Users, color: "text-emerald-600 bg-emerald-50" },
+    { label: "Welfare Campaigns", value: `${dynamicStats.activeProjects} Active`, icon: Gift, color: "text-amber-600 bg-amber-50" },
     { label: "Total Beneficiaries", value: "85,000+", icon: Heart, color: "text-rose-600 bg-rose-50" },
-    { label: "Pending Approvals", value: "12 Applications", icon: Clock, color: "text-blue-600 bg-blue-50" }
+    { label: "Pending Approvals", value: `${dynamicStats.pendingApprovals} Applications`, icon: Clock, color: "text-blue-600 bg-blue-50" }
   ];
 
-  // Mock volunteer list
-  const recentVolunteers = [
-    { id: "V-102", name: "Muhammad Ahmed", email: "ahmed@example.com", status: "Approved", date: "July 10, 2026" },
-    { id: "V-103", name: "Zainab Fatima", email: "zainab.f@example.com", status: "Pending", date: "July 09, 2026" },
-    { id: "V-104", name: "Hamza Ali", email: "hamza@example.com", status: "Approved", date: "July 07, 2026" },
-  ];
+  const recentVolunteers = rawRecentVolunteers.slice(0, 5).map((v: any, idx: number) => {
+    const formattedStatus = v.status.charAt(0).toUpperCase() + v.status.slice(1);
+    const dateStr = new Date(v.createdAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return {
+      id: `V-${100 + idx}`,
+      name: v.data.name,
+      email: v.data.email,
+      status: formattedStatus,
+      date: dateStr,
+    };
+  });
+
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -83,9 +99,9 @@ export default async function DashboardPage() {
             <h3 className="text-base font-bold text-gray-800">
               Recent Volunteer Registrations
             </h3>
-            <span className="text-xs font-semibold text-[#00ADF2] hover:underline cursor-pointer">
+            <Link href="/dashboard/volunteers" className="text-xs font-semibold text-[#00ADF2] hover:underline cursor-pointer">
               View all
-            </span>
+            </Link>
           </div>
 
           <div className="overflow-x-auto">
@@ -100,7 +116,7 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {recentVolunteers.map((v) => (
+                {recentVolunteers.map((v: any) => (
                   <tr key={v.id} className="hover:bg-gray-50/50">
                     <td className="py-3.5 text-xs font-semibold text-gray-600">{v.id}</td>
                     <td className="py-3.5 text-xs font-bold text-gray-800">{v.name}</td>
