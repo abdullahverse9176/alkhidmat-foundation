@@ -6,26 +6,15 @@ import {
   MapPin, Phone, Mail, Award, Calendar, AlertCircle
 } from "lucide-react";
 import { getBloodDonorsAction, updateDonorStatusAction } from "@/app/actions/blood-donor-actions";
-
-interface BloodDonor {
-  _id: string;
-  status: "pending" | "approved" | "rejected";
-  data: {
-    name: string;
-    email: string;
-    phone: string;
-    cityVillageArea: string;
-    bloodGroup: string;
-    lastDonated: string;
-  };
-  createdAt: string;
-}
+import BloodDonorDetailsModal, { BloodDonor } from "@/components/BloodDonorDetailsModal";
 
 export default function BloodDonorsDashboardPage() {
   const [donors, setDonors] = useState<BloodDonor[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [selectedDonorForModal, setSelectedDonorForModal] = useState<BloodDonor | null>(null);
 
   // Filters State
   const [selectedBloodGroup, setSelectedBloodGroup] = useState("all");
@@ -184,11 +173,8 @@ export default function BloodDonorsDashboardPage() {
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Donor Details</th>
-                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Contact Info</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Location</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Blood Group</th>
-                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Last Donation</th>
-                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Status</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
@@ -201,25 +187,9 @@ export default function BloodDonorsDashboardPage() {
                   });
                   return (
                     <tr key={d._id} className="hover:bg-gray-50/30 transition-colors">
-                      {/* Name & Sub Date */}
+                      {/* Name Only */}
                       <td className="px-6 py-5">
                         <div className="font-bold text-gray-800 text-sm">{d.data.name}</div>
-                        <div className="flex items-center gap-1 text-[11px] text-gray-400 mt-1 font-semibold">
-                          <Calendar className="w-3.5 h-3.5 text-gray-400" />
-                          <span>Registered: {dateStr}</span>
-                        </div>
-                      </td>
-
-                      {/* Contact Info */}
-                      <td className="px-6 py-5 space-y-1 text-xs">
-                        <div className="flex items-center gap-1.5 text-gray-600">
-                          <Mail className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                          <span className="font-medium">{d.data.email}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-gray-600">
-                          <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                          <span className="font-medium">{d.data.phone}</span>
-                        </div>
                       </td>
 
                       {/* Location (City/Village/Area) */}
@@ -237,29 +207,15 @@ export default function BloodDonorsDashboardPage() {
                         </span>
                       </td>
 
-                      {/* Last Donation */}
-                      <td className="px-6 py-5 text-center">
-                        <span className="text-xs font-semibold text-gray-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg">
-                          {d.data.lastDonated || "Never"}
-                        </span>
-                      </td>
-
-                      {/* Status */}
-                      <td className="px-6 py-5 text-center">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${
-                          d.status === "approved"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            : d.status === "rejected"
-                            ? "bg-rose-50 text-rose-700 border-rose-200"
-                            : "bg-amber-50 text-amber-700 border-amber-200"
-                        }`}>
-                          {d.status === "approved" ? "Active" : d.status === "rejected" ? "Hidden" : "Pending"}
-                        </span>
-                      </td>
-
                       {/* Actions */}
                       <td className="px-6 py-5 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => setSelectedDonorForModal(d)}
+                            className="px-2.5 py-1.5 text-xs font-bold text-gray-600 hover:text-[#00ADF2] hover:bg-[#00ADF2]/5 rounded-xl border border-gray-200 hover:border-[#00ADF2]/30 transition-all cursor-pointer shadow-sm"
+                          >
+                            More Details
+                          </button>
                           {actionLoading === d._id ? (
                             <Loader2 className="w-5 h-5 text-red-500 animate-spin" />
                           ) : (
@@ -294,6 +250,12 @@ export default function BloodDonorsDashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Details Modal */}
+      <BloodDonorDetailsModal 
+        donor={selectedDonorForModal}
+        onClose={() => setSelectedDonorForModal(null)}
+      />
     </div>
   );
 }
