@@ -8,6 +8,7 @@ import {
   Calendar, Clock, MapPin, Sparkles, ArrowLeft, ArrowRight, Loader2, AlertCircle, CalendarRange
 } from "lucide-react";
 import { getEventsAction } from "@/app/actions/event-actions";
+import EventVolunteerModal from "@/components/EventVolunteerModal";
 
 interface EventItem {
   _id: string;
@@ -26,6 +27,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
+  const [selectedEventForSignup, setSelectedEventForSignup] = useState<EventItem | null>(null);
 
   useEffect(() => {
     async function loadEvents() {
@@ -212,13 +214,13 @@ export default function EventsPage() {
 
                         {/* CTA button */}
                         {item.status === "upcoming" ? (
-                          <Link
-                            href="/volunteer"
+                          <button
+                            onClick={() => setSelectedEventForSignup(item)}
                             className="w-full py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                           >
                             <span>Volunteer For Event</span>
                             <ArrowRight className="w-4 h-4" />
-                          </Link>
+                          </button>
                         ) : (
                           <div className="py-2.5 text-center text-xs font-bold bg-gray-50 border border-gray-150 text-gray-400 rounded-xl">
                             Completed Campaign
@@ -234,6 +236,12 @@ export default function EventsPage() {
 
         </div>
       </main>
+
+      {/* Event Volunteer Signup Modal */}
+      <EventVolunteerModal 
+        event={selectedEventForSignup} 
+        onClose={() => setSelectedEventForSignup(null)} 
+      />
 
       {/* Footer */}
       <Footer />

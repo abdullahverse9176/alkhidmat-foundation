@@ -3,7 +3,7 @@
 import { dbConnect } from "@/lib/db";
 import { FormSubmission } from "@/models/FormSubmission";
 import { verifyRecaptcha } from "@/lib/recaptcha";
-import { ContactSchema, VolunteerRegisterSchema, BloodDonorSchema } from "@/app/schemas/contact-schema";
+import { ContactSchema, VolunteerRegisterSchema, BloodDonorSchema, EventVolunteerSchema } from "@/app/schemas/contact-schema";
 import { z } from "zod";
 import { SubmitFormResponse } from "../interfaces/forms";
 
@@ -12,6 +12,7 @@ const schemas: Record<string, z.ZodSchema> = {
   contact: ContactSchema,
   volunteer_register: VolunteerRegisterSchema,
   blood_donor: BloodDonorSchema,
+  event_volunteer: EventVolunteerSchema,
 };
 
 export async function submitFormAction(

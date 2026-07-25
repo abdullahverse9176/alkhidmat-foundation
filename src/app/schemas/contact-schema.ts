@@ -37,3 +37,15 @@ export const BloodDonorSchema = z.object({
 export type VolunteerRegisterData = z.infer<typeof VolunteerRegisterSchema>;
 export type ContactFormData = z.infer<typeof ContactSchema>;
 export type BloodDonorData = z.infer<typeof BloodDonorSchema>;
+
+export const EventVolunteerSchema = z.object({
+  name: nameField("Name"),
+  email: emailField("Email"),
+  phone: phoneField("Phone"),
+  city: z.string().min(2, "City name is required"),
+  area: z.string().min(2, "Area, Muhalla, Village or Society is required"),
+  eventId: z.string().min(1, "Event ID is required"),
+  eventName: z.string().min(1, "Event Name is required"),
+});
+
+export type EventVolunteerData = z.infer<typeof EventVolunteerSchema>;
