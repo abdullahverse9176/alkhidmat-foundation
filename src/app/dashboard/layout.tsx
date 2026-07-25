@@ -12,7 +12,8 @@ import {
   Layers,
   Droplet,
   Heart,
-  Map
+  Map,
+  Calendar
 } from "lucide-react";
 
 export default async function DashboardLayout({
@@ -102,6 +103,14 @@ export default async function DashboardLayout({
           >
             <Map className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Manage Areas</span>
+          </Link>
+
+          <Link 
+            href="/dashboard/events" 
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
+          >
+            <Calendar className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
+            <span>Manage Events</span>
           </Link>
 
           <div className="h-px bg-slate-800/80 my-4" />

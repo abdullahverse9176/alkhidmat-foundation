@@ -48,7 +48,7 @@ export default function Navbar() {
     {
       label: "Get Involved",
       dropdownItems: [
-        { label: "Upcoming Events", href: "/#events", description: "Join our public awareness events.", icon: Calendar },
+        { label: "Upcoming Events", href: "/events", description: "Join our public awareness events.", icon: Calendar },
         { label: "Join as Volunteer", href: "/volunteer", description: "Register as a volunteer and help out.", icon: UserPlus },
         { label: "Become a Blood Donor", href: "/blood-donor", description: "Sign up to donate blood and save lives.", icon: Heart }
       ]
