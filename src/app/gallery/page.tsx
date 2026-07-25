@@ -10,7 +10,7 @@ export default function GalleryPage() {
     <div className="relative min-h-screen bg-white">
 
       {/* Page Header / Hero Section */}
-      <section className="relative h-[45vh] flex items-center justify-center overflow-hidden bg-neutral-dark pt-20">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-neutral-dark pt-36 pb-24">
         {/* Background Image with Dark & Primary Gradient Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-10000 scale-105"
