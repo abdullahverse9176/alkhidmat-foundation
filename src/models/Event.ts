@@ -35,6 +35,10 @@ const EventSchema = new Schema(
       enum: ["upcoming", "past"],
       default: "upcoming",
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

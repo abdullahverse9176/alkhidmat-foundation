@@ -6,8 +6,11 @@ import ChairmanMessage from "@/components/ChairmanMessage";
 import Events from "@/components/Events";
 import News from "@/components/News";
 import Newsletter from "@/components/Newsletter";
+import { getFeaturedEventsAction } from "@/app/actions/event-actions";
 
 export default async function Home() {
+  const featuredEvents = await getFeaturedEventsAction();
+
   return (
     <div className="relative min-h-screen bg-white">
 
@@ -26,7 +29,7 @@ export default async function Home() {
         <ChairmanMessage />
 
         {/* Upcoming Events */}
-        <Events />
+        <Events events={featuredEvents} />
 
         {/* Latest News & Articles */}
         <News />

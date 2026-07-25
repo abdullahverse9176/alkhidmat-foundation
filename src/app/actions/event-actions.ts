@@ -32,10 +32,11 @@ export async function saveEventAction(eventData: {
   location: string;
   image?: string;
   status?: "upcoming" | "past";
+  featured?: boolean;
 }) {
   await dbConnect();
   try {
-    const { _id, title, description, date, time, location, image } = eventData;
+    const { _id, title, description, date, time, location, image, featured } = eventData;
 
     if (!title || !description || !date || !time || !location) {
       throw new Error("Required fields: Title, Description, Date, Time, Location.");
@@ -60,6 +61,7 @@ export async function saveEventAction(eventData: {
           location: location.trim(),
           image: image?.trim(),
           status: calculatedStatus,
+          featured: Boolean(featured),
         },
         { new: true, runValidators: true }
       );
@@ -72,11 +74,13 @@ export async function saveEventAction(eventData: {
         location: location.trim(),
         image: image?.trim(),
         status: calculatedStatus,
+        featured: Boolean(featured),
       });
     }
 
     revalidatePath("/dashboard/events");
     revalidatePath("/events");
+    revalidatePath("/");
     return JSON.parse(JSON.stringify(savedEvent));
   } catch (error: any) {
     console.error("Error in saveEventAction:", error);
@@ -93,9 +97,26 @@ export async function deleteEventAction(id: string) {
     await Event.findByIdAndDelete(id);
     revalidatePath("/dashboard/events");
     revalidatePath("/events");
+    revalidatePath("/");
     return { success: true };
   } catch (error: any) {
     console.error("Error in deleteEventAction:", error);
     throw new Error(error.message || "Failed to delete event");
+  }
+}
+
+/**
+ * Fetch only featured events for homepage display
+ */
+export async function getFeaturedEventsAction() {
+  await dbConnect();
+  try {
+    const events = await Event.find({ featured: true })
+      .sort({ date: 1 })
+      .lean();
+    return JSON.parse(JSON.stringify(events));
+  } catch (error: any) {
+    console.error("Error in getFeaturedEventsAction:", error);
+    throw new Error(error.message || "Failed to fetch featured events");
   }
 }

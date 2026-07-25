@@ -17,6 +17,7 @@ interface EventItem {
   location: string;
   image?: string;
   status: "upcoming" | "past";
+  featured?: boolean;
   createdAt: string;
 }
 
@@ -36,6 +37,7 @@ export default function EventsDashboardPage() {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [image, setImage] = useState("");
+  const [featured, setFeatured] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,6 +105,7 @@ export default function EventsDashboardPage() {
         time,
         location,
         image: image || undefined,
+        featured: Boolean(featured),
       };
 
       const saved = await saveEventAction(payload);
@@ -132,6 +135,7 @@ export default function EventsDashboardPage() {
     setTime(item.time);
     setLocation(item.location);
     setImage(item.image || "");
+    setFeatured(item.featured || false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -143,6 +147,7 @@ export default function EventsDashboardPage() {
     setTime("");
     setLocation("");
     setImage("");
+    setFeatured(false);
   };
 
   const handleDelete = async (id: string) => {
@@ -312,6 +317,19 @@ export default function EventsDashboardPage() {
               </div>
             </div>
 
+            <div className="flex items-center gap-2 py-1">
+              <input
+                type="checkbox"
+                id="featured"
+                checked={featured}
+                onChange={(e) => setFeatured(e.target.checked)}
+                className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary/20 cursor-pointer"
+              />
+              <label htmlFor="featured" className="text-xs font-bold text-gray-700 cursor-pointer select-none">
+                Featured on Homepage (Show in Upcoming Events)
+              </label>
+            </div>
+
             <div className="flex gap-2 pt-2">
               {editingId && (
                 <button
@@ -394,6 +412,11 @@ export default function EventsDashboardPage() {
                         }`}>
                           {item.status}
                         </span>
+                        {item.featured && (
+                          <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-0.5">
+                            ★ Featured
+                          </span>
+                        )}
                       </div>
                       
                       <p className="text-xs font-semibold text-gray-505 line-clamp-2 leading-relaxed">{item.description}</p>
