@@ -37,7 +37,7 @@ export default function Navbar() {
       label: "About Us",
       dropdownItems: [
         { label: "Who We Are", href: "/#about", description: "Our mission, vision, and core values.", icon: Info },
-        { label: "Our Leadership", href: "/#leadership", description: "Meet the team and the Chairman.", icon: Award },
+        { label: "Our Leadership", href: "/leadership", description: "Meet the team and the Chairman.", icon: Award },
         { label: "Operational Gallery", href: "/gallery", description: "Photos from our active welfare fields.", icon: UserPlus }
       ]
     },
@@ -68,7 +68,7 @@ export default function Navbar() {
 
   const isCategoryActive = (label: string) => {
     if (label === "Home" && pathname === "/") return true;
-    if (label === "About Us" && (pathname === "/gallery" || pathname.startsWith("/about"))) return true;
+    if (label === "About Us" && (pathname === "/gallery" || pathname === "/leadership" || pathname.startsWith("/about"))) return true;
     if (label === "Programs" && (pathname === "/services" || pathname === "/welfare-projects")) return true;
     if (label === "Get Involved" && (pathname === "/volunteer" || pathname === "/events" || pathname === "/blood-donor")) return true;
     if (label === "Contact" && pathname === "/contact") return true;

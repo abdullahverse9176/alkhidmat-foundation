@@ -14,7 +14,8 @@ import {
   Heart,
   Map,
   Calendar,
-  CalendarCheck
+  CalendarCheck,
+  Award
 } from "lucide-react";
 
 export default async function DashboardLayout({
@@ -120,6 +121,14 @@ export default async function DashboardLayout({
           >
             <CalendarCheck className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
             <span>Event Volunteers</span>
+          </Link>
+
+          <Link 
+            href="/dashboard/leadership" 
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all group"
+          >
+            <Award className="w-4.5 h-4.5 text-slate-400 group-hover:text-primary transition-colors" />
+            <span>Manage Leadership</span>
           </Link>
 
           <div className="h-px bg-slate-800/80 my-4" />
