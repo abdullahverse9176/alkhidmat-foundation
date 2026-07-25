@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { BloodDonorData, BloodDonorSchema } from "@/app/schemas/contact-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,9 +8,11 @@ import { useRecaptcha } from "@/app/hooks/useRecaptcha";
 import useUTM from "@/app/hooks/useUTM";
 import useGTM from "@/app/hooks/useGTM";
 import { submitFormAction } from "@/app/actions/form-actions";
+import { getAreasAction } from "@/app/actions/area-actions";
 import TextInput from "./forms-component/TextInput";
 import PhoneInputField from "./forms-component/PhoneInputField";
 import SelectBox from "./forms-component/SelectBox";
+import Autocomplete from "./forms-component/Autocomplete";
 import { Heart, ShieldCheck } from "lucide-react";
 
 interface BloodDonorRegisterProps {
@@ -23,14 +25,41 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
     handleSubmit,
     control,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<BloodDonorData>({
     resolver: zodResolver(BloodDonorSchema),
     defaultValues: {
       bloodGroup: "A+",
       lastDonated: "Never",
+      cityVillageArea: "",
     }
   });
+
+  const [areas, setAreas] = useState<string[]>([]);
+
+  // Register custom field manually
+  useEffect(() => {
+    register("cityVillageArea");
+  }, [register]);
+
+  // Fetch areas from DB on mount
+  useEffect(() => {
+    async function loadAreas() {
+      try {
+        const data = await getAreasAction();
+        // Format each area as "Muhalla/Village, City"
+        const formatted = data.map((a: any) => `${a.name}, ${a.city}`);
+        setAreas(formatted);
+      } catch (err) {
+        console.error("Failed to load areas:", err);
+      }
+    }
+    loadAreas();
+  }, []);
+
+  const locationValue = watch("cityVillageArea") || "";
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const donationIntervals = [
@@ -119,10 +148,12 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
           error={errors.phone}
         />
 
-        <TextInput
+        <Autocomplete
           label="City / Village / Area"
-          placeholder="Enter your location"
-          registration={register("cityVillageArea")}
+          placeholder="Search or select area..."
+          value={locationValue}
+          onChange={(val) => setValue("cityVillageArea", val, { shouldValidate: true })}
+          suggestions={areas}
           error={errors.cityVillageArea}
         />
       </div>
