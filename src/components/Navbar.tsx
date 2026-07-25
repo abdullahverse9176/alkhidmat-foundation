@@ -8,7 +8,7 @@ import assets from "@/data/assets";
 import { 
   Search, Menu, X, Heart, Users, Sparkles, ChevronDown,
   Info, Award, Activity, Briefcase, Calendar, UserPlus,
-  LogOut, LayoutDashboard
+  LogOut, LayoutDashboard, UserCheck
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
@@ -26,6 +26,9 @@ export default function Navbar() {
   
   // Track expanded dropdown in mobile view
   const [mobileExpandedDropdown, setMobileExpandedDropdown] = useState<string | null>(null);
+
+  // Track user account dropdown in desktop view
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   // Grouped Navigation Items with icons and descriptions
   const menuItems = [
@@ -49,7 +52,6 @@ export default function Navbar() {
       label: "Get Involved",
       dropdownItems: [
         { label: "Upcoming Events", href: "/events", description: "Join our public awareness events.", icon: Calendar },
-        { label: "Join as Volunteer", href: "/volunteer", description: "Register as a volunteer and help out.", icon: UserPlus },
         { label: "Become a Blood Donor", href: "/blood-donor", description: "Sign up to donate blood and save lives.", icon: Heart }
       ]
     },
@@ -228,41 +230,63 @@ export default function Navbar() {
                 <span>Volunteer</span>
               </Link>
 
-              {/* Donate Button */}
-              <Link
-                href="/#donation"
-                className="flex items-center gap-1.5 px-4.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider text-white bg-accent hover:bg-accent-hover transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg"
-              >
-                <Heart className="w-3.5 h-3.5 fill-current text-white" />
-                <span>Donate</span>
-              </Link>
-
               {/* STEP 10.1: Login/Dashboard state for desktop Navbar */}
               {status === "authenticated" ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-250 border cursor-pointer ${
+                <div 
+                  className="relative"
+                  onMouseEnter={() => setIsUserDropdownOpen(true)}
+                  onMouseLeave={() => setIsUserDropdownOpen(false)}
+                >
+                  <button
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 border cursor-pointer ${
                       isScrolled
                         ? "border-primary text-primary hover:bg-primary hover:text-white"
-                        : "border-white/30 text-white hover:bg-white hover:text-primary"
+                        : "border-white/40 text-white hover:bg-white/10"
                     }`}
                   >
-                    <LayoutDashboard className="w-3.5 h-3.5" />
-                    <span>Dashboard</span>
-                  </Link>
-                  <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-250 cursor-pointer ${
-                      isScrolled
-                        ? "text-neutral-light hover:text-red-650"
-                        : "text-gray-200 hover:text-white"
-                    }`}
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span>Logout</span>
+                    <UserCheck className="w-3.5 h-3.5" />
+                    <span>{session?.user?.name || "Account"}</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isUserDropdownOpen ? "rotate-180" : ""}`} />
                   </button>
-                </>
+
+                  <AnimatePresence>
+                    {isUserDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-48 bg-white border border-gray-150 rounded-2xl shadow-xl py-2 z-50 text-left overflow-hidden"
+                      >
+                        <div className="px-4 py-2 border-b border-gray-100">
+                          <p className="text-xs font-bold text-gray-800 truncate">{session?.user?.name || "Admin User"}</p>
+                          <p className="text-[10px] font-semibold text-gray-400 truncate">{session?.user?.email}</p>
+                        </div>
+
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors"
+                        >
+                          <LayoutDashboard className="w-4 h-4 text-primary" />
+                          <span>Dashboard</span>
+                        </Link>
+
+                        <button
+                          onClick={() => {
+                            setIsUserDropdownOpen(false);
+                            signOut({ callbackUrl: "/" });
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer text-left"
+                        >
+                          <LogOut className="w-4 h-4 text-rose-600" />
+                          <span>Logout</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ) : (
                 <Link
                   href="/login"
@@ -387,7 +411,7 @@ export default function Navbar() {
 
                 {/* Mobile CTAs */}
                 <div className="pt-4 space-y-2.5 border-t border-gray-100 mt-2 pb-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div>
                     <Link
                       href="/volunteer"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -395,14 +419,6 @@ export default function Navbar() {
                     >
                       <Users className="w-3.5 h-3.5" />
                       <span>Volunteer</span>
-                    </Link>
-                    <Link
-                      href="/#donation"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-accent text-white text-xs font-bold uppercase tracking-wider hover:bg-accent-hover cursor-pointer transition-colors text-center"
-                    >
-                      <Heart className="w-3.5 h-3.5 fill-current text-white" />
-                      <span>Donate</span>
                     </Link>
                   </div>
 
