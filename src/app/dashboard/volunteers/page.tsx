@@ -15,6 +15,7 @@ interface Volunteer {
     email: string;
     phone: string;
     city: string;
+    area: string;
     program: string;
   };
   createdAt: string;
@@ -29,6 +30,7 @@ export default function VolunteersPage() {
   // Filters State
   const [selectedProgram, setSelectedProgram] = useState("all");
   const [cityQuery, setCityQuery] = useState("");
+  const [areaQuery, setAreaQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
 
   const programs = [
@@ -50,6 +52,7 @@ export default function VolunteersPage() {
       const data = await getVolunteersAction({
         program: selectedProgram,
         city: cityQuery,
+        area: areaQuery,
         status: selectedStatus
       });
       setVolunteers(data);
@@ -67,7 +70,7 @@ export default function VolunteersPage() {
     }, 300); // Debounce search query changes
 
     return () => clearTimeout(delayDebounceFn);
-  }, [selectedProgram, cityQuery, selectedStatus]);
+  }, [selectedProgram, cityQuery, areaQuery, selectedStatus]);
 
   const handleStatusUpdate = async (id: string, newStatus: "approved" | "rejected") => {
     setActionLoading(id);
@@ -104,19 +107,36 @@ export default function VolunteersPage() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* City Filter */}
         <div className="relative">
           <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-            City / Area
+            City
           </label>
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by city..."
+              placeholder="Search city..."
               value={cityQuery}
               onChange={(e) => setCityQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800"
+            />
+          </div>
+        </div>
+
+        {/* Area Filter */}
+        <div className="relative">
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+            Area / Muhalla
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search area..."
+              value={areaQuery}
+              onChange={(e) => setAreaQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800"
             />
           </div>
@@ -193,7 +213,8 @@ export default function VolunteersPage() {
                 <tr className="bg-gray-50/50 border-b border-gray-100">
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Date & Info</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Contact Details</th>
-                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">City / Area</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">City</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Area / Muhalla</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Relief Program</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Status</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
@@ -231,9 +252,16 @@ export default function VolunteersPage() {
 
                       {/* City */}
                       <td className="px-6 py-5">
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-gray-700 bg-gray-100/80 px-2.5 py-1 rounded-lg border border-gray-200/50">
-                          <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded-lg border border-gray-200/50">
                           {v.data.city}
+                        </span>
+                      </td>
+
+                      {/* Area */}
+                      <td className="px-6 py-5">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-150">
+                          <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
+                          {v.data.area}
                         </span>
                       </td>
 

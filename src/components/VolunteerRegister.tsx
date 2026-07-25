@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle2, UserCheck, ShieldCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -10,9 +10,11 @@ import { useRecaptcha } from "@/app/hooks/useRecaptcha";
 import useUTM from "@/app/hooks/useUTM";
 import useGTM from "@/app/hooks/useGTM";
 import { submitFormAction } from "@/app/actions/form-actions";
+import { getAreasAction } from "@/app/actions/area-actions";
 import TextInput from "./forms-component/TextInput";
 import PhoneInputField from "./forms-component/PhoneInputField";
 import SelectBox from "./forms-component/SelectBox";
+import Autocomplete from "./forms-component/Autocomplete";
 
 interface VolunteerRegisterProps {
   onSuccess?: () => void;
@@ -25,10 +27,48 @@ export default function VolunteerRegister({ onSuccess }: VolunteerRegisterProps)
     handleSubmit,
     control,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<VolunteerRegisterData>({
     resolver: zodResolver(VolunteerRegisterSchema),
+    defaultValues: {
+      city: "",
+      area: "",
+    }
   });
+
+  const [rawAreas, setRawAreas] = useState<any[]>([]);
+
+  // Register custom fields manually
+  useEffect(() => {
+    register("city");
+    register("area");
+  }, [register]);
+
+  // Fetch areas from DB on mount
+  useEffect(() => {
+    async function loadAreas() {
+      try {
+        const data = await getAreasAction();
+        setRawAreas(data);
+      } catch (err) {
+        console.error("Failed to load areas:", err);
+      }
+    }
+    loadAreas();
+  }, []);
+
+  const cityValue = watch("city") || "";
+  const areaValue = watch("area") || "";
+
+  // Get unique list of cities
+  const cities = Array.from(new Set(rawAreas.map((a: any) => a.city)));
+
+  // Filter areas based on selected city
+  const filteredAreas = cityValue
+    ? rawAreas.filter((a: any) => a.city.toLowerCase() === cityValue.toLowerCase()).map((a: any) => a.name)
+    : rawAreas.map((a: any) => a.name);
 
 
   const programs = [
@@ -130,13 +170,30 @@ export default function VolunteerRegister({ onSuccess }: VolunteerRegisterProps)
             error={errors.phone}
           />
 
-          <TextInput
+          <Autocomplete
             label="City of Residence"
-            placeholder="Enter your city"
-            registration={register("city")}
+            placeholder="Search or select city..."
+            value={cityValue}
+            onChange={(val) => {
+              setValue("city", val, { shouldValidate: true });
+              setValue("area", "", { shouldValidate: true });
+            }}
+            suggestions={cities}
             error={errors.city}
           />
 
+
+
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+          <Autocomplete
+            label="Area / Muhalla / Village"
+            placeholder="Search or select area..."
+            value={areaValue}
+            onChange={(val) => setValue("area", val, { shouldValidate: true })}
+            suggestions={filteredAreas}
+            error={errors.area}
+          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">

@@ -33,15 +33,17 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
     defaultValues: {
       bloodGroup: "A+",
       lastDonated: "Never",
-      cityVillageArea: "",
+      city: "",
+      area: "",
     }
   });
 
-  const [areas, setAreas] = useState<string[]>([]);
+  const [rawAreas, setRawAreas] = useState<any[]>([]);
 
-  // Register custom field manually
+  // Register custom fields manually
   useEffect(() => {
-    register("cityVillageArea");
+    register("city");
+    register("area");
   }, [register]);
 
   // Fetch areas from DB on mount
@@ -49,9 +51,7 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
     async function loadAreas() {
       try {
         const data = await getAreasAction();
-        // Format each area as "Muhalla/Village, City"
-        const formatted = data.map((a: any) => `${a.name}, ${a.city}`);
-        setAreas(formatted);
+        setRawAreas(data);
       } catch (err) {
         console.error("Failed to load areas:", err);
       }
@@ -59,7 +59,16 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
     loadAreas();
   }, []);
 
-  const locationValue = watch("cityVillageArea") || "";
+  const cityValue = watch("city") || "";
+  const areaValue = watch("area") || "";
+
+  // Get unique list of cities
+  const cities = Array.from(new Set(rawAreas.map((a: any) => a.city)));
+
+  // Filter areas based on selected city
+  const filteredAreas = cityValue
+    ? rawAreas.filter((a: any) => a.city.toLowerCase() === cityValue.toLowerCase()).map((a: any) => a.name)
+    : rawAreas.map((a: any) => a.name);
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const donationIntervals = [
@@ -149,12 +158,24 @@ export default function BloodDonorRegister({ onSuccess }: BloodDonorRegisterProp
         />
 
         <Autocomplete
-          label="City / Village / Area"
+          label="City"
+          placeholder="Search or select city..."
+          value={cityValue}
+          onChange={(val) => {
+            setValue("city", val, { shouldValidate: true });
+            setValue("area", "", { shouldValidate: true });
+          }}
+          suggestions={cities}
+          error={errors.city}
+        />
+
+        <Autocomplete
+          label="Area / Muhalla / Village / Society"
           placeholder="Search or select area..."
-          value={locationValue}
-          onChange={(val) => setValue("cityVillageArea", val, { shouldValidate: true })}
-          suggestions={areas}
-          error={errors.cityVillageArea}
+          value={areaValue}
+          onChange={(val) => setValue("area", val, { shouldValidate: true })}
+          suggestions={filteredAreas}
+          error={errors.area}
         />
       </div>
 

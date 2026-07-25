@@ -6,7 +6,8 @@ import { revalidatePath } from "next/cache";
 
 interface DonorFilter {
   bloodGroup?: string;
-  cityVillageArea?: string;
+  city?: string;
+  area?: string;
   status?: string;
 }
 
@@ -22,8 +23,12 @@ export async function getBloodDonorsAction(filters: DonorFilter = {}) {
       query["data.bloodGroup"] = filters.bloodGroup;
     }
 
-    if (filters.cityVillageArea && filters.cityVillageArea.trim() !== "") {
-      query["data.cityVillageArea"] = { $regex: filters.cityVillageArea.trim(), $options: "i" };
+    if (filters.city && filters.city.trim() !== "") {
+      query["data.city"] = { $regex: filters.city.trim(), $options: "i" };
+    }
+
+    if (filters.area && filters.area.trim() !== "") {
+      query["data.area"] = { $regex: filters.area.trim(), $options: "i" };
     }
 
     if (filters.status && filters.status !== "all") {

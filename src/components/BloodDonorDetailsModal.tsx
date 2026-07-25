@@ -10,7 +10,8 @@ export interface BloodDonor {
     name: string;
     email: string;
     phone: string;
-    cityVillageArea: string;
+    city: string;
+    area: string;
     bloodGroup: string;
     lastDonated: string;
   };
@@ -67,11 +68,19 @@ export default function BloodDonorDetailsModal({ donor, onClose }: BloodDonorDet
             </span>
           </div>
 
-          {/* Location */}
+          {/* City */}
           <div className="flex justify-between items-center py-2 border-b border-gray-50">
-            <span className="font-bold text-gray-400 uppercase tracking-wide text-xs">Location</span>
+            <span className="font-bold text-gray-400 uppercase tracking-wide text-xs">City</span>
             <span className="font-bold text-gray-700 bg-gray-100 px-2.5 py-0.5 rounded-lg border border-gray-200/50">
-              {donor.data.cityVillageArea}
+              {donor.data.city}
+            </span>
+          </div>
+
+          {/* Area */}
+          <div className="flex justify-between items-center py-2 border-b border-gray-50">
+            <span className="font-bold text-gray-400 uppercase tracking-wide text-xs">Area / Village / Society</span>
+            <span className="font-bold text-gray-800">
+              {donor.data.area}
             </span>
           </div>
 

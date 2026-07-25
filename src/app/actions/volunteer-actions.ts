@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 interface VolunteerFilter {
   program?: string;
   city?: string;
+  area?: string;
   status?: string;
 }
 
@@ -25,6 +26,10 @@ export async function getVolunteersAction(filters: VolunteerFilter = {}) {
 
     if (filters.city && filters.city.trim() !== "") {
       query["data.city"] = { $regex: filters.city.trim(), $options: "i" };
+    }
+
+    if (filters.area && filters.area.trim() !== "") {
+      query["data.area"] = { $regex: filters.area.trim(), $options: "i" };
     }
 
     if (filters.status && filters.status !== "all") {

@@ -18,7 +18,8 @@ export default function BloodDonorsDashboardPage() {
 
   // Filters State
   const [selectedBloodGroup, setSelectedBloodGroup] = useState("all");
-  const [locationQuery, setLocationQuery] = useState("");
+  const [cityQuery, setCityQuery] = useState("");
+  const [areaQuery, setAreaQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -30,7 +31,8 @@ export default function BloodDonorsDashboardPage() {
     try {
       const data = await getBloodDonorsAction({
         bloodGroup: selectedBloodGroup,
-        cityVillageArea: locationQuery,
+        city: cityQuery,
+        area: areaQuery,
         status: selectedStatus
       });
       setDonors(data);
@@ -48,7 +50,7 @@ export default function BloodDonorsDashboardPage() {
     }, 300); // Debounce search query input
 
     return () => clearTimeout(delayDebounceFn);
-  }, [selectedBloodGroup, locationQuery, selectedStatus]);
+  }, [selectedBloodGroup, cityQuery, areaQuery, selectedStatus]);
 
   const handleStatusUpdate = async (id: string, newStatus: "approved" | "rejected") => {
     setActionLoading(id);
@@ -85,19 +87,36 @@ export default function BloodDonorsDashboardPage() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* City/Village/Area Filter */}
+      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* City Filter */}
         <div className="relative">
           <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-            City / Village / Area
+            City
           </label>
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search location (e.g. Chiniot, Lalian)..."
-              value={locationQuery}
-              onChange={(e) => setLocationQuery(e.target.value)}
+              placeholder="Search city..."
+              value={cityQuery}
+              onChange={(e) => setCityQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-gray-800"
+            />
+          </div>
+        </div>
+
+        {/* Area Filter */}
+        <div className="relative">
+          <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+            Area / Muhalla / Village
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search area..."
+              value={areaQuery}
+              onChange={(e) => setAreaQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-gray-800"
             />
           </div>
@@ -173,7 +192,8 @@ export default function BloodDonorsDashboardPage() {
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Donor Details</th>
-                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">City</th>
+                  <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Area / Muhalla</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Blood Group</th>
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
@@ -192,11 +212,18 @@ export default function BloodDonorsDashboardPage() {
                         <div className="font-bold text-gray-800 text-sm">{d.data.name}</div>
                       </td>
 
-                      {/* Location (City/Village/Area) */}
+                      {/* City */}
                       <td className="px-6 py-5">
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded-lg border border-gray-250/55">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded-lg border border-gray-200/50">
+                          {d.data.city}
+                        </span>
+                      </td>
+
+                      {/* Area */}
+                      <td className="px-6 py-5">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-700 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-150">
                           <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                          {d.data.cityVillageArea}
+                          {d.data.area}
                         </span>
                       </td>
 
