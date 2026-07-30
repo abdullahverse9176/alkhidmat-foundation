@@ -104,7 +104,7 @@ export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProp
       }));
 
   return (
-    <section id="projects" className="py-24 bg-white relative">
+    <section id="projects" className="py-12 sm:py-16 md:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header containing text and a call to action link */}

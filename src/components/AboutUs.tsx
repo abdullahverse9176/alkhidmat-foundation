@@ -9,7 +9,7 @@ export default function AboutUs() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <section id="about" className="py-24 bg-white relative">
+    <section id="about" className="py-12 sm:py-16 md:py-24 bg-gray-50 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
@@ -84,7 +84,7 @@ export default function AboutUs() {
 
             {/* Mission & Vision cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-              <div className="p-5 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/20 transition-all">
+              <div className="p-5 rounded-xl bg-white border border-gray-100 hover:border-primary/20 transition-all">
                 <div className="flex items-center gap-2 text-primary font-bold mb-2">
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                   <span>Our Mission</span>
@@ -94,7 +94,7 @@ export default function AboutUs() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl bg-gray-50 border border-gray-100 hover:border-primary/20 transition-all">
+              <div className="p-5 rounded-xl bg-white border border-gray-150 hover:border-primary/20 transition-all">
                 <div className="flex items-center gap-2 text-accent font-bold mb-2">
                   <Heart className="w-5 h-5 text-accent fill-current" />
                   <span>Our Vision</span>
@@ -113,7 +113,7 @@ export default function AboutUs() {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="overflow-hidden bg-gray-50 rounded-xl p-5 border border-primary/10 text-xs text-neutral-light space-y-3 font-medium"
+                  className="overflow-hidden bg-white rounded-xl p-5 border border-primary/10 text-xs text-neutral-light space-y-3 font-medium"
                 >
                   <p>
                     Through our organized local hubs, we build direct food distribution pipelines, volunteer squads for immediate medical camp set-ups, and clean water pipelines that are managed locally by community heads. 

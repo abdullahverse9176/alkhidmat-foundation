@@ -50,7 +50,7 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 md:py-24 bg-gray-50 relative overflow-hidden">
       {/* Decorative quotes background */}
       <div className="absolute top-1/2 left-10 -translate-y-1/2 w-48 h-48 text-gray-50 pointer-events-none z-0">
         <Quote className="w-full h-full fill-current" />
@@ -69,7 +69,7 @@ export default function Testimonials() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative bg-gray-50 rounded-3xl border border-gray-150 p-8 sm:p-12 shadow-sm min-h-[300px] flex flex-col justify-between">
+        <div className="relative bg-white rounded-3xl border border-gray-150 p-8 sm:p-12 shadow-xl min-h-[300px] flex flex-col justify-between">
           
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
