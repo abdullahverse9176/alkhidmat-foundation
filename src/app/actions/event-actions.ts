@@ -8,15 +8,15 @@ import { revalidatePath } from "next/cache";
  * Fetch all events sorted by date (upcoming first)
  */
 export async function getEventsAction() {
-  await dbConnect();
   try {
+    await dbConnect();
     const events = await Event.find()
       .sort({ date: 1 })
       .lean();
     return JSON.parse(JSON.stringify(events));
   } catch (error: any) {
     console.error("Error in getEventsAction:", error);
-    throw new Error(error.message || "Failed to fetch events");
+    return [];
   }
 }
 
@@ -109,14 +109,14 @@ export async function deleteEventAction(id: string) {
  * Fetch only featured events for homepage display
  */
 export async function getFeaturedEventsAction() {
-  await dbConnect();
   try {
+    await dbConnect();
     const events = await Event.find({ featured: true })
       .sort({ date: 1 })
       .lean();
     return JSON.parse(JSON.stringify(events));
   } catch (error: any) {
     console.error("Error in getFeaturedEventsAction:", error);
-    throw new Error(error.message || "Failed to fetch featured events");
+    return [];
   }
 }

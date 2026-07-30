@@ -45,13 +45,13 @@ export async function uploadImageAction(formData: FormData): Promise<string> {
  * Fetch all services from MongoDB
  */
 export async function getServicesAction() {
-  await dbConnect();
   try {
+    await dbConnect();
     const services = await Service.find().sort({ createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(services));
   } catch (error) {
     console.error("Error in getServicesAction:", error);
-    throw new Error("Failed to fetch services");
+    return [];
   }
 }
 
@@ -115,14 +115,14 @@ export async function deleteServiceAction(idOrSlug: string) {
  * Fetch projects. Optionally filter by serviceSlug.
  */
 export async function getProjectsAction(serviceSlug?: string) {
-  await dbConnect();
   try {
+    await dbConnect();
     const query = serviceSlug ? { serviceSlug } : {};
     const projects = await Project.find(query).sort({ createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(projects));
   } catch (error) {
     console.error("Error in getProjectsAction:", error);
-    throw new Error("Failed to fetch projects");
+    return [];
   }
 }
 

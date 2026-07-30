@@ -6,27 +6,44 @@ import ChairmanMessage from "@/components/ChairmanMessage";
 import Events from "@/components/Events";
 import News from "@/components/News";
 import Newsletter from "@/components/Newsletter";
+import Services from "@/components/Services";
+import FeaturedProjects from "@/components/FeaturedProjects";
+import Testimonials from "@/components/Testimonials";
 import { getFeaturedEventsAction } from "@/app/actions/event-actions";
+import { getServicesAction, getProjectsAction } from "@/app/actions/services";
 
 export default async function Home() {
-  const featuredEvents = await getFeaturedEventsAction();
+  const [featuredEvents, services, projects] = await Promise.all([
+    getFeaturedEventsAction(),
+    getServicesAction(),
+    getProjectsAction()
+  ]);
 
   return (
     <div className="relative min-h-screen bg-white">
 
       {/* Main Sections */}
       <main className="w-full">
-        {/* Hero Section */}
+        {/* Hero Section Carousel */}
         <Hero />
 
         {/* Impact Statistics */}
         <ImpactStats />
+
+        {/* Services & Care Areas Swipeable Carousel */}
+        <Services initialServices={services} />
+
+        {/* Featured Welfare Projects Swipeable Carousel */}
+        <FeaturedProjects projects={projects} />
 
         {/* About Us Overview */}
         <AboutUs />
 
         {/* Chairman Leadership Message */}
         <ChairmanMessage />
+
+        {/* Testimonials Review Slider */}
+        <Testimonials />
 
         {/* Upcoming Events */}
         {featuredEvents && featuredEvents.length > 0 && (

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Heart, Calendar, ArrowRight } from "lucide-react";
+import { Heart, Calendar, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { featuredProjectsData } from "@/data/mockData";
 import Link from "next/link";
 
@@ -20,6 +20,42 @@ interface FeaturedProjectsProps {
 }
 
 export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [scrollIndex, setScrollIndex] = React.useState(0);
+
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const cardWidth = container.querySelector(".project-card")?.clientWidth || (container.clientWidth * 0.85);
+      const gap = 24; // gap-6 is 24px
+      const index = Math.round(container.scrollLeft / (cardWidth + gap));
+      setScrollIndex(index);
+    }
+  };
+
+  const scrollToCard = (index: number) => {
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const cardWidth = container.querySelector(".project-card")?.clientWidth || (container.clientWidth * 0.85);
+      const gap = 24;
+      container.scrollTo({
+        left: index * (cardWidth + gap),
+        behavior: "smooth"
+      });
+      setScrollIndex(index);
+    }
+  };
+
+  const scrollNext = () => {
+    const nextIndex = Math.min(scrollIndex + 1, displayProjects.length - 1);
+    scrollToCard(nextIndex);
+  };
+
+  const scrollPrev = () => {
+    const prevIndex = Math.max(scrollIndex - 1, 0);
+    scrollToCard(prevIndex);
+  };
+
   const containerVariants = {
     hidden: {},
     visible: {
@@ -85,121 +121,156 @@ export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProp
             </p>
           </div>
           
-          <Link
-            href="/#donation"
-            className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-hover group transition-colors cursor-pointer border-b border-primary/20 pb-1 align-middle inline-flex"
-          >
-            <span>View All Campaigns</span>
-            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/#donation"
+              className="flex items-center gap-2 text-sm font-bold text-primary hover:text-primary-hover group transition-colors cursor-pointer border-b border-primary/20 pb-1 align-middle inline-flex"
+            >
+              <span>All Campaigns</span>
+              <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
 
-        {/* Project Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {displayProjects.map((project) => {
-            const percentage = Math.min(100, Math.round((project.raisedAmount / project.targetAmount) * 100));
+        {/* Carousel / Project Cards Grid Container */}
+        <div className="relative">
+          {/* Scroll container */}
+          <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 no-scrollbar scroll-smooth w-full"
+          >
+            {displayProjects.map((project, idx) => {
+              const percentage = Math.min(100, Math.round((project.raisedAmount / project.targetAmount) * 100));
 
-            return (
-              <motion.div
-                key={project.id}
-                variants={cardVariants}
-                className="bg-white rounded-2xl border border-gray-150 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+              return (
+                <div
+                  key={project.id}
+                  className="project-card snap-start shrink-0 w-[86%] sm:w-[65%] md:w-auto bg-white rounded-2xl border border-gray-150 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group"
+                >
+                  {/* Image Container with Zoom effect */}
+                  <div className="relative h-56 w-full overflow-hidden bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-dark/45 to-transparent" />
+                    
+                    {/* Category badge */}
+                    <span className="absolute top-4 left-4 bg-white/95 text-primary text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-md border border-gray-100">
+                      {project.category}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-grow flex flex-col justify-between space-y-6">
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-bold text-neutral-dark group-hover:text-primary transition-colors duration-150 leading-snug">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs text-neutral-light leading-relaxed font-semibold">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    {/* Financial indicators and Progress bar */}
+                    <div className="space-y-2.5">
+                      <div className="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden border border-gray-50">
+                        <div
+                          className="bg-primary h-full rounded-full"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+
+                      <div className="flex justify-between items-center text-xs font-bold">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] text-neutral-light uppercase font-semibold">Raised</span>
+                          <span className="text-primary font-black">${project.raisedAmount.toLocaleString()}</span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <span className="text-[10px] text-neutral-light uppercase font-semibold">Goal</span>
+                          <span className="text-neutral-dark font-black">${project.targetAmount.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center text-[10px] text-neutral-light border-t border-gray-100 pt-3">
+                        <span className="font-bold text-accent px-2 py-0.5 bg-accent/10 rounded">{percentage}% Funded</span>
+                        <span className="flex items-center gap-1 font-semibold">
+                          <Calendar className="w-3.5 h-3.5 text-neutral-light" />
+                          <span>Active Campaign</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="pt-2 grid grid-cols-2 gap-3">
+                      <Link
+                        href={project.slug ? `/#donation?project=${project.slug}` : "/#donation"}
+                        className="py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg text-center transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                      >
+                        <Heart className="w-3.5 h-3.5 fill-current" />
+                        <span>Donate</span>
+                      </Link>
+                      {project.slug ? (
+                        <Link
+                          href={`/services/${project.serviceSlug}/${project.slug}`}
+                          className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
+                        >
+                          Read More
+                        </Link>
+                      ) : (
+                        <Link
+                          href="/#about"
+                          className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
+                        >
+                          Read More
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Swipe indicator dots and arrow buttons for mobile scroll control */}
+          <div className="flex items-center justify-between mt-4 md:hidden">
+            <div className="flex gap-2">
+              {displayProjects.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToCard(idx)}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    scrollIndex === idx ? "bg-primary w-5" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <button
+                onClick={scrollPrev}
+                disabled={scrollIndex === 0}
+                className="p-2 bg-gray-50 border border-gray-200 text-neutral-dark rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary hover:text-white"
+                aria-label="Previous Project"
               >
-                {/* Image Container with Zoom effect */}
-                <div className="relative h-56 w-full overflow-hidden bg-gray-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-dark/45 to-transparent" />
-                  
-                  {/* Category badge */}
-                  <span className="absolute top-4 left-4 bg-white/95 text-primary text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-md border border-gray-100">
-                    {project.category}
-                  </span>
-                </div>
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={scrollNext}
+                disabled={scrollIndex >= displayProjects.length - 1}
+                className="p-2 bg-gray-50 border border-gray-200 text-neutral-dark rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary hover:text-white"
+                aria-label="Next Project"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
 
-                {/* Content */}
-                <div className="p-6 flex-grow flex flex-col justify-between space-y-6">
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-bold text-neutral-dark group-hover:text-primary transition-colors duration-150 leading-snug">
-                      {project.title}
-                    </h3>
-                    <p className="text-xs text-neutral-light leading-relaxed font-semibold">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  {/* Financial indicators and Progress bar */}
-                  <div className="space-y-2.5">
-                    <div className="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden border border-gray-50">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${percentage}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                        className="bg-primary h-full rounded-full"
-                      />
-                    </div>
-
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] text-neutral-light uppercase font-semibold">Raised</span>
-                        <span className="text-primary font-black">${project.raisedAmount.toLocaleString()}</span>
-                      </div>
-                      <div className="flex flex-col items-end">
-                        <span className="text-[10px] text-neutral-light uppercase font-semibold">Goal</span>
-                        <span className="text-neutral-dark font-black">${project.targetAmount.toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between items-center text-[10px] text-neutral-light border-t border-gray-100 pt-3">
-                      <span className="font-bold text-accent px-2 py-0.5 bg-accent/10 rounded">{percentage}% Funded</span>
-                      <span className="flex items-center gap-1 font-semibold">
-                        <Calendar className="w-3.5 h-3.5 text-neutral-light" />
-                        <span>Active Campaign</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="pt-2 grid grid-cols-2 gap-3">
-                    <Link
-                      href={project.slug ? `/#donation?project=${project.slug}` : "/#donation"}
-                      className="py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg text-center transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
-                    >
-                      <Heart className="w-3.5 h-3.5 fill-current" />
-                      <span>Donate</span>
-                    </Link>
-                    {project.slug ? (
-                      <Link
-                        href={`/services/${project.serviceSlug}/${project.slug}`}
-                        className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
-                      >
-                        Read More
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/#about"
-                        className="py-2.5 border border-gray-200 hover:border-primary hover:text-primary text-neutral-dark text-xs font-bold rounded-lg text-center transition-all cursor-pointer flex items-center justify-center"
-                      >
-                        Read More
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
       </div>
     </section>
   );
