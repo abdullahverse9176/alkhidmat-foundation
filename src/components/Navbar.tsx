@@ -79,9 +79,11 @@ export default function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          isScrolled 
-            ? "glass-nav py-2.5 shadow-sm" 
-            : "bg-transparent py-4 text-white"
+          isMobileMenuOpen
+            ? "bg-white border-b border-gray-150 py-2.5 text-neutral-dark shadow-sm"
+            : isScrolled
+              ? "glass-nav py-2.5 shadow-sm text-neutral-dark"
+              : "bg-transparent py-4 text-white"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -306,7 +308,7 @@ export default function Navbar() {
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className={`p-2 rounded-full cursor-pointer ${
-                  isScrolled ? "text-neutral-dark hover:bg-gray-150" : "text-white hover:bg-white/10"
+                  isScrolled || isMobileMenuOpen ? "text-neutral-dark hover:bg-gray-150" : "text-white hover:bg-white/10"
                 }`}
                 aria-label="Search"
               >
@@ -316,7 +318,7 @@ export default function Navbar() {
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`p-2 rounded-lg cursor-pointer transition-colors ${
-                  isScrolled ? "text-neutral-dark hover:bg-gray-150" : "text-white hover:bg-white/10"
+                  isScrolled || isMobileMenuOpen ? "text-neutral-dark hover:bg-gray-150" : "text-white hover:bg-white/10"
                 }`}
                 aria-label="Toggle Menu"
               >
@@ -334,24 +336,24 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="lg:hidden bg-white border-t border-gray-100 shadow-inner overflow-hidden max-h-[85vh] overflow-y-auto"
+              className="lg:hidden bg-white border-b border-gray-150 shadow-xl overflow-hidden max-h-[85vh] overflow-y-auto"
             >
-              <div className="px-4 py-3 space-y-1.5 sm:px-6">
+              <div className="px-4 py-4 space-y-2 sm:px-6">
                 {menuItems.map((item) => {
                   const hasDropdown = !!item.dropdownItems;
                   const isActive = isCategoryActive(item.label);
                   const isExpanded = mobileExpandedDropdown === item.label;
 
                   return (
-                    <div key={item.label} className="border-b border-gray-50 pb-1.5 last:border-b-0 last:pb-0">
+                    <div key={item.label} className="pb-1">
                       {hasDropdown ? (
                         <>
                           <button
                             onClick={() => item.label && setMobileExpandedDropdown(isExpanded ? null : item.label)}
-                            className={`flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider cursor-pointer ${
+                            className={`flex items-center justify-between w-full px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-wider cursor-pointer transition-all ${
                               isActive
-                                ? "text-primary bg-primary/5"
-                                : "text-neutral-dark hover:bg-gray-50"
+                                ? "text-primary bg-primary/10"
+                                : "text-neutral-dark hover:bg-neutral-dark/5 hover:text-primary"
                             }`}
                           >
                             <span>{item.label}</span>
@@ -366,7 +368,7 @@ export default function Navbar() {
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="pl-4 pr-2 mt-1 space-y-1 overflow-hidden"
+                                className="pl-3 pr-2 mt-1.5 space-y-1 bg-neutral-dark/5 p-2 rounded-xl border border-neutral-dark/5 overflow-hidden"
                               >
                                 {item.dropdownItems?.map((subItem) => {
                                   const SubIcon = subItem.icon;
@@ -378,12 +380,14 @@ export default function Navbar() {
                                         setIsMobileMenuOpen(false);
                                         setMobileExpandedDropdown(null);
                                       }}
-                                      className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-left cursor-pointer hover:bg-gray-50 text-neutral-light hover:text-primary transition-colors"
+                                      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-left cursor-pointer hover:bg-white text-neutral-light hover:text-primary transition-all duration-150"
                                     >
-                                      <SubIcon className="w-4 h-4 shrink-0 text-neutral-light" />
+                                      <div className="p-1.5 bg-white shadow-xs rounded-md text-neutral-light hover:text-primary shrink-0">
+                                        <SubIcon className="w-3.5 h-3.5 text-neutral-light" />
+                                      </div>
                                       <div className="flex flex-col">
-                                        <span className="text-xs font-bold">{subItem.label}</span>
-                                        <span className="text-[10px] text-neutral-light leading-none mt-0.5">{subItem.description}</span>
+                                        <span className="text-xs font-bold text-neutral-dark">{subItem.label}</span>
+                                        <span className="text-[9px] text-neutral-light leading-none mt-0.5">{subItem.description}</span>
                                       </div>
                                     </Link>
                                   );
@@ -396,10 +400,10 @@ export default function Navbar() {
                         <Link
                           href={item.href || "/"}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider cursor-pointer ${
+                          className={`block w-full text-left px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-wider cursor-pointer transition-all ${
                             isActive
-                              ? "text-primary bg-primary/5"
-                              : "text-neutral-dark hover:bg-gray-50"
+                              ? "text-primary bg-primary/10"
+                              : "text-neutral-dark hover:bg-neutral-dark/5 hover:text-primary"
                           }`}
                         >
                           {item.label}
@@ -410,15 +414,15 @@ export default function Navbar() {
                 })}
 
                 {/* Mobile CTAs */}
-                <div className="pt-4 space-y-2.5 border-t border-gray-100 mt-2 pb-3">
+                <div className="pt-4 space-y-3 border-t border-gray-200/50 mt-3 pb-3">
                   <div>
                     <Link
                       href="/volunteer"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary hover:text-white cursor-pointer transition-colors text-center"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-hover text-white text-xs font-bold uppercase tracking-wider hover:shadow-lg transition-all duration-200 cursor-pointer shadow-md text-center"
                     >
-                      <Users className="w-3.5 h-3.5" />
-                      <span>Volunteer</span>
+                      <Users className="w-4 h-4 text-white" />
+                      <span>Become a Volunteer</span>
                     </Link>
                   </div>
 
@@ -428,9 +432,9 @@ export default function Navbar() {
                       <Link
                         href="/dashboard"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-primary-hover cursor-pointer transition-colors text-center"
+                        className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent-hover text-slate-900 text-xs font-extrabold uppercase tracking-wider hover:shadow-lg transition-all duration-200 cursor-pointer shadow-md text-center"
                       >
-                        <LayoutDashboard className="w-3.5 h-3.5 text-white" />
+                        <LayoutDashboard className="w-4 h-4 text-slate-900" />
                         <span>Dashboard</span>
                       </Link>
                       <button
@@ -438,9 +442,9 @@ export default function Navbar() {
                           setIsMobileMenuOpen(false);
                           signOut({ callbackUrl: "/" });
                         }}
-                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-gray-200 text-neutral-dark text-xs font-bold uppercase tracking-wider hover:bg-gray-50 cursor-pointer transition-colors text-center"
+                        className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-neutral-dark/5 border border-neutral-dark/10 hover:bg-neutral-dark/10 text-neutral-dark text-xs font-bold uppercase tracking-wider cursor-pointer transition-all duration-200 text-center"
                       >
-                        <LogOut className="w-3.5 h-3.5" />
+                        <LogOut className="w-4 h-4 text-neutral-dark" />
                         <span>Logout</span>
                       </button>
                     </div>
@@ -449,7 +453,7 @@ export default function Navbar() {
                       <Link
                         href="/login"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg border border-primary/20 text-neutral-dark hover:border-primary text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors text-center"
+                        className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-neutral-dark/5 border border-neutral-dark/10 hover:bg-neutral-dark/10 text-neutral-dark text-xs font-bold uppercase tracking-wider hover:text-primary transition-all duration-200 cursor-pointer text-center"
                       >
                         <span>Login Member Portal</span>
                       </Link>
