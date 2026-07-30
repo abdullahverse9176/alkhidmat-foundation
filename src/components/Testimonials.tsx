@@ -50,7 +50,7 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="py-12 sm:py-16 md:py-24 bg-gray-50 relative overflow-hidden">
+    <section className="py-10 sm:py-12 md:py-16 bg-gray-50 relative overflow-hidden">
       {/* Decorative quotes background */}
       <div className="absolute top-1/2 left-10 -translate-y-1/2 w-48 h-48 text-gray-50 pointer-events-none z-0">
         <Quote className="w-full h-full fill-current" />
@@ -59,7 +59,7 @@ export default function Testimonials() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <span className="text-xs font-bold text-primary uppercase tracking-widest px-3 py-1 bg-primary/10 rounded-full">
             Words of Trust
           </span>

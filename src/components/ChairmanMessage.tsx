@@ -7,7 +7,7 @@ import { chairmanMessageData } from "@/data/mockData";
 
 export default function ChairmanMessage() {
   return (
-    <section id="leadership" className="py-12 sm:py-16 md:py-24 bg-white relative">
+    <section id="leadership" className="py-10 sm:py-12 md:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="bg-gray-50 rounded-3xl border border-gray-150 shadow-sm overflow-hidden p-8 sm:p-12 lg:p-16">

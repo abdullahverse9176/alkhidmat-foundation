@@ -80,7 +80,7 @@ export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProp
 
   // Build the list of projects to render: prefer database projects, fall back to mock data
   const displayProjects = projects.length > 0 
-    ? projects.slice(0, 6).map(p => ({
+    ? projects.slice(0, 3).map(p => ({
         id: p._id || p.slug,
         title: p.title,
         description: p.shortDescription || `${p.title} - An active welfare initiative of Alkhidmat Foundation.`,
@@ -91,7 +91,7 @@ export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProp
         slug: p.slug,
         serviceSlug: p.serviceSlug
       }))
-    : featuredProjectsData.map(p => ({
+    : featuredProjectsData.slice(0, 3).map(p => ({
         id: p.id,
         title: p.title,
         description: p.description,
@@ -104,11 +104,11 @@ export default function FeaturedProjects({ projects = [] }: FeaturedProjectsProp
       }));
 
   return (
-    <section id="projects" className="py-12 sm:py-16 md:py-24 bg-white relative">
+    <section id="projects" className="py-10 sm:py-12 md:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header containing text and a call to action link */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 md:mb-12 gap-6">
           <div className="max-w-2xl">
             <span className="text-xs font-bold text-primary uppercase tracking-widest px-3 py-1 bg-primary/10 rounded-full">
               Welfare Initiatives

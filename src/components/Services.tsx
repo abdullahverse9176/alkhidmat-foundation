@@ -33,9 +33,9 @@ export interface ServicesProps {
 }
 
 export default function Services({ initialServices }: ServicesProps) {
-  const displayServices = initialServices && initialServices.length > 0 
+  const displayServices = (initialServices && initialServices.length > 0 
     ? initialServices 
-    : servicesData;
+    : servicesData).slice(0, 4);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollIndex, setScrollIndex] = useState(0);
@@ -74,11 +74,11 @@ export default function Services({ initialServices }: ServicesProps) {
   };
 
   return (
-    <section id="services" className="py-12 sm:py-16 md:py-24 bg-gray-50 relative overflow-hidden">
+    <section id="services" className="py-10 sm:py-12 md:py-16 bg-gray-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
           <span className="text-xs font-bold text-primary uppercase tracking-widest px-3 py-1 bg-primary/10 rounded-full">
             Our Care Areas
           </span>

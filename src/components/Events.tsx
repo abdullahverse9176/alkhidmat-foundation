@@ -24,11 +24,11 @@ export default function Events({ events = [] }: { events?: EventItem[] }) {
   };
 
   return (
-    <section id="events" className="py-12 sm:py-16 md:py-24 bg-white relative">
+    <section id="events" className="py-10 sm:py-12 md:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
           <span className="text-xs font-bold text-primary uppercase tracking-widest px-3 py-1 bg-primary/10 rounded-full">
             Get Involved
           </span>
